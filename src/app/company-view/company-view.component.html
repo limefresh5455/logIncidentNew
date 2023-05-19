@@ -1,0 +1,1914 @@
+<h5 *ngIf="companyView && !concerned" class="bevelTitle">COMPANY VIEW</h5>
+<h5 *ngIf="companyView && concerned" class="bevelTitle">LOGCONCERN</h5>
+<h5 *ngIf="assignedView" class="bevelTitle">ASSIGNED TO ME</h5>
+<h5 *ngIf="myView" class="bevelTitle titleCase">
+  MY
+  <ng-container *ngIf="company && company.incidentPluralName">{{
+    company.incidentPluralName | titlecase
+  }}</ng-container>
+  <ng-container *ngIf="!company || !company.incidentPluralName"
+    >Incidents
+  </ng-container>
+</h5>
+<div *ngIf="incidents || !incidentsLoaded" class="col-12 px-0 mx-0">
+  <ngx-mat-drp
+    *ngIf="options"
+    (selectedDateRangeChanged)="updateRange($event)"
+    class="hidden"
+    [options]="options"
+    #dateRangePicker
+  ></ngx-mat-drp>
+  <hr class="mt-0" />
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" *ngIf="companyView" (click)="incidentReport()">
+      <a
+        [ngClass]="!chartParam ? 'nav-link active' : 'nav-link'"
+        data-toggle="tab"
+        href="#"
+        data-target="#m_tabs_1_2"
+      >
+        <ng-container *ngIf="company && company.incidentPluralName">{{
+          company.incidentPluralName | titlecase
+        }}</ng-container>
+        <ng-container *ngIf="!company || !company.incidentPluralName"
+          >Incidents
+        </ng-container>
+        Report</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="!concerned">
+      <a
+        [ngClass]="
+          (!companyView && !chartParam) || paramValue == 'All'
+            ? 'nav-link active'
+            : 'nav-link'
+        "
+        data-toggle="tab"
+        href="#"
+        (click)="selectIncidents('All')"
+        data-target="#m_tabs_1_1"
+        >All</a
+      >
+    </li>
+    <ng-container *ngIf="!concerned">
+      <li class="nav-item" *ngFor="let incidentType of incidentTypesData">
+        <ng-container
+          *ngIf="
+            incidentType.name != 'Guidance' &&
+            incidentType.name != 'Safe on Site' &&
+            incidentType.name != 'Audits' &&
+            incidentType.name != 'Managers Tour'
+          "
+        >
+          <a
+            data-toggle="tab"
+            href="#"
+            (click)="selectIncidents(incidentType.name)"
+            data-target="#m_tabs_1_1"
+            [ngClass]="
+              incidentType.name == paramValue ? 'nav-link active' : 'nav-link'
+            "
+            >{{ incidentType.name }}</a
+          >
+        </ng-container>
+      </li>
+    </ng-container>
+    <ng-container *ngIf="concerned">
+      <li class="nav-item" *ngFor="let incidentType of concernedTypes">
+        <a
+          data-toggle="tab"
+          href="#"
+          (click)="selectIncidents(incidentType.name)"
+          data-target="#m_tabs_1_1"
+          [ngClass]="
+            incidentType.name == paramValue ? 'nav-link active' : 'nav-link'
+          "
+          >{{ incidentType.name }}</a
+        >
+      </li>
+    </ng-container>
+  </ul>
+  <div class="col-12 row mx-0 px-0">
+    <div class="tab-content pr-xl-0 px-0 px-md-2 col-xl-9">
+      <div
+        [ngClass]="!companyView || chartParam ? 'tab-pane active' : 'tab-pane'"
+        id="m_tabs_1_1"
+        role="tabpanel"
+      >
+        <div
+          class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded"
+        >
+          <div
+            class="m-portlet__head"
+            [style.background-color]="companyColor"
+            [style.border-color]="companyColor"
+          >
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <h3
+                  class="m-portlet__head-text"
+                  *ngIf="currentUser.company.name != 'barratt'"
+                >
+                  <ng-container *ngIf="company && company.incidentPluralName">{{
+                    company.incidentPluralName | titlecase
+                  }}</ng-container>
+                  <ng-container *ngIf="!company || !company.incidentPluralName"
+                    >Incidents
+                  </ng-container>
+                </h3>
+                <h3
+                  class="m-portlet__head-text"
+                  *ngIf="currentUser.company.name == 'barratt'"
+                >
+                  {{ currentIncidentType }}
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <div class="col-12 row pb-2">
+              <div class="mr-auto">
+                <p *ngIf="selectedIncidents && incidents">
+                  Showing: {{ selectedIncidents.length }} of
+                  {{ incidents.length }}
+                  <ng-container *ngIf="company && company.incidentPluralName">{{
+                    company.incidentPluralName | titlecase
+                  }}</ng-container>
+                  <ng-container *ngIf="!company || !company.incidentPluralName"
+                    >Incidents
+                  </ng-container>
+                </p>
+              </div>
+              <div class="ml-auto">
+                <a
+                  routerLink="/export"
+                  [queryParams]="queryParams"
+                  class="m-portlet__nav-link btn btn-sm btn-dark m-btn m-btn--pill"
+                  [style.background-color]="accentColor"
+                  [style.border-color]="accentColor"
+                >
+                  Export
+                  <ng-container *ngIf="company && company.incidentPluralName">{{
+                    company.incidentPluralName | titlecase
+                  }}</ng-container>
+                  <ng-container *ngIf="!company || !company.incidentPluralName"
+                    >Incidents
+                  </ng-container>
+                </a>
+              </div>
+            </div>
+            <div class="m-section">
+              <div class="m-section__content" style="overflow: scroll">
+                <table
+                  class="table table-hover table-responsive-sm"
+                  style="max-width: 100%"
+                >
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th class="descriptionWidth">Description</th>
+                      <th
+                        *ngIf="
+                          currentUser.company.name === 'Aon' && companyView
+                        "
+                      >
+                        Client
+                      </th>
+                      <th *ngIf="!myView">Creator</th>
+                      <th *ngIf="!currentUser.company.name == 'barratt'">
+                        Assignee
+                      </th>
+
+                      <th
+                        *ngIf="
+                          !myView &&
+                          (currentUser.company.name === 'barratt' ||
+                            currentUser.company.name == 'Finninguk' ||
+                            currentUser.company.name == 'Finning')
+                        "
+                      >
+                        <ng-container
+                          *ngIf="currentUser.company.name !== 'barratt'"
+                          >Unit
+                        </ng-container>
+                        <ng-container
+                          *ngIf="currentUser.company.name === 'barratt'"
+                          >Division
+                        </ng-container>
+                      </th>
+                      <th *ngIf="myView">
+                        <ng-container
+                          *ngIf="currentUser.company.name !== 'barratt'"
+                          >Reporter
+                        </ng-container>
+                        <ng-container
+                          *ngIf="currentUser.company.name === 'barratt'"
+                          >Division
+                        </ng-container>
+                      </th>
+                      <!-- <th
+                      *ngIf="
+                          !myView &&
+                          (currentUser.company.name === 'barratt' ||
+                            currentUser.company.name == 'Finninguk' ||
+                            currentUser.company.name == 'Finning')
+                        "
+                    >
+                      Company Name
+                    </th> -->
+                      <th
+                        *ngIf="
+                          !myView &&
+                          (currentUser.company.name === 'barratt' ||
+                            currentUser.company.name == 'Finninguk' ||
+                            currentUser.company.name == 'Finning')
+                        "
+                      >
+                        <ng-container
+                          *ngIf="currentUser.company.name !== 'barratt'"
+                          >Branch
+                        </ng-container>
+                        <ng-container
+                          *ngIf="currentUser.company.name === 'barratt'"
+                          >Site
+                        </ng-container>
+                      </th>
+                      <!-- <th *ngIf="!myView">Creator Email</th> -->
+
+                      <th *ngIf="hasBlueprintNumbers">
+                        Blueprint Project Number
+                      </th>
+                      <th>
+                        <ng-container
+                          *ngIf="company && company.incidentPluralName"
+                          >{{
+                            company.incidentPluralName | titlecase
+                          }}</ng-container
+                        >
+                        <ng-container
+                          *ngIf="!company || !company.incidentPluralName"
+                          >Incidents
+                        </ng-container>
+                        Date
+                      </th>
+                      <th *ngIf="currentUser.company.name != 'emico'">ID</th>
+                      <th *ngIf="currentUser.company.name == 'emico'">
+                        Project ID
+                      </th>
+                      <!-- <th >SIF Category</th> -->
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!--  Skeleton loading indicator -->
+                    <tr *ngFor="let number of [1, 2, 3, 4, 5, 6, 7, 8]">
+                      <th *ngIf="!incidents" scope="row">
+                        <div class="tableButton loading"></div>
+                      </th>
+                      <td
+                        *ngIf="
+                          !incidents && !currentUser.company.name === 'barratt'
+                        "
+                      >
+                        <div class="tableDesc loading"></div>
+                      </td>
+                      <td
+                        *ngIf="
+                          !incidents &&
+                          currentUser.company.name === 'Aon' &&
+                          companyView
+                        "
+                      >
+                        <div class="tableDesc loading"></div>
+                      </td>
+                      <td *ngIf="!incidents && !myView">
+                        <div class="tableDesc loading"></div>
+                      </td>
+                      <td
+                        *ngIf="
+                          !incidents &&
+                          !myView &&
+                          (currentUser.company.name === 'barratt' ||
+                            currentUser.company.name == 'Finninguk' ||
+                            currentUser.company.name == 'Finning')
+                        "
+                      >
+                        <div class="tableDesc loading"></div>
+                      </td>
+                      <td
+                        *ngIf="
+                          !incidents &&
+                          !myView &&
+                          (currentUser.company.name === 'barratt' ||
+                            currentUser.company.name == 'Finninguk' ||
+                            currentUser.company.name == 'Finning')
+                        "
+                      >
+                        <div class="tableDesc loading"></div>
+                      </td>
+                      <td *ngIf="!incidents && !myView">
+                        <div class="tableDesc loading"></div>
+                      </td>
+                      <td *ngIf="!incidents && hasBlueprintNumbers">
+                        <div class="tableDesc loading"></div>
+                      </td>
+                      <td *ngIf="!incidents">
+                        <div class="tableDesc loading"></div>
+                      </td>
+                      <td *ngIf="!incidents">
+                        <div class="tableDate loading"></div>
+                      </td>
+                      <td *ngIf="!incidents">
+                        <div class="marginAuto row">
+                          <div class="loading tableMiniButton"></div>
+                          <div
+                            class="tableMiniButton marginLeft10 loading"
+                          ></div>
+                        </div>
+                      </td>
+                    </tr>
+                    <ng-container
+                      *ngIf="selectedIncidents && selectedIncidents.length > 0"
+                    >
+                      <tr
+                        *ngFor="
+                          let incident of selectedIncidents
+                            | paginate : { itemsPerPage: 10, currentPage: p }
+                        "
+                      >
+                        <th scope="row" (click)="goToIncident(incident.id)">
+                          <ng-container *ngIf="incident.status">
+                            <span
+                              class="btn btn-primary breakSpaces"
+                              matTooltip="{{ incident.type.name }}"
+                              [ngStyle]="{
+                                'background-color':
+                                  incident.status.name == 'Closed'
+                                    ? hexToRGB(incident.type.color)
+                                    : incident.type.color,
+                                'border-color':
+                                  incident.status.name == 'Closed'
+                                    ? hexToRGB(incident.type.color)
+                                    : incident.type.color
+                              }"
+                              >{{ incident.status.name }}</span
+                            >
+                          </ng-container>
+                        </th>
+                        <td
+                          class="descriptionWidth"
+                          (click)="goToIncident(incident.id)"
+                        >
+                          {{ incident.shortDescription }}
+                        </td>
+
+                        <td
+                          class="clientName"
+                          *ngIf="
+                            currentUser.company.name === 'Aon' && companyView
+                          "
+                        >
+                          <span
+                            *ngIf="
+                              incident.user &&
+                              incident.user.profile &&
+                              incident.user.profile.fields[0]?.fieldValue
+                            "
+                          >
+                            {{ incident.user.profile.fields[0].fieldValue }}
+                          </span>
+                        </td>
+                        <td *ngIf="!myView" (click)="goToIncident(incident.id)">
+                          <span *ngIf="incident.user"
+                            >{{ incident.user.firstName }}
+                            {{ incident.user.lastName }}</span
+                          >
+                          <span *ngIf="!incident.user">---</span><br />
+                          <span *ngIf="incident.user"
+                            >({{ incident.user?.email }})</span
+                          >
+                          <span *ngIf="!incident.user">---</span>
+                        </td>
+                        <td
+                          (click)="goToIncident(incident.id)"
+                          *ngIf="!(currentUser.company.name == 'barratt')"
+                        >
+                          <ng-container
+                            *ngIf="
+                              incident.assignments[0]?.user?.firstName ||
+                              incident.assignments[0]?.user?.lastName
+                            "
+                          >
+                            {{
+                              incident && incident.assignments[0]
+                                ? incident.assignments[0].user.firstName +
+                                  " " +
+                                  incident.assignments[0].user.lastName
+                                : "-"
+                            }}
+                          </ng-container>
+                          <span *ngIf="!incident.user">---</span><br />
+                          <span
+                            *ngIf="
+                              incident.user &&
+                              incident.assignments[0]?.user?.email
+                            "
+                          >
+                            ({{
+                              incident && incident.assignments[0]
+                                ? incident.assignments[0].user.email
+                                : " -"
+                            }})
+                          </span>
+                        </td>
+                        <!-- <td
+                        *ngIf="
+                            !myView &&
+                            (currentUser.company.name === 'barratt' ||
+                              currentUser.company.name == 'Finninguk' ||
+                              currentUser.company.name == 'Finning')
+                          "
+                        (click)="goToIncident(incident.id)"
+                      >
+                          <span *ngIf="incident.user">{{
+                            incident.userGroup?.parent?.name
+                            }}</span>
+                        <span *ngIf="!incident.user">---</span>
+                      </td> -->
+                        <td
+                          *ngIf="
+                            !myView &&
+                            (currentUser.company.name === 'barratt' ||
+                              currentUser.company.name == 'Finninguk' ||
+                              currentUser.company.name == 'Finning')
+                          "
+                          (click)="goToIncident(incident.id)"
+                        >
+                          <span *ngIf="incident.user">{{
+                            incident.userGroup?.name
+                          }}</span>
+                          <span *ngIf="!incident.user">---</span>
+                        </td>
+                        <td
+                          *ngIf="hasBlueprintNumbers"
+                          (click)="goToIncident(incident.id)"
+                        >
+                          {{ incident["SAP Blueprint Project Number"] }}
+                        </td>
+                        <td (click)="goToIncident(incident.id)">
+                          {{
+                            getWhenIncidentHappened(incident)
+                              | date
+                                : "dd/MM/y
+                          HH:mm"
+                          }}
+                        </td>
+                        <td
+                          (click)="goToIncident(incident.id)"
+                          *ngIf="currentUser.company.name != 'emico'"
+                        >
+                          {{ incident.id }}
+                        </td>
+                        <td
+                          (click)="goToIncident(incident.id)"
+                          *ngIf="currentUser.company.name == 'emico'"
+                        >
+                          {{ getProjectId(incident) }}
+                        </td>
+                        <!-- <td>
+                          Hazardous Work Environments </td> -->
+                        <td data-field="Actions" class="m-datatable__cell">
+                          <span class="miniButtons">
+                            <span
+                              *ngIf="
+                                currentUser.admin &&
+                                !currentUser.isRestrictedAdmin
+                              "
+                              routerLink="/incidents/{{ incident.id }}/edit/"
+                              class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                              title="Edit details"
+                            >
+                              <i class="la la-edit"></i>
+                            </span>
+                            <span
+                              (click)="exportToPDF(incident.id)"
+                              class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                              title="Export PDF"
+                            >
+                              <i class="la la-file-pdf-o"></i>
+                            </span>
+                          </span>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-container *ngIf="selectedIncidents.length == 0">
+                      <tr>
+                        <td colspan="12" class="text-center">
+                          There are currently no
+                          <ng-container
+                            *ngIf="company && company.incidentPluralName"
+                            >{{
+                              company.incidentPluralName | titlecase
+                            }}</ng-container
+                          >
+                          <ng-container
+                            *ngIf="!company || !company.incidentPluralName"
+                            >Incidents
+                          </ng-container>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                <ng-container
+                  *ngIf="selectedIncidents && selectedIncidents.length > 0"
+                >
+                  <pagination-controls
+                    style="text-align: center"
+                    responsive="true"
+                    (pageChange)="p = $event"
+                  ></pagination-controls>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        [ngClass]="!chartParam ? 'tab-pane active' : 'tab-pane'"
+        id="m_tabs_1_2"
+        role="tabpanel"
+        *ngIf="companyView"
+      >
+        <!--  Non Finning Stuff    -->
+        <div
+          class="row"
+          *ngIf="currentUser.company.name !== 'Finninguk' && !concerned"
+        >
+          <div class="col-12">
+            <div
+              class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                      <ng-container
+                        *ngIf="company && company.incidentPluralName"
+                        >{{
+                          company.incidentPluralName | titlecase
+                        }}</ng-container
+                      >
+                      <ng-container
+                        *ngIf="!company || !company.incidentPluralName"
+                        >Incidents
+                      </ng-container>
+                      Summary
+                    </h3>
+                    <div class="headerButton">
+                      <i
+                        matTooltipClass="tooltipStyles"
+                        matTooltip="Click on legend to enable/disable status types"
+                        class="fas icon-Button fa-lg fa-info-circle"
+                      ></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="m-widget4">
+                  <div class="m-widget4__chart m-portlet-fit--sides">
+                    <div
+                      style="min-height: 200px"
+                      class="row col-12"
+                      *ngIf="!incidents"
+                    >
+                      <div class="col-3"></div>
+                      <div
+                        *ngFor="let number of [1, 2, 3, 4]"
+                        class="col-1 incidentLabel loading"
+                      ></div>
+                      <div class="col-5"></div>
+                      <div class="loading incidentBar"></div>
+                    </div>
+                    <div class="col-12 m-section__content">
+                      <canvas id="incidents_count_chart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <!--begin::Portlet-->
+            <div
+              class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3
+                      *ngIf="currentUser.company.name !== 'Aon'"
+                      class="m-portlet__head-text"
+                    >
+                      {{ topLevelGroupName }} Summary
+                    </h3>
+                    <h3
+                      *ngIf="currentUser.company.name === 'Aon'"
+                      class="m-portlet__head-text"
+                    >
+                      Client Summary
+                    </h3>
+                    <div class="headerButton">
+                      <i
+                        matTooltipClass="tooltipStyles"
+                        matTooltip="Click on legend to enable/disable status types"
+                        class="fas icon-Button fa-lg fa-info-circle"
+                      ></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="m-widget4">
+                  <div class="m-widget4__chart m-portlet-fit--sides">
+                    <div
+                      style="min-height: 200px"
+                      class="row col-12"
+                      *ngIf="!incidents"
+                    >
+                      <div class="col-3"></div>
+                      <div
+                        *ngFor="let number of [1, 2, 3, 4]"
+                        class="col-1 incidentLabel loading"
+                      ></div>
+                      <div class="col-5"></div>
+                      <div class="loading incidentBar"></div>
+                    </div>
+                    <div class="col-12 m-section__content">
+                      <canvas id="incident_detail_summary_chart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--end::Portlet-->
+          </div>
+          <div class="col-md-6">
+            <div
+              class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                      <ng-container
+                        *ngIf="company && company.incidentPluralName"
+                        >{{
+                          company.incidentPluralName | titlecase
+                        }}</ng-container
+                      >
+                      <ng-container
+                        *ngIf="!company || !company.incidentPluralName"
+                        >Incidents
+                      </ng-container>
+                      By User
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="tab-content">
+                  <div class="m-list-timeline m-list-timeline--skin-light">
+                    <!--     TODO Investigate why is there a finnning check inside a non finning check? Maybe left in case of a revert to old design?         -->
+                    <div
+                      class="m-list-timeline__items"
+                      *ngIf="
+                        currentUser.company.name == 'Finninguk' ||
+                        currentUser.company.name == 'Finning'
+                      "
+                    >
+                      <canvas id="incident_by_user_bar_chart"></canvas>
+                    </div>
+                    <div
+                      class="m-list-timeline__items"
+                      *ngIf="currentUser.company.name != 'Finninguk'"
+                    >
+                      <ng-container
+                        *ngFor="
+                          let item of orderedIncidentsByUser;
+                          let i = index
+                        "
+                      >
+                        <div class="m-list-timeline__item" *ngIf="i < 10">
+                          <span
+                            class="m-list-timeline__badge m-list-timeline__badge--info"
+                          ></span>
+                          <span
+                            style="overflow-wrap: break-word; font-size: 0.9rem"
+                            class="m-list-timeline__text"
+                            >{{ item.displayName }}</span
+                          >
+                          <span class="m-list-timeline__time"
+                            >{{ item.count }} Logged</span
+                          >
+                        </div>
+                      </ng-container>
+                      <div *ngIf="!incidents">
+                        <div
+                          *ngFor="let number of [1, 2, 3, 4]"
+                          class="margin-20 row col-12"
+                        >
+                          <div class="listCircle loading"></div>
+                          <div class="listTitle loading"></div>
+                          <div class="listSubTitle loading"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div
+              class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                      <ng-container
+                        *ngIf="company && company.incidentSingularName"
+                        >{{
+                          company.incidentSingularName | titlecase
+                        }}</ng-container
+                      >
+                      <ng-container
+                        *ngIf="!company || !company.incidentSingularName"
+                        >Incident
+                      </ng-container>
+                      Type Volume
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="m_widget4_tab1_content">
+                    <div class="m-list-timeline m-list-timeline--skin-light">
+                      <div
+                        class="m-list-timeline__items"
+                        *ngIf="currentUser.company.name == 'Finning'"
+                      >
+                        <canvas id="incident_count_bar_chart"></canvas>
+                      </div>
+                      <div
+                        class="m-list-timeline__items"
+                        *ngIf="currentUser.company.name != 'Finninguk'"
+                      >
+                        <div
+                          class="m-list-timeline__item"
+                          *ngFor="let incidentType of incidentTypeCount"
+                        >
+                          <span
+                            class="myBadgeBefore"
+                            [ngStyle]="{
+                              'background-color': incidentType.color
+                            }"
+                          ></span>
+                          <span class="myBadge"></span>
+                          <span class="m-list-timeline__text">{{
+                            incidentType.name
+                          }}</span>
+                          <span class="m-list-timeline__time"
+                            >{{ incidentType.count }} Logged</span
+                          >
+                        </div>
+                        <div *ngIf="!incidents">
+                          <div
+                            *ngFor="let number of [1, 2, 3, 4]"
+                            class="margin-20 row col-12"
+                          >
+                            <div class="loading listCircle"></div>
+                            <div class="listTitle loading"></div>
+                            <div class="listSubTitle loading"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--  Finning Stuff  -->
+        <div
+          class="row"
+          *ngIf="
+            ((currentUser &&
+              currentUser.company &&
+              currentUser.company.name == 'Finninguk') ||
+              currentUser.company.name == 'Finning') &&
+            !concerned
+          "
+        >
+          <div class="col-lg-12">
+            <!--begin::Portlet-->
+            <div
+              class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                      <ng-container
+                        *ngIf="company && company.incidentPluralName"
+                        >{{
+                          company.incidentPluralName | titlecase
+                        }}</ng-container
+                      >
+                      <ng-container
+                        *ngIf="!company || !company.incidentPluralName"
+                        >Incidents
+                      </ng-container>
+                      Reports
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="row">
+                  <div
+                    class="col w-md-20"
+                    *ngIf="totalincidentCount"
+                    (click)="selectIncidents('All')"
+                  >
+                    <div class="load_info p-2" style="background: #cd159f">
+                      <span
+                        ><img src="assets/Icon/stack-exchange-logo.svg"
+                      /></span>
+                      <h4 class="text-white">
+                        {{ totalincidentCount.allIncidents.count
+                        }}<span
+                          >Total
+                          <ng-container
+                            *ngIf="company && company.incidentPluralName"
+                            >{{
+                              company.incidentPluralName | titlecase
+                            }}</ng-container
+                          >
+                          <ng-container
+                            *ngIf="!company || !company.incidentPluralName"
+                            >Incidents</ng-container
+                          ></span
+                        >
+                      </h4>
+                    </div>
+                    <div
+                      class="prg_bar_flex row mx-0 px-0"
+                      style="background: #cd159f"
+                    >
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Open</p>
+                        <circle-progress
+                          [percent]="totalincidentCount.allIncidents.open"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                      </div>
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Closed</p>
+                        <circle-progress
+                          [percent]="totalincidentCount.allIncidents.close"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="col w-md-20"
+                    *ngFor="let incidentType of incidentTypeCount"
+                    (click)="selectIncidents(incidentType.name)"
+                  >
+                    <div
+                      class="load_info p-2"
+                      [style.background-color]="incidentType.color"
+                    >
+                      <span
+                        ><img src="assets/Icon/stack-exchange-logo.svg"
+                      /></span>
+                      <h4 class="text-white">
+                        {{ incidentType.count }}
+                        <span class="text-white">{{ incidentType.name }}</span>
+                      </h4>
+                    </div>
+                    <div
+                      class="prg_bar_flex row mx-0 px-0"
+                      [style.background-color]="incidentType.color"
+                    >
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Open</p>
+                        <circle-progress
+                          [percent]="incidentType.open"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                      </div>
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Closed</p>
+                        <circle-progress
+                          [percent]="incidentType.close"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row col-12" *ngIf="!totalincidentCount">
+                  <div *ngFor="let number of [1, 2, 3, 4]" class="col">
+                    <div class="top_load_info load_info loading"></div>
+                    <div class="bottom_load_info prg_bar_flex loading">
+                      <div class="prog_bar left_b"></div>
+                      <div class="prog_bar right_b"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--end::Portlet-->
+          </div>
+          <div class="col-lg-12">
+            <!--begin::Portlet-->
+            <div
+              class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">What Happened</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="m-widget4">
+                  <div class="m-widget4__chart m-portlet-fit--sides">
+                    <div
+                      style="min-height: 200px"
+                      class="row col-12"
+                      *ngIf="!incidents"
+                    >
+                      <div class="col-3"></div>
+                      <div
+                        *ngFor="let number of [1, 2, 3, 4]"
+                        class="col-1 incidentLabel loading"
+                      ></div>
+                      <div class="col-5"></div>
+                      <div class="loading incidentBar"></div>
+                    </div>
+                    <div class="col-12 m-section__content">
+                      <canvas id="incident_what_bar_chart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--end::Portlet-->
+          </div>
+
+          <div class="col-lg-12">
+            <!--begin:: Widgets/Audit Log-->
+            <div
+              class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">Why it Happened</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="m-widget4">
+                  <div class="m-widget4__chart m-portlet-fit--sides">
+                    <div
+                      style="min-height: 200px"
+                      class="row col-12"
+                      *ngIf="!incidents"
+                    >
+                      <div class="col-3"></div>
+                      <div class="col-1 incidentLabel loading"></div>
+                      <div class="col-5"></div>
+                      <div class="loading incidentBar"></div>
+                    </div>
+                    <div class="col-12 m-section__content">
+                      <canvas id="incident_why_it_bar_chart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <!--begin::Portlet-->
+            <div
+              class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">SOS Volume Graph</h3>
+                    <div class="headerButton">
+                      <i
+                        matTooltipClass="tooltipStyles"
+                        matTooltip="Click on legend to enable/disable status types"
+                        class="fas icon-Button fa-lg fa-info-circle"
+                      ></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="m-widget4">
+                  <div class="m-widget4__chart m-portlet-fit--sides">
+                    <div
+                      style="min-height: 200px"
+                      class="row col-12"
+                      *ngIf="!incidents"
+                    >
+                      <div class="col-3"></div>
+                      <div
+                        *ngFor="let number of [1, 2, 3, 4]"
+                        class="col-1 incidentLabel loading"
+                      ></div>
+                      <div class="col-5"></div>
+                      <div class="loading incidentBar"></div>
+                    </div>
+                    <div class="col-12 m-section__content">
+                      <canvas id="sos_detail_summary_chart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--end::Portlet-->
+          </div>
+        </div>
+
+        <!-- Concerned Stuff -->
+        <div class="row" *ngIf="concerned">
+          <div class="col-lg-12">
+            <!--begin::Portlet-->
+            <div
+              class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                      <ng-container
+                        *ngIf="company && company.incidentPluralName"
+                        >{{
+                          company.incidentPluralName | titlecase
+                        }}</ng-container
+                      >
+                      <ng-container
+                        *ngIf="!company || !company.incidentPluralName"
+                        >Incidents
+                      </ng-container>
+                      Reports
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="row">
+                  <div class="col w-md-20" *ngIf="totalincidentCount">
+                    <div class="load_info p-2" style="background: #cd159f">
+                      <span
+                        ><img src="assets/Icon/stack-exchange-logo.svg"
+                      /></span>
+                      <h4 class="text-white">
+                        {{ totalincidentCount.allIncidents.count
+                        }}<span
+                          >Total
+                          <ng-container
+                            *ngIf="company && company.incidentPluralName"
+                            >{{
+                              company.incidentPluralName | titlecase
+                            }}</ng-container
+                          >
+                          <ng-container
+                            *ngIf="!company || !company.incidentPluralName"
+                            >Incidents</ng-container
+                          ></span
+                        >
+                      </h4>
+                    </div>
+                    <div
+                      class="prg_bar_flex row mx-0 px-0"
+                      style="background: #cd159f"
+                    >
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Open</p>
+                        <circle-progress
+                          [percent]="totalincidentCount.allIncidents.open"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                        <br />
+                        <strong>{{
+                          totalincidentCount.allIncidents.totalOpen
+                        }}</strong>
+                      </div>
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Closed</p>
+                        <circle-progress
+                          [percent]="totalincidentCount.allIncidents.close"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                        <br />
+                        <strong>{{
+                          totalincidentCount.allIncidents.totalClose
+                        }}</strong>
+                      </div>
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Submitted for Response</p>
+                        <circle-progress
+                          [percent]="totalincidentCount.allIncidents.submitted"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                        <br />
+                        <strong>{{
+                          totalincidentCount.allIncidents.totalSubmitted
+                        }}</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="col w-md-20"
+                    *ngFor="let incidentType of incidentTypeCount"
+                  >
+                    <div
+                      class="load_info p-2"
+                      [style.background-color]="incidentType.color"
+                    >
+                      <span
+                        ><img src="assets/Icon/stack-exchange-logo.svg"
+                      /></span>
+                      <h4 class="text-white">
+                        {{ incidentType.count }}
+                        <span class="text-white">{{ incidentType.name }}</span>
+                      </h4>
+                    </div>
+                    <div
+                      class="prg_bar_flex row mx-0 px-0"
+                      [style.background-color]="incidentType.color"
+                    >
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Open</p>
+                        <circle-progress
+                          [percent]="incidentType.open"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                        <br />
+                        <strong>{{ incidentType.totalOpen }}</strong>
+                      </div>
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Closed</p>
+                        <circle-progress
+                          [percent]="incidentType.close"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                        <br />
+                        <strong>{{ incidentType.totalClose }}</strong>
+                      </div>
+                      <div class="prog_bar col-xxl-6 mx-auto">
+                        <p>Submitted for Response</p>
+                        <circle-progress
+                          [percent]="incidentType.submitted"
+                          [radius]="40"
+                          [showSubtitle]="false"
+                          [outerStrokeWidth]="5"
+                          [unitsColor]="'#ffffff'"
+                          [showInnerStroke]="false"
+                          [animation]="true"
+                          [animationDuration]="100"
+                          [titleColor]="'#ffffff'"
+                        ></circle-progress>
+                        <br />
+                        <strong>{{ incidentType.totalSubmitted }}</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row col-12" *ngIf="!totalincidentCount">
+                  <div *ngFor="let number of [1, 2, 3, 4]" class="col">
+                    <div class="top_load_info load_info loading"></div>
+                    <div class="bottom_load_info prg_bar_flex loading">
+                      <div class="prog_bar left_b"></div>
+                      <div class="prog_bar right_b"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--end::Portlet-->
+          </div>
+          <div class="col-12">
+            <div
+              class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+            >
+              <div
+                class="m-portlet__head"
+                [style.background-color]="companyColor"
+                [style.border-color]="companyColor"
+              >
+                <div class="m-portlet__head-caption">
+                  <div class="m-portlet__head-title">
+                    <h3 class="m-portlet__head-text">
+                      <ng-container
+                        *ngIf="company && company.incidentSingularName"
+                        >{{
+                          company.incidentSingularName | titlecase
+                        }}</ng-container
+                      >
+                      <ng-container
+                        *ngIf="!company || !company.incidentSingularName"
+                        >Incident
+                      </ng-container>
+                      Type Volume
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="m-portlet__body">
+                <div class="tab-content">
+                  <div class="tab-pane active">
+                    <div class="m-list-timeline m-list-timeline--skin-light">
+                      <div class="m-list-timeline__items">
+                        <canvas id="incident_count_bar_chart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngFor="let type of concernedTypes">
+            <div class="col-lg-6 mb-4" *ngFor="let graph of type.graphs">
+              <div
+                class="m-portlet m-portlet--rounded m-portlet--head-solid-bg h-100"
+              >
+                <div
+                  class="m-portlet__head"
+                  [style.background-color]="type.color"
+                  [style.border-color]="type.color"
+                >
+                  <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                      <h3 class="m-portlet__head-text text-white">
+                        {{ type.name }}: {{ graph.name }}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="m-portlet__body pb-0">
+                  <div class="tab-content">
+                    <div class="tab-pane active">
+                      <div class="m-list-timeline m-list-timeline--skin-light">
+                        <div class="m-list-timeline__items">
+                          <apx-chart
+                            *ngIf="graph.values.length > 0"
+                            [series]="graph.values"
+                            [legend]="this.polarChartOptions.legend"
+                            [chart]="this.polarChartOptions.chart"
+                            [labels]="graph.labels"
+                          >
+                          </apx-chart>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 pr-xr-0">
+      <div
+        class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded"
+        *ngIf="hasBlueprintNumbers"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">
+                Search by Blueprint Project Number
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="m-section mb-0">
+            <div class="m-section__content">
+              <div *ngIf="!incidents">
+                <div *ngFor="let number of [1, 2, 3, 4]" class="filterSkelWrap">
+                  <div class="filterTitle loading"></div>
+                  <div class="filterBody loading"></div>
+                </div>
+              </div>
+              <form [formGroup]="bluePrintNumberSearchForm">
+                <div class="m-form__group form-group">
+                  <label>Blueprint Project No.</label>
+                  <input
+                    type="text"
+                    class="form-control m-input"
+                    formControlName="bluePrintNumberInput"
+                  />
+                  <button
+                    (click)="searchByBlueprintNumber()"
+                    class="btn btn-dark my-3"
+                    [style.background-color]="accentColor"
+                    [style.border-color]="accentColor"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">Filters</h3>
+            </div>
+            <div class="headerButton">
+              <i
+                matTooltipClass="tooltipStyles"
+                matTooltip="Reset Filters"
+                (click)="resetFilterForm()"
+                class="fas icon-Button fas fa-sync clickable"
+              ></i>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="m-section">
+            <div class="m-section__content">
+              <div *ngIf="!filterForm">
+                <div *ngFor="let number of [1, 2, 3, 4]" class="filterSkelWrap">
+                  <div class="filterTitle loading"></div>
+                  <div class="filterBody loading"></div>
+                </div>
+              </div>
+              <form [formGroup]="filterForm" *ngIf="filterForm">
+                <ng-container *ngFor="let filter of filters">
+                  <div
+                    class="m-form__group form-group"
+                    *ngIf="
+                      !concerned ||
+                      (filter.title != 'What Happened' &&
+                        filter.title != 'Why it Happened' &&
+                        filter.title != 'Severity' &&
+                        filter.title != 'Why it Nearly Happened' &&
+                        filter.title != 'What Nearly Happened')
+                    "
+                  >
+                    <label>{{ filter.title }}</label>
+                    <select
+                      class="form-control m-input"
+                      formControlName="{{ filter.id }}"
+                      id="{{ filter.title | noSpaces }}"
+                      (change)="addFilter(filter.title, $event.target.value)"
+                    >
+                      <option
+                        *ngFor="let option of filter.options"
+                        [value]="option"
+                      >
+                        {{ option }}
+                      </option>
+                    </select>
+                  </div>
+                </ng-container>
+                <!--Status filter not in the backend hard coded as temporary fix-->
+                <div class="m-form__group form-group">
+                  <label>Status</label>
+                  <select
+                    class="form-control m-input"
+                    formControlName="status"
+                    (change)="addFilter('Status', $event.target.value)"
+                  >
+                    <option [value]="'All'">All</option>
+                    <option *ngFor="let status of statuses">
+                      {{ status.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- <div
+                  class="m-form__group form-group"
+                  *ngIf="companyView && !currentUser.company.name == 'barratt'"
+                >
+                  <form [formGroup]="filterForm1">
+                    <label>Managers Name</label>
+                    <mat-form-field appearance="outline">
+                      <mat-select formControlName="user_name" multiple>
+                        <mat-select-trigger>
+                          {{ user_name.value ? user_name.value[0] : "" }}
+                          <span
+                            *ngIf="user_name.value?.length > 1"
+                            class="example-additional-selection"
+                          >
+                            (+{{ user_name.value.length - 1 }}
+                            {{
+                              user_name.value?.length === 2
+                                ? "other"
+                                : "others"
+                            }})
+                          </span>
+                        </mat-select-trigger>
+                        <ng-container *ngFor="let option of dashUsers">
+                          <mat-option
+                            *ngIf="option == 'All'"
+                            [value]="option"
+                            (click)="selectAllUsers(ev1)"
+                            #ev1
+                          >
+                            {{ option }}
+                          </mat-option>
+                          <mat-option
+                            *ngIf="option != 'All'"
+                            [value]="option"
+                            [value]="option"
+                            (click)="selectAllUsers(ev1)"
+                            #ev1
+                            >{{ option }}</mat-option
+                          >
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+                  </form>
+                </div> -->
+
+                <!-- <div
+                  class="m-form__group form-group"
+                  *ngIf="companyView && !currentUser.company.name == 'barratt' || companyView && !currentUser.company.name == 'Finning'"
+                > -->
+                <div
+                  class="m-form__group form-group"
+                  *ngIf="companyView && currentUser.company.name == 'Finninguk'"
+                >
+                  <form [formGroup]="filterForm1">
+                    <label>Managers Name</label>
+                    <mat-form-field appearance="outline">
+                      <mat-select formControlName="user_name" multiple>
+                        <mat-select-trigger>
+                          {{ user_name.value ? user_name.value[0] : "" }}
+                          <span
+                            *ngIf="user_name.value?.length > 1"
+                            class="example-additional-selection"
+                          >
+                            (+{{ user_name.value.length - 1 }}
+                            {{
+                              user_name.value?.length === 2
+                                ? "other"
+                                : "others"
+                            }})
+                          </span>
+                        </mat-select-trigger>
+                        <ng-container *ngFor="let option of dashUsers">
+                          <mat-option
+                            *ngIf="option == 'All'"
+                            [value]="option"
+                            (click)="selectAllUsers(ev1)"
+                            #ev1
+                          >
+                            {{ option }}
+                          </mat-option>
+                          <mat-option
+                            *ngIf="option != 'All'"
+                            [value]="option"
+                            [value]="option"
+                            (click)="selectAllUsers(ev1)"
+                            #ev1
+                            >{{ option }}</mat-option
+                          >
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+                  </form>
+                </div>
+
+                <div
+                  class="m-form__group form-group"
+                  *ngIf="companyView && currentUser.company.name == 'Finninguk'"
+                >
+                  <form [formGroup]="filterForm2">
+                    <label>Assigned Users</label>
+                    <mat-form-field appearance="outline">
+                      <mat-select formControlName="assign_name" multiple>
+                        <mat-select-trigger>
+                          {{ assign_name.value ? assign_name.value[0] : "" }}
+                          <span
+                            *ngIf="assign_name.value?.length > 1"
+                            class="example-additional-selection"
+                          >
+                            (+{{ assign_name.value.length - 1 }}
+                            {{
+                              assign_name.value?.length === 2
+                                ? "other"
+                                : "others"
+                            }})
+                          </span>
+                        </mat-select-trigger>
+                        <ng-container *ngFor="let option of dashAssigned">
+                          <mat-option
+                            *ngIf="option == 'All'"
+                            [value]="option"
+                            (click)="selectAllAssigned(ev1)"
+                            #ev1
+                          >
+                            {{ option }}
+                          </mat-option>
+                          <mat-option
+                            *ngIf="option != 'All'"
+                            [value]="option"
+                            [value]="option"
+                            (click)="selectAllAssigned(ev1)"
+                            #ev1
+                            >{{ option }}</mat-option
+                          >
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+                  </form>
+                </div>
+                <!-- 
+                <div class="m-form__group form-group" *ngIf="companyView && currentUser.company.name == 'Finninguk'">
+                  <form [formGroup]="filterForm3">
+                    <label>Originator Users</label>
+                    <mat-form-field appearance="outline">
+                      <mat-select formControlName="originator_name" multiple>
+                        <mat-select-trigger>
+                          {{ originator_name.value ? originator_name.value[0] : "" }}
+                          <span *ngIf="originator_name.value?.length > 1" class="example-additional-selection">
+                            (+{{ originator_name.value.length - 1 }}
+                            {{
+                            originator_name.value?.length === 2
+                            ? "other"
+                            : "others"
+                            }})
+                          </span>
+                        </mat-select-trigger>
+                        <ng-container *ngFor="let option of dashOrginitor">
+                          <mat-option *ngIf="option == 'All'" [value]="option" (click)="selectAllOrgintior(ev1)" #ev1>
+                            {{ option }}
+                          </mat-option>
+                          <mat-option *ngIf="option != 'All'" [value]="option" [value]="option"
+                            (click)="selectAllOrgintior(ev1)" #ev1>{{ option }}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+                  </form>
+                </div> -->
+                <div
+                  class="m-form__group form-group"
+                  *ngIf="companyView && currentUser.company.name == 'Finninguk'"
+                >
+                  <form [formGroup]="filterForm3">
+                    <label>Originator Users</label>
+                    <mat-form-field
+                      class="example-chip-list"
+                      appearance="outline"
+                    >
+                      <mat-chip-list #chipList aria-label="Fruit selection">
+                        <mat-chip
+                          *ngFor="let user of selectedUsers"
+                          [selectable]="selectable"
+                          [removable]="removable"
+                          (removed)="remove(user)"
+                        >
+                          {{ user.name }}
+                          <mat-icon matChipRemove *ngIf="removable"
+                            >cancel
+                          </mat-icon>
+                        </mat-chip>
+                        <input
+                          #userInput
+                          placeholder="Originator"
+                          aria-label="Creators"
+                          [formControl]="creatorsField"
+                          [matAutocomplete]="auto"
+                          [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="add($event)"
+                          (keyup)="searchCompanyUsers($event.target.value)"
+                          remove-space
+                        />
+                      </mat-chip-list>
+                      <mat-autocomplete
+                        #auto="matAutocomplete"
+                        (optionSelected)="
+                          onSelectionChanged($event.option.value)
+                        "
+                        [displayWith]="displayFn"
+                      >
+                        <mat-option
+                          *ngFor="let user of filteredCreators | async"
+                          [value]="user"
+                        >
+                          <span
+                            [innerHTML]="user.name | highlight : toHighlight"
+                          ></span>
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </form>
+                </div>
+                <div
+                  class="m-form__group form-group"
+                  *ngIf="companyView && currentUser.company.name == 'Aon'"
+                >
+                  <label>Client Name</label>
+                  <select
+                    class="form-control m-input"
+                    (change)="addFilter('clientName', $event.target.value)"
+                  >
+                    <option [value]="'All'">All</option>
+                    <option
+                      [value]="client"
+                      *ngFor="let client of clientNameIncident"
+                    >
+                      {{ client }}
+                    </option>
+                  </select>
+                </div>
+                <div
+                  class="m-form__group form-group"
+                  *ngIf="
+                    companyView &&
+                    requiresIncidentDocuments &&
+                    !currentUser.company.name == 'barratt'
+                  "
+                >
+                  <label>Incident Document</label>
+                  <select
+                    class="form-control m-input"
+                    (change)="
+                      addFilter('incidentDocument', $event.target.value)
+                    "
+                  >
+                    <option [value]="'All'">All</option>
+                    <option [value]="true">True</option>
+                    <option [value]="false">False</option>
+                  </select>
+                </div>
+                <div
+                  class="m-form__group form-group"
+                  *ngIf="!currentUser.company.name == 'barratt'"
+                >
+                  <!-- <label>Creators</label>
+                  <mat-form-field appearance="outline">
+                    <input type="text" (keyup)="searchCompanyUsers($event.target.value)" matInput
+                           placeholder="Creators"
+                           aria-label="Creators" [matAutocomplete]="auto" [formControl]="creatorsField">
+                    <mat-autocomplete #auto="matAutocomplete"
+                                      (optionSelected)="onSelectionChanged($event.option.value)"
+                                      [displayWith]="displayFn">
+                      <mat-option *ngFor="let user of filteredCreators | async" [value]="user">
+                        <span [innerHTML]="user.name | highlight: toHighlight"></span>
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field> -->
+                  <form class="auto-form" *ngIf="companyView">
+                    <mat-form-field
+                      class="example-chip-list"
+                      appearance="outline"
+                    >
+                      <mat-chip-list #chipList aria-label="Fruit selection">
+                        <mat-chip
+                          *ngFor="let user of selectedUsers"
+                          [selectable]="selectable"
+                          [removable]="removable"
+                          (removed)="remove(user)"
+                        >
+                          {{ user.name }}
+                          <mat-icon matChipRemove *ngIf="removable"
+                            >cancel
+                          </mat-icon>
+                        </mat-chip>
+                        <input
+                          #userInput
+                          placeholder="Creators"
+                          aria-label="Creators"
+                          [formControl]="creatorsField"
+                          [matAutocomplete]="auto"
+                          [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="add($event)"
+                          (keyup)="searchCompanyUsers($event.target.value)"
+                          remove-space
+                        />
+                      </mat-chip-list>
+                      <mat-autocomplete
+                        #auto="matAutocomplete"
+                        (optionSelected)="
+                          onSelectionChanged($event.option.value)
+                        "
+                        [displayWith]="displayFn"
+                      >
+                        <mat-option
+                          *ngFor="let user of filteredCreators | async"
+                          [value]="user"
+                        >
+                          <span
+                            [innerHTML]="user.name | highlight : toHighlight"
+                          ></span>
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </form>
+                </div>
+                <button
+                  (click)="resetFilterForm()"
+                  class="btn btn-dark"
+                  [style.background-color]="accentColor"
+                  [style.border-color]="accentColor"
+                >
+                  Reset
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="padding-top-10 text-align-center"
+  *ngIf="!incidents && incidentsLoaded"
+>
+  <h1 *ngIf="companyView">
+    There Are Currently No
+    <ng-container *ngIf="company && company.incidentPluralName">{{
+      company.incidentPluralName | titlecase
+    }}</ng-container>
+    <ng-container *ngIf="!company || !company.incidentPluralName"
+      >Incidents
+    </ng-container>
+    <br />Associated With This Company
+  </h1>
+  <h1 *ngIf="assignedView">
+    There Are Currently No
+    <ng-container *ngIf="company && company.incidentPluralName">{{
+      company.incidentPluralName | titlecase
+    }}</ng-container>
+    <ng-container *ngIf="!company || !company.incidentPluralName"
+      >Incidents
+    </ng-container>
+    <br />Assigned To You
+  </h1>
+  <h1 *ngIf="myView">
+    You Have Not Posted or Edited Any<br />
+    <ng-container *ngIf="company && company.incidentPluralName">{{
+      company.incidentPluralName | titlecase
+    }}</ng-container>
+    <ng-container *ngIf="!company || !company.incidentPluralName"
+      >Incidents
+    </ng-container>
+  </h1>
+  <br />
+  <button class="btn btn-dark btn-lg" routerLink="/create-incident">
+    Add
+    <ng-container *ngIf="company && company.incidentPluralName">{{
+      company.incidentPluralName | titlecase
+    }}</ng-container>
+    <ng-container *ngIf="!company || !company.incidentPluralName"
+      >Incidents
+    </ng-container>
+  </button>
+</div>

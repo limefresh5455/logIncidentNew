@@ -1,0 +1,137 @@
+agm-map {
+  height: 300px;
+}
+
+.mediaItemImage {
+  height: 300px;
+}
+
+canvas:hover {
+  cursor: pointer;
+}
+
+/*.m-portlet.m-portlet--success.m-portlet--head-solid-bg {*/
+/*background: #252b27;*/
+/*border-color: #252b27; }*/
+/*.m-portlet.m-portlet--success.m-portlet--head-solid-bg .m-portlet__head {*/
+/*background-color: #252b27;*/
+/*border-color: #252b27; }*/
+.noPointer {
+  cursor: default;
+}
+
+.imgCanvas {
+  width: auto;
+  max-height: 300px;
+  z-index: 999;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.mediaVideo {
+  width: 100%;
+  height: auto;
+}
+
+.canvasOverlayDiv {
+  position: relative;
+}
+
+.canvasOverlayDiv img {
+  max-height: 300px;
+}
+
+.injImg {
+  max-height: 300px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.imgLink {
+  width: inherit;
+  height: inherit;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.disabled {
+  color: grey;
+  background-color: lightgrey;
+}
+
+.disabled:hover,
+.disabled:hover .m-nav__link-icon,
+.disabled:hover .m-nav__link-text {
+  cursor: unset !important;
+  color: grey !important;
+  text-decoration: none !important;
+}
+
+input.ng-invalid:not(.ng-pristine):not(:focus) {
+  border: 2px solid #f23;
+}
+
+select.ng-invalid:not(.ng-pristine):not(:focus) {
+  border: 2px solid #f23;
+}
+
+.clickable:hover {
+  cursor: pointer;
+}
+
+/** Not Found Css **/
+.notFound {
+  background: #fff;
+  width: 100%;
+  padding: 125px 50px;
+  height: 100%;
+  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
+  border-radius: 4px;
+  text-align: center;
+  min-height: 73vh;
+  margin: 0 20px;
+  border-top: 66px solid rgb(65, 65, 65);
+}
+
+.notFound h2 {
+  font-size: 30px;
+  font-weight: 400;
+  color: #222;
+  text-transform: capitalize;
+}
+
+.notFound h1 {
+  display: block;
+  font-size: 80px;
+  width: 100%;
+}
+
+.notFound h1 span {
+  color: #000;
+}
+
+.form-control[disabled] {
+  color: black !important;
+  -webkit-text-fill-color: black;
+  opacity: 1;
+}
+
+.breakSpaces {
+  color: #fff;
+}
+
+.parentClass {
+  position: relative;
+}
+
+.itemImages {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

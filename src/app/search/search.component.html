@@ -1,0 +1,135 @@
+<h5 class="bevelTitle titleCase">SEARCH
+  <ng-container *ngIf="company && company.incidentPluralName">{{company.incidentPluralName}}</ng-container>
+  <ng-container *ngIf="!company || !company.incidentPluralName">Incidents</ng-container>
+</h5>
+<div class="col-12 mx-0 px-0 row">
+  <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded w-100">
+    <div class="m-portlet__head" [style.background-color]="companyColor" [style.border-color]="companyColor">
+      <div class="m-portlet__head-caption">
+        <div class="m-portlet__head-title">
+          <h3 class="m-portlet__head-text col-6">
+            <ng-container *ngIf="company && company.incidentPluralName">{{company.incidentPluralName}}</ng-container>
+            <ng-container *ngIf="!company || !company.incidentPluralName">Incidents</ng-container>
+          </h3>
+          <div class="headerButton col-6">
+            <div class="input-group">
+              <input type="text" #text class="form-control" placeholder="Search" aria-label="Search"
+                     aria-describedby="basic-addon2" (keyup.enter)="search(text)" >
+              <span class="btn btn-light" (click)="search(text)" [style.color]="companyColor" style="border-radius: 0 5px 5px 0;" id="basic-addon2">
+              <i title="Search" class=" flaticon-search-magnifier-interface-symbol"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet__body pt-3 pb-2 px-3">
+      <div class="col-12 row pb-2">
+        <div class="mr-auto">
+
+        </div>
+        <div class="ml-auto">
+          <a routerLink="/export"  *ngIf="incidents && incidents.length >0" [queryParams]="queryParams"
+             class="m-portlet__nav-link btn btn-sm btn-dark m-btn m-btn--pill"  [style.background-color]="companyColor" [style.border-color]="companyColor">
+            Export
+            <ng-container *ngIf="company && company.incidentPluralName">{{company.incidentPluralName |titlecase}}</ng-container>
+            <ng-container *ngIf="!company || !company.incidentPluralName">Incidents</ng-container>
+          </a>
+        </div>
+      </div>
+      <div class="m-section mb-0">
+        <div class="m-section__content" style="overflow: scroll">
+          <div class="col-12 text-center " *ngIf="loading">
+            <mat-spinner class="mx-auto" ></mat-spinner>
+          </div>
+
+          <table *ngIf="incidents && incidents.length > 0" class="table table-hover table-responsive-sm" style="max-width: 100%">
+            <thead>
+            <tr>
+              <th>Status</th>
+              <th class="descriptionWidth">Description</th>
+              <th *ngIf="currentUser.company.name === 'Aon' ">Client</th>
+              <th>Creator</th>
+              <th>Unit</th>
+              <th>Branch</th>
+              <th>Creator Email</th>
+              <th *ngIf="hasBlueprintNumbers">Blueprint Project Number</th>
+              <th>Reported at</th>
+              <th *ngIf="currentUser.company.name != 'emico'">ID</th>
+              <th *ngIf="currentUser.company.name == 'emico'">Project ID</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let incident of incidents">
+              <th scope="row" (click)="goToIncident(incident.id)">
+                <ng-container *ngIf="incident.status">
+                    <span class="btn btn-primary" [ngStyle]="{'background-color': (incident.status.name == 'Closed') ? hexToRGB(incident.type.color) : incident.type.color, 'border-color': (incident.status.name == 'Closed') ? hexToRGB(incident.type.color) : incident.type.color}" matTooltip="{{incident.type.name}}">{{incident.status.name}}</span>
+                </ng-container>
+              </th>
+              <td class="descriptionWidth" (click)="goToIncident(incident.id)">{{incident.shortDescription}}
+              </td>
+
+              <td class="clientName" *ngIf="currentUser.company.name === 'Aon'">
+                  <span
+                    *ngIf="incident.user && incident.user.profile && incident.user.profile.fields[0].fieldValue">
+
+                    {{incident.user.profile.fields[0].fieldValue}}
+                  </span>
+              </td>
+
+              <td (click)="goToIncident(incident.id)">
+                <span *ngIf="incident.user">{{ incident.user.firstName}}<br> {{ incident.user.lastName}}</span>
+                <span *ngIf="!incident.user">Undefined</span>
+              </td>
+              <td (click)="goToIncident(incident.id)">
+                <span *ngIf="incident.user">{{  incident.userGroup?.parent?.name }}</span>
+                <span *ngIf="!incident.user">---</span>
+              </td>
+              <td (click)="goToIncident(incident.id)">
+                <span *ngIf="incident.user">{{ incident.userGroup?.name }}</span>
+                <span *ngIf="!incident.user">---</span>
+              </td>
+              <td (click)="goToIncident(incident.id)">
+                <span *ngIf="incident.user">{{ incident.user.email }}</span>
+                <span *ngIf="!incident.user">Undefined</span>
+              </td>
+              <td *ngIf="hasBlueprintNumbers" (click)="goToIncident(incident.id)">
+                {{incident['SAP Blueprint Project Number']}}
+              </td>
+              <td
+                (click)="goToIncident(incident.id)">{{ getWhenIncidentHappened(incident) | date:'dd/MM/y HH:mm'  }}
+              </td>
+              <td (click)="goToIncident(incident.id)"
+                  *ngIf="currentUser.company.name != 'emico'">{{ incident.id }}</td>
+              <td (click)="goToIncident(incident.id)"
+                  *ngIf="currentUser.company.name == 'emico'"> {{ getProjectId(incident)}}</td>
+              <td data-field="Actions" class="m-datatable__cell">
+                <span class="miniButtons">
+                  <span *ngIf="currentUser.admin && !currentUser.isRestrictedAdmin"
+                        routerLink="/incidents/{{incident.id}}/edit/"
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                        title="Edit details">
+                    <i class="la la-edit"></i>
+                  </span>
+                  <span (click)="exportToPDF(incident.id)"
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"
+                        title="Export PDF">
+                    <i class="la la-file-pdf-o"></i>
+                  </span>
+                </span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div *ngIf="!incidents || incidents.length == 0" class="text-center">
+            <h3 *ngIf="!searchTerm && !loading">Please use the search box above</h3>
+            <h3 *ngIf="searchTerm && !loading">No Results found for {{searchTerm}}</h3>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+

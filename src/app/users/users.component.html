@@ -1,0 +1,189 @@
+<h5 class="bevelTitle">Users</h5>
+<div class="col-12">
+  <hr/>
+  <div class="tab-content">
+    <div class="tab-pane active" id="m_tabs_1_5" role="tabpanel">
+      <div class="row">
+        <div class="col-xl-9">
+          <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+            <div class="m-portlet__body">
+              <div class="col-12 row pb-2 ml-3">
+                <div class="ml-auto">
+                  <button class="btn btn-sm btn-dark" routerLink="/business-units" [style.background-color]="accentColor" [style.border-color]="accentColor">
+                      Business Units
+                  </button>
+                </div>
+                <div class="ml-2" *ngIf="company && company.userAdmin">
+                  <button class="btn btn-sm btn-dark" routerLink="/add-users" [style.background-color]="accentColor" [style.border-color]="accentColor">
+                      Add Users
+                  </button>
+                </div>
+              </div>
+              <div class="m-section">
+                <div class="m-section__content" style="overflow: scroll">
+                  <table class="table table-hover table-responsive-sm" style="max-width: 100%">
+                    <thead [style.background-color]="mmtColor" [style.border-color]="mmtColor" [ngStyle]="{'color': '#fff'}">
+                    <tr>
+                      <th scope="col" sortable="firstName" (sort)="onSort($event)">First Name</th>
+                      <th scope="col" sortable="lastName" (sort)="onSort($event)">Last Name</th>
+                      <th scope="col" sortable="email" (sort)="onSort($event)">Email</th>
+                      <th scope="col" sortable="phone" (sort)="onSort($event)">Phone</th>
+                      <th scope="col" sortable="groupName" (sort)="onSort($event)">Group Name</th>
+                      <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center" *ngIf="loadingData">
+                        <td colspan="6">
+                          <i class="fa fa-spinner fa-spin fa-3x fa-fw text-center"></i>
+                        </td>
+                      </tr>
+                      <ng-container *ngIf="!loadingData">
+                        <tr *ngFor="let user of userList | paginate: {  id: 'server', itemsPerPage: itemsPerPage, currentPage: p, totalItems: total }; let i = index">
+                          <td>{{ user.firstName }}</td>
+                          <td>{{ user.lastName }}</td>
+                          <td>{{ user.email }}</td>
+                          <td>{{ user.phone }}</td>
+                          <td>{{ user.groupName }}</td>
+                          <td class="edit-mmt">
+                            <a *ngIf="logAdmin?.isLogincidentAdmin" class="btn btn-sm btn-dark response" (click)="goToEditUsers(user.id)" [style.background-color]="accentColor" [style.border-color]="accentColor">Edit</a>
+                            <button class="btn btn-sm btn-dark response" [style.background-color]="accentColor" [style.border-color]="accentColor" [style.margin-left]="'3px'" (click)="openUserDetailModal(content, user.id)">View</button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                  <ng-container *ngIf="userList && userList.length > 0 && !loadingData">
+                    <pagination-controls id="server" style="text-align: center;" responsive="true" (pageChange)="getAllUsers(p = $event, termName)"></pagination-controls>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3">
+          <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+            <div class="m-portlet__head" [style.background-color]="mmtColor" [style.border-color]="mmtColor">
+              <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                  <h3 class="m-portlet__head-text">
+                    Filters
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div class="m-portlet__body">
+              <div class="m-section">
+                <div class="m-section__content">
+                  <form [formGroup]="filterForm">
+                    <div class="m-form__group form-group">
+                      <label>Users</label>
+                      <mat-form-field >
+                        <input type="text" (keyup)="searchCompanyUsers($event.target.value)" matInput placeholder="Users" aria-label="Users" [matAutocomplete]="auto" [formControl]="creatorsField">
+                        <mat-autocomplete #auto="matAutocomplete"
+                        (optionSelected)="onSelectionChanged($event.option.value)" [displayWith]="displayFn">
+                          <mat-option *ngFor="let user of filteredCreators | async" [value]="user">
+                            <span [innerHTML]="user.name | highlight: toHighlight"></span>
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <button class="btn btn-sm btn-dark" (click)="resetFilterForm()" [style.background-color]="accentColor" [style.border-color]="accentColor">Reset</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">User Detail</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="m-portlet__body">
+        <div class="col-12 text-center">
+          <i class="fa fa-spinner fa-spin fa-3x fa-fw text-center" *ngIf="loading"></i>
+        </div>
+        <div class="m-form__section m-form__section--first" *ngIf="!loading">
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">First Name :</label><span class="col-xl-6">{{(userDetails && userDetails.firstName) ? userDetails.firstName : ''}}</span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Last Name :</label><span class="col-xl-6">{{(userDetails && userDetails.lastName) ? userDetails.lastName : ''}}</span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Email :</label><span class="col-xl-6">{{(userDetails && userDetails.email) ? userDetails.email : ''}}</span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Phone :</label><span class="col-xl-6">{{(userDetails && userDetails.phone) ? userDetails.phone : ''}}</span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Business Unit :</label><span class="col-xl-6">{{(userDetails && userDetails.userGroup) ? userDetails.userGroup.parent.name : ''}}</span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Group Name(Branch) :</label><span class="col-xl-6">{{(userDetails && userDetails.userGroup) ? userDetails.userGroup.name : ''}}</span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Supervisor :</label><span class="col-xl-6">{{(userDetails && userDetails.supervisor) ? userDetails.supervisor.firstName + ' ' + userDetails.supervisor.lastName : ''}}</span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Admin :</label>
+            <span class="col-xl-6">
+            <mat-slide-toggle [checked]="(userDetails && userDetails.admin) ? userDetails.admin : 'false'" [disabled]='true'></mat-slide-toggle>
+            </span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Is Dashboard View :</label>
+            <span class="col-xl-6">
+            <mat-slide-toggle [checked]="(userDetails && userDetails.isDashboardViewOnly) ? userDetails.isDashboardViewOnly : 'false'" [disabled]='true'></mat-slide-toggle>
+            </span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Is Manager :</label>
+            <span class="col-xl-6">
+            <mat-slide-toggle [checked]="(userDetails && userDetails.isManager) ? userDetails.isManager : 'false'" [disabled]='true'></mat-slide-toggle>
+            </span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Is Restricted Admin :</label>
+            <span class="col-xl-6">
+            <mat-slide-toggle [checked]="(userDetails && userDetails.isRestrictedAdmin) ? userDetails.isRestrictedAdmin : 'false'" [disabled]='true'></mat-slide-toggle>
+            </span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Is Project Manager :</label>
+            <span class="col-xl-6">
+            <mat-slide-toggle [checked]="(userDetails && userDetails.isProjectManager) ? userDetails.isProjectManager : 'false'" [disabled]='true'></mat-slide-toggle>
+            </span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Is App Only :</label>
+            <span class="col-xl-6">
+            <mat-slide-toggle [checked]="(userDetails && userDetails.isAppOnly) ? userDetails.isAppOnly : 'false'" [disabled]='true'></mat-slide-toggle>
+            </span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Is Active :</label>
+            <span class="col-xl-6">
+            <mat-slide-toggle [checked]="(userDetails && userDetails.isActive) ? userDetails.isActive : 'false'" [disabled]='true'></mat-slide-toggle></span></strong>
+          </div>
+          <div class="m-form__group form-group">
+            <strong><label class="col-xl-6">Reset Password Next Login :</label>
+            <span class="col-xl-6">
+            <mat-slide-toggle [checked]="(userDetails && userDetails.resetPasswordNextLogin) ? userDetails.resetPasswordNextLogin : 'false'" [disabled]='true'></mat-slide-toggle></span></strong>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Close</button>
+  </div>
+</ng-template>

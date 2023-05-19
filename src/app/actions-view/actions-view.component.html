@@ -1,0 +1,74 @@
+<h5 *ngIf="mmtView" class="bevelTitle">Actions View</h5>
+<hr/>
+<div class="row">
+  <div class="row col-12">
+    <div class="col-lg-2">
+      <a routerLink="/mmt/actions" class="btn btn-sm btn-dark" [style.background-color]="accentColor" [style.border-color]="accentColor">
+        Back
+      </a>
+    </div>
+    <div class="col-lg-8">
+      <div class=" m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success">
+          <div class="m-portlet__head" [style.background-color]="mmtColor" [style.border-color]="mmtColor">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                  Actions View 
+                </h3>
+              </div>
+              <button class="btn btn-sm btn-dark add_note" [style.background-color]="accentColor" [style.border-color]="accentColor" (click)="openAddNotesModal(addNote)">Add Notes</button>
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+              <div class="m-form__group form-group">
+                <div class="col-sm-12"><strong>Status</strong>: 
+                  <ng-container *ngIf="incidents.status">
+                    <span class="btn" [ngClass]="(incidents.status.name == 'Open') ? 'redClass' : 'greenClass'">{{incidents.status.name}}</span>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <div class="col-sm-12"><strong>Created: {{incidents.createdAt | date:'dd/MM/y HH:mm'}}</strong></div>
+              </div>
+              <div class="m-form__group form-group">
+                <div class="col-sm-12"><strong>Branch: {{branch}}</strong></div>
+              </div>
+              <div class="m-form__group form-group">
+                <div class="col-sm-12"><strong>Description: {{description}}</strong></div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="col-lg-2"></div>
+  </div>
+</div>
+
+<ng-template #addNote let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Add Note</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="addNoteForm">
+      <div class="form-group">
+        <label>Note Type</label>
+        <select name="noteType" class="form-control m-input" formControlName="noteType">
+          <option *ngFor="let noteType of noteTypes" [value]="noteType.id">{{noteType.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Note</label>
+        <textarea rows="3" class="form-control m-input" formControlName="note"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" [style.background-color]="accentColor"
+            [style.border-color]="accentColor" (click)="onSubmit(); modal.close('Save click')">Save
+    </button>
+  </div>
+</ng-template>

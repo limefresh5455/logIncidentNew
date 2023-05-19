@@ -1,0 +1,213 @@
+@import '~dropzone/dist/min/dropzone.min.css';
+
+.hoverPointer :hover {
+  cursor: pointer;
+}
+
+.titleCase {
+  text-transform: uppercase;
+}
+
+.bevelTitle {
+  color: #9c9c9c;
+  text-shadow: rgba(255, 255, 255, 0.5) 0px 3px 3px;
+  text-align: center;
+  margin: -20px auto 10px;
+  text-transform: uppercase;
+}
+
+.loading {
+  min-height: 1px;
+  min-width: 1px;
+  background: rgb(210, 212, 215);
+  z-index: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shine */
+.loading:after {
+  content: '';
+  top: 0;
+  transform: translateX(100%);
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  z-index: 1;
+  animation: slide 2s infinite;
+
+  /*
+  CSS Gradient - complete browser support from http://www.colorzilla.com/gradient-editor/
+  */
+  background: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(50%, rgba(255, 255, 255, 0.8)), color-stop(99%, rgba(128, 186, 232, 0)), color-stop(100%, rgba(125, 185, 232, 0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#007db9e8', GradientType=1); /* IE6-9 */
+}
+
+/* animation */
+
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.dropDownWrap {
+  z-index: 101;
+}
+
+.dropDownBody {
+  left: auto;
+  right: 16px;
+}
+
+.submitButton {
+  margin: 1vh 0
+
+}
+
+.portGrey {
+  background-color: grey !important;
+}
+
+.formInputSkel {
+  width: 80px;
+  height: 15px;
+  margin: 5px
+}
+
+.formCircleSkel {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  margin: 5px
+}
+
+.formTitleSkel {
+  width: 150px;
+  height: 20px;
+  margin: 5px
+}
+
+.margin5 {
+  margin: 5px;
+}
+
+
+agm-map {height: 400px;}
+
+.example-full-width {
+  /*width: 50%;*/
+}
+
+.form-check{
+  padding-left: 0px;
+}
+
+
+.allowSelfAssign-search{
+border-color: rgb(65, 65, 65);
+background-color: rgb(65, 65, 65);
+}
+.opt_list .mat-option-text > small, .opt_list .mat-option-text {
+    display: block;
+    line-height: 20px;
+}
+.opt_list .mat-option-text > small {
+    color: #777;
+}
+
+.drawing-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 999;
+    width:100%;
+    background: rgba(0,0,0,.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.draw-images {
+    display: flex;
+    align-items: center;
+}
+.draw-images img {
+    max-width: 100px;
+    height: 100px;
+    margin: 0 5px;
+    border-radius: 3px;
+}
+/*.bg_image_pop {
+    transform: scale(.3);
+}
+.toolbar {
+    transform: scale(3);
+}*/
+.btn.btn-secondary.Schematicbutton {
+    background: rgb(65, 65, 65);
+    color: #fff;
+    border: 1px solid rgb(65, 65, 65);
+    margin-bottom: 10px;
+}
+.btn_upload {
+    width: 100%;
+    min-height: 120px;
+    border: 2px dashed rgba(0,0,0,.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    background: #fcfcfc;
+    margin: 20px 0;
+}
+
+.editinjury {
+    border: 0 !important;
+ }
+
+.m-form .m-form__help{
+  color: #000 !important;
+}
+
+.m-form .m-form__section{
+  color: #000 !important;
+}
+
+.hideMedia{
+  display: none;
+}
+.mat-class{
+  border: 1px solid #ebedf2;
+}
+.mat-class:focus {
+  border: 1px solid #716ACA;
+}
+p {
+  font-family: Lato;
+}
+.container1 {
+  width:180px;
+  display:inline-block;
+  cursor:pointer;
+  }
+  .delete-bttn {
+  top: -35px;
+  position: relative;
+  left: -31px;
+  cursor:pointer;
+  /* background-color: rgba(237, 71, 71, 0.723); */
+}
+.delete-bttn:hover{
+  background-color:#DF2026;
+}
+

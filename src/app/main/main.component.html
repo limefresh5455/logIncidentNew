@@ -1,0 +1,304 @@
+<!-- begin:: Page -->
+<div class="m-grid m-grid--hor m-grid--root m-page" id="page-container">
+  <ng-template #resetPass let-modal>
+    <form [formGroup]="resetForm" (ngSubmit)="onSubmit()">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Reset Password</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xl-12">
+            <div class="m-form__group form-group">
+              <label> Current Password <span class="error">*</span></label>
+              <input type="password" formControlName="previousPassword" [ngClass]="{
+                  'is-invalid': submitted && f.previousPassword.errors
+                }" class="form-control" placeholder="Password.." remove-space autocomplete="off" />
+              <div *ngIf="submitted && f.previousPassword.errors" class="invalid-feedback">
+                <div *ngIf="f.previousPassword.errors?.required">
+                  Password is required
+                </div>
+              </div>
+            </div>
+            <div class="m-form__group form-group">
+              <label> New Password <span class="error">*</span></label>
+              <input type="password" formControlName="desiredPassword" [ngClass]="{
+                  'is-invalid': submitted && f.desiredPassword.errors
+                }" class="form-control" placeholder="Password.." remove-space autocomplete="off" />
+              <div *ngIf="submitted && f.desiredPassword.errors" class="invalid-feedback">
+                <div *ngIf="f.desiredPassword.errors?.required">
+                  New Password is required
+                </div>
+                <div *ngIf="f.desiredPassword.errors?.pattern">
+                  Please enter 7 character must contain one capital and one
+                  number
+                </div>
+              </div>
+            </div>
+            <div class="m-form__group form-group">
+              <label> Confirm Password <span class="error">*</span></label>
+              <input type="password" formControlName="cPassword"
+                [ngClass]="{ 'is-invalid': submitted && f.cPassword.errors }" class="form-control"
+                placeholder="Password.." remove-space autocomplete="off" />
+              <div *ngIf="submitted && f.cPassword.errors" class="invalid-feedback">
+                <div *ngIf="f.cPassword.errors.confirmedValidator">
+                  Password and Confirm Password must be match.
+                </div>
+                <div *ngIf="f.cPassword.errors?.pattern">
+                  Please enter 7 character must contain one capital and one
+                  number
+                </div>
+                <div *ngIf="f.cPassword.errors?.required">
+                  Confirm Password is required.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm">Reset</button>
+      </div>
+    </form>
+  </ng-template>
+  <div id="content-wrap">
+    <!-- begin::Body -->
+    <div class="fixToTop m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
+      <!-- BEGIN: Left Aside -->
+      <div id="m_aside_left" class="fixToTop m-grid__item m-aside-left" [ngStyle]="{
+          'background-image':
+            'linear-gradient(' +
+            companyColor +
+            ', ' +
+            currentUser.company.accent +
+            ')'
+        }">
+        <div class="m-stack__item m-brand">
+          <div class="m-stack m-stack--ver m-stack--general">
+            <div class="m-stack__item m-stack__item--middle m-brand__logo">
+              <a routerLink="/dashboard" class="col-12 m-brand__logo-wrapper text-center"
+                [ngStyle]="{ color: 'white', 'font-family': 'Work Sans' }">
+                <img alt="" class="companyImage" src="{{ currentUser.company.imageUrl }}" />
+                <br />
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- BEGIN: Aside Menu -->
+        <div id="m_ver_menu" class="m-aside-menu m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark"
+          m-menu-vertical="1" m-menu-scrollable="1" m-menu-dropdown-timeout="500">
+          <ul class="m-menu__nav m-menu__nav--dropdown-submenu-arrow">
+            <li *ngIf="currentUser.isProjectManager == false"  class="m-menu__item m-menu__item--submenu"
+              [ngClass]="{ 'active-link': url == '/dashboard' }">
+              <a routerLink="/dashboard" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Dashboard" class="m-menu__link-icon flaticon-line-graph"></i>
+                <span class="m-menu__link-text">Dashboard</span>
+              </a>
+            </li>
+            <li *ngIf="currentUser.admin === true" class="m-menu__item m-menu__item--submenu"
+              [ngClass]="{ 'active-link': url == '/search' }">
+              <a routerLink="/search" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Search" class="m-menu__link-icon flaticon-search-magnifier-interface-symbol"></i>
+                <span class="m-menu__link-text"><ng-container *ngIf="company && company.incidentSingularName">{{
+                    company.incidentSingularName | titlecase
+                    }}</ng-container>
+                  <ng-container *ngIf="!company || !company.incidentSingularName">Incident</ng-container>
+                  Search</span>
+              </a>
+            </li>
+
+            <li *ngIf="currentUser.admin === true && requiresTags" class="m-menu__item m-menu__item--submenu"
+              [ngClass]="{ 'active-link': url == '/searchTags' }">
+              <a routerLink="/searchTags" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i class="m-menu__link-icon la la-tags"></i>
+                <span class="m-menu__link-text">Incident by Tag</span>
+              </a>
+            </li>
+            <li *ngIf="currentUser.admin === true" class="m-menu__item m-menu__item--submenu" [ngClass]="{
+                'active-link':
+                  url == '/company-view' && url !== '/company-view/1'
+              }">
+              <a routerLink="/company-view" class="m-menu__link m-menu__toggle" [ngClass]="{
+                  'active-link':
+                    url == '/company-view' && url !== '/company-view/1'
+                }">
+                <i title="Company View" class="m-menu__link-icon flaticon-calendar"></i>
+                <span class="m-menu__link-text">Company View</span>
+              </a>
+            </li>
+            <li *ngIf="
+                currentUser.isManager ||
+                currentUser.isProjectManager ||
+                currentUser.isDashboardViewOnly !== true
+              " class="m-menu__item m-menu__item--submenu" [ngClass]="{ 'active-link': url == '/assigned' }">
+              <a routerLink="/assigned" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Assigned To Me" class="m-menu__link-icon flaticon-calendar"></i>
+                <span class="m-menu__link-text">Assigned To Me</span>
+              </a>
+            </li>
+            <li  *ngIf="currentUser.company.name == 'Finninguk'" class="m-menu__item m-menu__item--submenu">
+              <a routerLink="/Sif" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="SIF" class="m-menu__link-icon flaticon-profile-1"></i>
+                <span class="m-menu__link-text">SIF Reports</span>
+              </a>
+            </li>
+            <!-- <li  *ngIf="currentUser.company.name == 'Finninguk'" class="m-menu__item m-menu__item--submenu">
+              <a routerLink="/CIFComponent" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="SIF" class="m-menu__link-icon flaticon-profile-1"></i>
+                <span class="m-menu__link-text">CIF Reports</span>
+              </a>
+            </li> -->
+            <li class="m-menu__item m-menu__item--submenu">
+              <a routerLink="/my-view" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="My View" class="m-menu__link-icon flaticon-calendar"></i>
+                <span class="m-menu__link-text">
+                  My
+                  <ng-container *ngIf="company && company.incidentPluralName">{{
+                    company.incidentPluralName | titlecase
+                    }}</ng-container>
+                  <ng-container *ngIf="!company || !company.incidentPluralName">Incidents</ng-container>
+                </span>
+              </a>
+            </li>
+            <li *ngIf="currentUser.company.name == 'Finning'" class="m-menu__item m-menu__item--submenu">
+              <a routerLink="/action-age-severity" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Action/Age/Severity" class="m-menu__link-icon flaticon-calendar"></i>
+                <span class="m-menu__link-text"> Action/Age/Severity </span>
+              </a>
+            </li>
+            <li class="m-menu__item m-menu__item--submenu">
+              <a routerLink="/create-incident" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Create Incident" class="m-menu__link-icon flaticon-add"></i>
+                <span class="m-menu__link-text">
+                  Create
+                  <ng-container *ngIf="company && company.incidentSingularName">{{
+                    company.incidentSingularName | titlecase
+                    }}</ng-container>
+                  <ng-container *ngIf="!company || !company.incidentSingularName">Incident</ng-container>
+                </span>
+              </a>
+            </li>
+
+            <li class="m-menu__item m-menu__item--submenu">
+              <a routerLink="/profile" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Profile" class="m-menu__link-icon flaticon-profile-1"></i>
+                <span class="m-menu__link-text">Profile</span>
+              </a>
+            </li>
+            <li class="m-menu__item m-menu__item--submenu" *ngIf="sosValue">
+              <a routerLink="/sos" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Safe On Site" class="m-menu__link-icon flaticon-profile-1"></i>
+                <span class="m-menu__link-text">SOS</span>
+              </a>
+            </li>
+            <li class="m-menu__item m-menu__item--submenu" *ngIf="user?.isAuditor == true" [ngClass]="{
+                'm-menu__item--open m-menu__item--expanded': activeClass
+              }" aria-haspopup="true" m-menu-submenu-toggle="hover">
+              <a href="javascript:;" (click)="menuShowHide()" class="m-menu__link m-menu__toggle"
+                routerLinkActive="active-link"><i class="m-menu__link-icon flaticon-profile-1"></i><span
+                  class="m-menu__link-text">Audits</span><i class="m-menu__ver-arrow la la-angle-right"></i></a>
+              <div class="m-menu__submenu">
+                <span class="m-menu__arrow"></span>
+                <ul class="m-menu__subnav">
+                  <li class="m-menu__item" title="Audits" [ngClass]="{ 'active-link': url == '/mmt/audits' }"
+                    *ngIf="auditValue" aria-haspopup="true">
+                    <a  routerLink=  "/mmt/audits" class="m-menu__link" routerLinkActive="active-link"><i
+                        class="m-menu__link-icon flaticon-list"><span></span></i><span class="m-menu__link-text">
+                        Audits</span></a>
+                  </li>
+                  <li class="m-menu__item" title="Monthly Tours"
+                    [ngClass]="{ 'active-link': url == '/mmt/monthly-tours' }" *ngIf="mmtValue" aria-haspopup="true">
+                    <a routerLink="/mmt/monthly-tours" class="m-menu__link" routerLinkActive="active-link"><i
+                        class="m-menu__link-icon flaticon-list"><span></span></i><span class="m-menu__link-text">
+                        Monthly Tours</span></a>
+                  </li>
+                  <li class="m-menu__item" title="Audit Actions" [ngClass]="{ 'active-link': url == '/mmt/actions' }"
+                    *ngIf="!auditActionValue" aria-haspopup="true">
+                    <a routerLink="/mmt/actions" class="m-menu__link" routerLinkActive="active-link"><i
+                        class="m-menu__link-icon flaticon-list-1"><span></span></i><span class="m-menu__link-text">
+                        Audit Actions</span></a>
+                  </li>
+                  <li class="m-menu__item" title="Question Pool MMT" [ngClass]="{
+                      'active-link': url == '/mmt/question-pool-mmt'
+                    }" *ngIf="mmtValue" aria-haspopup="true">
+                    <a routerLink="/mmt/question-pool-mmt" class="m-menu__link" routerLinkActive="active-link"><i
+                        class="m-menu__link-icon flaticon-list-2"><span></span></i><span class="m-menu__link-text">
+                        Question Pool MMT</span></a>
+                  </li>
+                  <li class="m-menu__item" title="Question Pool Audits" [ngClass]="{
+                      'active-link': url == '/mmt/question-pool-ae'
+                    }" *ngIf="auditValue" aria-haspopup="true">
+                    <a routerLink="/mmt/question-pool-ae" class="m-menu__link" routerLinkActive="active-link"><i
+                        class="m-menu__link-icon flaticon-list-2"><span></span></i><span class="m-menu__link-text">
+                        Question Pool Audits</span></a>
+                  </li>
+                  <li class="m-menu__item" title="Future MMTs" *ngIf="mmtValue" aria-haspopup="true">
+                    <a routerLink="/mmt/future-mmt" class="m-menu__link" routerLinkActive="active-link"><i
+                        class="m-menu__link-icon flaticon-list-3"><span></span></i><span class="m-menu__link-text">
+                        Future MMTs</span></a>
+                  </li>
+                  <li class="m-menu__item" title="Future Audits" *ngIf="auditValue" aria-haspopup="true">
+                    <a routerLink="/mmt/future-aes" class="m-menu__link" routerLinkActive="active-link"><i
+                        class="m-menu__link-icon flaticon-list-3"><span></span></i><span class="m-menu__link-text">
+                        Future Audits</span></a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="m-menu__item m-menu__item--submenu"
+              *ngIf="mmtValue && user?.isAuditor === true">
+              <a routerLink="/audits-admin" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Audits Admin" class="m-menu__link-icon flaticon-profile-1"></i>
+                <span class="m-menu__link-text">Audits Admin</span>
+              </a>
+            </li>
+            <li *ngIf="user?.isLogincidentAdmin == true" class="m-menu__item m-menu__item--submenu"
+              [ngClass]="{ 'active-link': url == '/users' }">
+              <a routerLink="/users" [ngClass]="{
+                  'active-link': url == '/business-units' || url == '/add-users'
+                }" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Users" class="m-menu__link-icon flaticon-profile-1"></i>
+                <span class="m-menu__link-text">Users</span>
+              </a>
+            </li>
+
+
+            <!-- <li class="m-menu__item  m-menu__item--submenu">
+              <a routerLink="/change-password" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="ChangePassword" class="m-menu__link-icon flaticon-logout"></i>
+                <span class="m-menu__link-text">Change Password</span>
+              </a>
+            </li> -->
+            <li class="m-menu__item m-menu__item--submenu">
+              <a (click)="logout()" class="m-menu__link m-menu__toggle" routerLinkActive="active-link">
+                <i title="Logout" class="m-menu__link-icon flaticon-logout"></i>
+                <span class="m-menu__link-text">Logout</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!-- END: Aside Menu -->
+      </div>
+      <!-- END: Left Aside -->
+      <div class="m-grid__item m-grid__item--fluid m-wrapper">
+        <div class="m-content">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end:: Body -->
+  <!-- begin::Footer -->
+  <footer class="m-grid__item m-footer" id="footer">
+    <div class="m-container m-container--fluid m-container--full-height m-page__container">
+      <div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
+        <div class="footer-text m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
+          <span class="m-footer__copyright">
+            {{ year }} &copy; Logincident
+          </span>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- end::Footer -->
+</div>
+<!-- end:: Page -->

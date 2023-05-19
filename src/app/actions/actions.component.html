@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-xl-12">
+    <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+      <div class="m-portlet__body">
+        <div class="m-section">
+          <div class="m-section__content" style="overflow: scroll">
+            <table class="table table-hover table-responsive-sm" style="max-width: 100%">
+              <thead [style.background-color]="actionColor" [style.border-color]="actionColor" [ngStyle]="{'color': '#fff'}">
+              <tr>
+                <th scope="col" sortable="statusName" (sort)="onSort($event)">Status</th>
+                <th scope="col" sortable="createdDate" (sort)="onSort($event)">Created</th>
+                <th scope="col" sortable="branchName" (sort)="onSort($event)">Branch</th>
+                <th scope="col" sortable="description" (sort)="onSort($event)">Description</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let number of [1,2,3,4,5,6,7,8]">
+                  <th *ngIf="!selectedIncidents">
+                    <div class="tableButton loading">
+                    </div>
+                  </th>
+                  <td *ngIf="!selectedIncidents">
+                    <div class="tableDate loading">
+                    </div>
+                  </td>
+                  <td *ngIf="!selectedIncidents">
+                    <div class="tableBranch loading">
+                    </div>
+                  </td>             
+                  <td *ngIf="!selectedIncidents">
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                  <th *ngIf="!selectedIncidents">
+                    <div class="tableButton loading">
+                    </div>
+                  </th>
+                </tr>
+                <tr *ngFor="let branch of selectedIncidents | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                  <td>
+                    <ng-container *ngIf="branch.status">
+                      <span class="btn" [ngClass]="(branch.statusName == 'Open') ? 'redClass' : 'greenClass'">{{branch.statusName}}</span>
+                    </ng-container>
+                  </td>
+                  <td>{{branch.createdDate | date:'dd/MM/y HH:mm'}}</td>
+                  <td>{{branch.branchName}}</td>
+                  <td>{{branch.description}}</td>
+                  <td><button class="btn btn-sm btn-dark" [style.background-color]="accentColor" [style.border-color]="accentColor" (click)="goToActionsView(branch.id)">Action</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <ng-container *ngIf="selectedIncidents && selectedIncidents.length > 0">
+              <pagination-controls style="text-align: center;" responsive="true" (pageChange)="p = $event"></pagination-controls>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

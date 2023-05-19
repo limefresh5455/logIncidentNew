@@ -1,0 +1,76 @@
+<h5 class="bevelTitle">CIF REPORTS</h5>
+<div class="col-12 px-0 mx-0">
+    <div class="col-sm-4 ">
+      <div id="sosrange" class="btn-info sos-custom-range">
+        <i class="fa fa-calendar"></i>&nbsp;
+        <span></span> <i class="fa fa-caret-down faCarets"></i>
+      </div>
+    </div>
+</div>
+<div class="col-lg-12">
+  <!--begin:: CIF What graph data-->
+  <div
+    class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+  >
+    <div
+      class="m-portlet__head"
+      [style.background-color]="companyColor"
+      [style.border-color]="companyColor"
+    >
+      <div class="m-portlet__head-caption">
+        <div class="m-portlet__head-title">
+          <h3 class="m-portlet__head-text">What</h3>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet__body">
+      <div class="tab-content">
+        <div class="m-list-timeline m-list-timeline--skin-light">
+          <div class="m-list-timeline__items">
+            <canvas id="cifData_what_it_bar_chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End:: SIF What graph data-->
+</div>
+<div class="row">
+<!-- for driving vechiles why sifData_what_it_bar_chart -->
+<div class="col-xl-6" *ngFor="let whydata of whyValuesData; let i = index">
+  <!--begin:: SIF What graph data-->
+  <div
+    class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+  >
+    <div
+      class="m-portlet__head"
+      [style.background-color]="companyColor"
+      [style.border-color]="companyColor"
+    >
+      <div class="m-portlet__head-caption">
+        <div class="m-portlet__head-title">
+          <h3 class="m-portlet__head-text">{{ whydata }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet__body">
+      <div class="tab-content">
+        <div class="m-list-timeline m-list-timeline--skin-light">
+          <div class="m-list-timeline__items">
+            <canvas class="why_bar" id="why_bar_chart_{{i}}"  labels="labels"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End:: SIF What graph data-->
+</div>
+</div>
+
+
+
+
+
+
+
+

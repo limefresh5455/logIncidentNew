@@ -1,0 +1,154 @@
+<h5 *ngIf="sosView" class="bevelTitle">SOS({{sosTitle}}) VIEW</h5>
+<div class="col-12">
+  <hr/>
+  <div class="tab-content">
+    <div class="tab-pane active" id="m_tabs_1_5" role="tabpanel">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+            <div class="m-portlet__body">
+              <img src="{{ currentUser.company.imageUrl }}" class="finning_logo">
+              <div *ngIf="!sosData">
+                <div class="card cardClass loading">
+                </div>
+              </div>      
+              <div class="accordion" id="accordionExample" *ngIf="sosData">
+                <div class="card">
+                  <div class="card-header" id="headingOne" [ngClass]="(totalCount == 0) ? 'greenClass' : ((totalCount >= 0) && (totalCount < 11)) ? 'amberClass' : (totalCount >= 12) ? 'redClass': ''">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        {{sosTitle}}
+                      </button>
+                      <span class="right">
+                        Total Risk Rating ({{totalCount}})
+                      </span>
+                    </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body row col-sm-12">
+                      <div class="col-sm-6">
+                        <strong>Name : {{sosUsers.firstName}} {{sosUsers.lastName}}</strong><br/>
+                        <strong>Attendees : {{sosReport.attendee}}</strong><br/>
+                        <strong>Date : {{sosReport.date | date : 'dd/MM/yyyy'}}</strong><br/>
+                        <strong>Department : {{sosReport.department}}</strong><br/>
+                        <strong>Time : {{sosReport.time | date : 'HH:mm'}}</strong><br/>
+                        <strong>Workcarriedout : {{sosReport.workcarriedout}}</strong><br/>
+                      </div>
+                      <div class="col-sm-6">
+                        <strong *ngIf="sosAddress">{{sosAddress.fieldTitle}}</strong><br/>
+                        <p *ngIf="sosAddress.fieldType == 'gps' && sosAddress.fieldTitle == 'What3Words'">{{whats3words}}<br/>
+                        </p>
+                        <span *ngIf="sosAddress.lat">
+                          <agm-map [zoom]="15" [latitude]="+sosAddress.lat" [longitude]="+sosAddress.lng">
+                            <agm-marker [latitude]="+sosAddress.lat" [longitude]="+sosAddress.lng"></agm-marker>
+                          </agm-map>
+                          {{incidentLocation}}
+                        </span>
+                      </div> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion" [id]="'sectionAccordion'+i" *ngFor="let sosSection of sosDataSection; let i = index">
+                <div class="card">
+                  <div class="card-header" [id]="'headingTwo'+i" [ngClass]="(getTotalRating(sosSection.name) == 0) ? 'greenClass' : ((getTotalRating(sosSection.name) >= 0) && (getTotalRating(sosSection.name) < 11)) ? 'amberClass' : (getTotalRating(sosSection.name) >= 12) ? 'redClass': ''">
+                      <h5 class="mb-0">
+                          <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#'+sosSection.name" aria-expanded="true" [attr.aria-controls]="sosSection.name">
+                              {{sosSection.name}}
+                          </button>
+                          <span class="right">
+                              Section Risk Rating ({{getTotalRating(sosSection.name)}})
+                          </span>
+                      </h5>
+                  </div>
+                  <div [id]="sosSection.name" class="collapse" [attr.aria-labelledby]="'headingTwo'+i"  [attr.data-parent]="'#sectionAccordion'+i">
+                    <div class="card-body">
+                      <div class="accordion" [id]="'accordionExample'+i" *ngFor="let sosSubSection of sosSection.subsection; let i = index">
+                        <div class="card">
+                          <div class="card-header" id="headingOne{{i}}" [ngClass]="(sosSubSection.rating == 0) ? 'greenClass' : ((sosSubSection.rating >= 0) && (sosSubSection.rating < 11)) ? 'amberClass' : (sosSubSection.rating >= 12) ? 'redClass': ''">
+                            <h5 class="mb-0">
+                              <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#'+sosSubSection.name" aria-expanded="false" [attr.aria-controls]="sosSubSection.name">
+                                {{sosSubSection.name}}
+                              </button>
+                              <span class="right">
+                                Subsection Risk Rating ({{sosSubSection.rating}})
+                              </span>
+                            </h5>
+                          </div>
+                          <div [id]="sosSubSection.name" class="collapse" [attr.aria-labelledby]="'headingOne'+i" [attr.data-parent]="'#accordionExample'+i">
+                            <div class="card-body row col-sm-12">
+                              <div class="col-sm-4">
+                                <strong>Likelihood : {{(sosSubSection) ? sosSubSection.likelihood : ""}}</strong><br/>
+                                <strong>Severity : {{(sosSubSection) ? sosSubSection.severity : ""}}</strong><br/>
+                                <!-- <strong>Location : {{(sosSubSection) ? sosSubSection.location : ""}}</strong><br/> -->
+                                <strong>Hazards : {{(sosSubSection) ? sosSubSection.hazards : ""}}</strong><br/>
+                              </div>
+                              <div class="col-sm-8">
+                                <ng-container *ngIf="sosSubSection.media">
+                                  <div class="justify-content-center text-align-center col-12 row p-0 m-0">
+                                    <ng-container *ngFor="let mediaItem of sosSubSection.media">
+                                      <div *ngIf="mediaItem.type != 'image' || (mediaItem.type === 'image' && hasMediaSrc(mediaItem.uuid))"
+                                           class="col-lg-6">
+                                        <a style="justify-content: center" href="javascript:void(0)" (click)="getMedia(mediaItem, previewImage)">
+                                          <ng-container style="justify-content: center"
+                                                        *ngIf="mediaItem.type === 'image' && hasMediaSrc(mediaItem.uuid)">
+                                            <ng-container *ngIf="!mediaItem.overlayId">
+                                              <img [src]="mediaSrc[mediaItem.uuid]" style="max-height: 300px !important;" class="img-fluid"
+                                                   [alt]="mediaItem.label">
+                                              <br>
+                                            </ng-container>
+                                            <ng-container *ngIf="mediaItem.overlayId">
+                                              <canvas id="{{mediaItem.uuid}}" style="max-height: 300px !important; max-width: 100% !important;" [attr.overlayId]="mediaItem.overlayId" #canvas></canvas>
+                                            </ng-container>
+                                          </ng-container>
+                                          <ng-container *ngIf="mediaItem.type === 'video' && hasMediaSrc(mediaItem.uuid)">
+                                            <video [src]="mediaSrc[mediaItem.uuid]" style="width: 100%;max-height: 300px !important;" class="mediaVideo" controls>
+                                            </video>
+                                            <br>
+                                          </ng-container>
+                                          <ng-container *ngIf="mediaItem.type === 'audio' && hasMediaSrc(mediaItem.uuid)">
+                                            <audio controls>
+                                              <source [src]="mediaSrc[mediaItem.uuid]" type="audio/mp4"/>
+                                            </audio>
+                                            <br>
+                                          </ng-container>
+                                          <ng-container *ngIf="mediaItem.type === 'doc' && hasMediaSrc(mediaItem.uuid)">
+                                            <button class="w-100 btn btn-link" style="white-space: normal;word-wrap: break-word;">{{mediaItem.label}}</button>
+                                            <br>
+                                          </ng-container>
+                                        </a>
+                                        <br>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>    
+
+<ng-template #previewImage let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" *ngIf="preViewType === 'image'">Image Preview</h4>
+    <h4 class="modal-title" *ngIf="preViewType === 'video'">Video Preview</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <img [src]="preViewImg" *ngIf="preViewType === 'image'" style="max-height: 300px !important;" class="img-fluid">
+    <video [src]="preViewImg" *ngIf="preViewType === 'video'" style="width: 100%; max-height: 300px !important;" class="mediaVideo" controls></video>
+  </div>
+</ng-template>

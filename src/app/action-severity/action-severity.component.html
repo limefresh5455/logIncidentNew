@@ -1,0 +1,125 @@
+<h5 class="bevelTitle"></h5>
+<div class="dashbaordTable">
+  <!-- <div class="exprt-button"><button>Export</button></div> -->
+  <div *ngIf="!incidentTotals">
+    <table class="table table-bordered " >
+      <thead>
+        <tr>
+          <th colspan="1" class="greenBg"><span></span></th>
+          <th colspan="5"></th>
+        </tr>
+        <tr class="Theading">
+          <th>Severity</th>
+          <th>0-21 days</th>
+          <th>22-90 days</th>
+          <th>91-180 days</th>
+          <th>181-365 days</th>
+          <th>More than 365 days</th>
+          <th class="whiteBg">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let number of [1,2,3,4,5,6,7,8]">
+        <th *ngIf="!incidentTotals" scope="row">
+          <div class="tableButton loading">
+          </div>
+        </th>
+        <td *ngIf="!incidentTotals">
+          <div class="tableDesc loading">
+          </div>
+        </td>
+        <td *ngIf="!incidentTotals">
+          <div class="tableDesc loading">
+          </div>
+        </td>
+        <td *ngIf="!incidentTotals">
+          <div class="tableDesc loading">
+          </div>
+        </td>
+        <td *ngIf="!incidentTotals">
+          <div class="tableDesc loading">
+          </div>
+        </td>
+        <td *ngIf="!incidentTotals">
+          <div class="tableDate loading">
+          </div>
+        </td>
+        <td *ngIf="!incidentTotals">
+          <div class="tableDate loading">
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div  *ngFor="let incident of incidentTotals | keyvalue">
+   <table class="table table-bordered table-responsive-sm">
+    <thead>
+      <tr>
+        <th  [ngStyle]="{'background': incident.value.high.color}"  colspan="2" class="greenBg"><span>{{incident.key}} ({{getOpenClosedCount('Open', incident.key)}}, {{getOpenClosedCount('Closed', incident.key)}})</span></th>
+        <th colspan="5"></th>
+      </tr>
+      <tr class="Theading">
+        <th >Severity</th>
+        <th>0-21 days</th>
+        <th>22-90 days</th>
+        <th>91-180 days</th>
+        <th>181-365 days</th>
+        <th>More than 365 days</th>
+        <th class="whiteBg">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr >
+        <td class="whiteBg" *ngIf="incident.value.displayLowMedHigh">High</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.high.days21}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.high.days90}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.high.days180}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.high.days365}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.high.older}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.high.total}}</td>
+      </tr>
+      <tr>
+        <td class="whiteBg" *ngIf="incident.value.displayLowMedHigh">Medium</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.medium.days21}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.medium.days90}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.medium.days180}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.medium.days365}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.medium.older}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.medium.total}}</td> 
+      </tr>      
+      <tr>
+        <td *ngIf="incident.value.displayLowMedHigh" class="whiteBg">Low</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.low.days21}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.low.days90}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.low.days180}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.low.days365}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.low.older}}</td>
+        <td *ngIf="incident.value.displayLowMedHigh">{{incident.value.low.total}}</td>
+      </tr>
+      <tr>
+        <td class="whiteBg">Total</td>
+        <td>{{incident.value.total.days21}}</td>
+        <td>{{incident.value.total.days90}}</td>
+        <td>{{incident.value.total.days180}}</td>
+        <td>{{incident.value.total.days365}}</td>
+        <td>{{incident.value.total.older}}</td>
+        <td>{{incident.value.total.total}}</td>
+      </tr>      
+    </tbody>
+  </table>
+  </div>
+</div>
+<div class="padding-top-10 text-align-center" *ngIf="(!incidentTotals || incidentTotals.length == 0)">
+  <h1>There are currently no <ng-container *ngIf="currentUser.company.name == 'logconcern'; then concern else incident"></ng-container>s</h1>
+  <button class="btn btn-dark btn-lg" routerLink="/create-incident">Add
+    <ng-container *ngIf="currentUser.company.name == 'logconcern'; then concern else incident"></ng-container>
+  </button>
+</div>
+<ng-template #incident>
+  <ng-container *ngIf="currentUser.company.name == 'AonFleet'; then incident_profile else incident_incident"></ng-container>
+</ng-template>
+<ng-template #concern>Concern</ng-template>
+
+<ng-template #incident_profile>Profile</ng-template>
+<ng-template #incident_incident>Incident</ng-template>

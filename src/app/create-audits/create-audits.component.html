@@ -1,0 +1,230 @@
+<h5 *ngIf="mmtView" class="bevelTitle">Create Audits Accounts</h5>
+<hr />
+<div class="row">
+  <div class="row col-12">
+    <div class="col-lg-2 mb-2">
+      <a
+        routerLink="/audits-admin"
+        class="btn btn-sm btn-dark"
+        [style.background-color]="accentColor"
+        [style.border-color]="accentColor"
+      >
+        Back
+      </a>
+    </div>
+    <div class="col-lg-8">
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+          <div
+            class="m-portlet__head"
+            [style.background-color]="mmtColor"
+            [style.border-color]="mmtColor"
+          >
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">Create Audits Accounts</h3>
+              </div>
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+              <div class="m-form__group form-group">
+                <label>Name <span class="error">*</span></label>
+                <input
+                  type="text"
+                  formControlName="name"
+                  [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                  class="form-control"
+                  placeholder="Name.."
+                  remove-space
+                />
+                <div
+                  *ngIf="submitted && f.name.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.name.errors.required">Name is required</div>
+                  <div *ngIf="f.name.errors?.trimError">
+                    {{ f.name.errors?.trimError.value }}
+                  </div>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <label for="businessUnitId"
+                  >Business Unit <span class="error">*</span></label
+                >
+                <select
+                  [ngClass]="{
+                    'is-invalid': submitted && f.businessUnitId.errors
+                  }"
+                  formControlName="businessUnitId"
+                  class="form-control"
+                  (change)="selectUnit($event)"
+                >
+                  <option value="">Select Business Unit</option>
+                  <option *ngFor="let unit of uniqueListUnit" [value]="unit.id">
+                    {{ unit.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="submitted && f.businessUnitId.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.businessUnitId.errors.required">
+                    Business Unit is required
+                  </div>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <label for="branchId"
+                  >Branch Name <span class="error">*</span></label
+                >
+                <select
+                  [ngClass]="{ 'is-invalid': submitted && f.branchId.errors }"
+                  formControlName="branchId"
+                  class="form-control"
+                >
+                  <option value="">Select Branch</option>
+                  <option
+                    *ngFor="let branch of selectBranchList"
+                    [value]="branch.id"
+                  >
+                    {{ branch.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="submitted && f.branchId.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.branchId.errors.required">
+                    Branch Name is required
+                  </div>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <label for="branchsupervisorId"
+                  >Branch Supervisor <span class="error">*</span></label
+                >
+                <mat-form-field appearance="outline">
+                  <input
+                    type="text"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.branchsupervisorId.errors
+                    }"
+                    (keyup)="
+                      searchCompanyUsers($event.target.value, 'supervisor')
+                    "
+                    matInput
+                    placeholder="Users"
+                    aria-label="Users"
+                    [matAutocomplete]="autoSuper"
+                    formControlName="branchsupervisorId"
+                  />
+                  <mat-autocomplete
+                    #autoSuper="matAutocomplete"
+                    (optionSelected)="
+                      onSelectionChanged($event.option.value, 'supervisor')
+                    "
+                    [displayWith]="displayFn"
+                  >
+                    <mat-option
+                      *ngFor="let user of filteredCreators | async"
+                      [value]="user"
+                    >
+                      <span
+                        [innerHTML]="user.name | highlight : toHighlight"
+                      ></span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error
+                    *ngIf="submitted && f.branchsupervisorId.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.branchsupervisorId.errors.required">
+                      Branch Supervisor is required
+                    </div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="m-form__group form-group">
+                <label for="branchauditorId"
+                  >Branch Auditor <span class="error">*</span></label
+                >
+                <mat-form-field appearance="outline">
+                  <input
+                    type="text"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.branchauditorId.errors
+                    }"
+                    (keyup)="searchCompanyUsers($event.target.value, 'auditor')"
+                    matInput
+                    placeholder="Users"
+                    aria-label="Users"
+                    [matAutocomplete]="autoAudit"
+                    formControlName="branchauditorId"
+                  />
+                  <mat-autocomplete
+                    #autoAudit="matAutocomplete"
+                    (optionSelected)="
+                      onSelectionChanged($event.option.value, 'auditor')
+                    "
+                    [displayWith]="displayFn"
+                  >
+                    <mat-option
+                      *ngFor="let user of filteredCreators1 | async"
+                      [value]="user"
+                    >
+                      <span
+                        [innerHTML]="user.name | highlight : toHighlight"
+                      ></span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error
+                    *ngIf="submitted && f.branchauditorId.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.branchauditorId.errors.required">
+                      Branch Auditor is required
+                    </div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <!-- <div class="m-form__group form-group">
+                <label for="branchsupervisorId">Branch Supervisor <span class="error">*</span></label>
+                <select [ngClass]="{ 'is-invalid': submitted && f.branchsupervisorId.errors }" formControlName="branchsupervisorId" class="form-control">
+                   <option value="">Select Supervisor</option>
+                   <option *ngFor="let user of userList" [value]="user.id">{{user.firstName+" "+user.lastName}}</option>
+                </select>
+                <div *ngIf="submitted && f.branchsupervisorId.errors" class="invalid-feedback">
+                    <div *ngIf="f.branchsupervisorId.errors.required">Branch Supervisor is required</div>
+                </div>
+              </div> -->
+              <!-- <div class="m-form__group form-group">
+                <label for="branchauditorId">Branch Auditor <span class="error">*</span></label>
+                <select [ngClass]="{ 'is-invalid': submitted && f.branchauditorId.errors }" formControlName="branchauditorId" class="form-control">
+                   <option value="">Select Auditor</option>
+                   <option *ngFor="let user of userList" [value]="user.id">{{user.firstName+" "+user.lastName}}</option>
+                </select>
+                <div *ngIf="submitted && f.branchauditorId.errors" class="invalid-feedback">
+                    <div *ngIf="f.branchauditorId.errors.required">Branch Auditor is required</div>
+                </div>
+              </div> -->
+            </div>
+            <div class="col-md-12 mx-auto">
+              <button
+                class="btn btn-dark col-12 submitButton"
+                [style.background-color]="mmtColor"
+                [style.border-color]="mmtColor"
+                type="submit"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-2"></div>
+  </div>
+</div>

@@ -1,0 +1,256 @@
+.greenClass{
+  background-color: rgb(0, 155, 51);
+  color: #fff;
+  text-align: center;
+}
+
+.greenClassLate{
+  background-color: rgb(0, 155, 51);
+  color: #fff;
+  text-align: center;
+}
+
+.amberClass{
+  background-color: rgb(255, 163, 0);
+  color: #fff;
+  text-align: center;
+}
+
+.greyClass{
+  background-color: rgb(199, 199, 188);
+  color: #fff;
+  text-align: center;
+}
+
+.amberClassLate{
+  background-color: rgb(255, 163, 0);
+  color: #fff;
+  text-align: center;
+}
+
+.redClass{
+  background-color: rgb(248, 0, 0);
+  color: #fff;
+  text-align: center;
+}
+
+.purpleClass{
+  background-color: rgb(213, 19, 135);
+  color: #fff;
+  text-align: center;
+}
+
+.redClassLate{
+  background-color: rgb(248, 0, 0);
+  color: #fff;
+  text-align: center;
+}
+
+.ngx-mat-drp-calendar-container{
+  height: auto !important;
+}
+
+.modal-header{
+  padding: 12px !important;
+  background-color: rgb(205,92,92);
+}
+
+.modal-header .modal-title{
+  color: #fff;
+}
+
+.filter-box{
+  margin-bottom: 0;
+}
+
+.btn-apply{
+  background-color: #58dd6e;
+  border-color: #58dd6e;
+}
+
+.btn-export{
+  background-color: #58cbdd;
+  border-color: #58cbdd;
+}
+
+span.redClass{
+  padding: 5px;
+  width: 100%;
+  float: left;
+}
+
+span.redClassLate{
+  padding: 5px;
+  width: 100%;
+  float: left;
+}
+
+span.greenClass{
+  padding: 5px;
+  width: 100%;
+  float: left;
+}
+
+span.greenClassLate{
+  padding: 5px;
+  width: 100%;
+  float: left;
+}
+
+span.amberClass{
+  padding: 5px;
+  width: 100%;
+  float: left;
+}
+
+span.amberClassLate{
+  padding: 5px;
+  width: 100%;
+  float: left;
+}
+
+.monthlyClass{
+  text-align: center;
+}
+
+.monthlyIcon{
+  padding: 10px;
+  margin: 5px;
+}
+
+.tooltip1:hover {
+  cursor: pointer;
+  position: relative;
+}
+.custom-span-text {
+  display: none;
+}
+.tooltip1:hover .custom-span-text {
+  border: #000 2px solid;
+  padding: 5px 20px 5px 5px;
+  display: block;
+  z-index: 100;
+  background: #fff;
+  position: absolute;
+  top: -4px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: normal;
+  color: #65707d;
+  margin-top: -16px;
+  margin-left: -70px;
+}
+
+::ng-deep .monthFilterClass {
+  z-index: 999 !important;
+}
+
+th[sortable] {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+th[sortable].desc:before, th[sortable].asc:before {
+  content: '';
+  display: block;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAmxJREFUeAHtmksrRVEUx72fH8CIGQNJkpGUUmakDEiZSJRIZsRQmCkTJRmZmJgQE0kpX0D5DJKJgff7v+ru2u3O3vvc67TOvsdatdrnnP1Y///v7HvvubdbUiIhBISAEBACQkAICAEhIAQ4CXSh2DnyDfmCPEG2Iv9F9MPlM/LHyAecdyMzHYNwR3fdNK/OH9HXl1UCozD24TCvILxizEDWIEzA0FcM8woCgRrJCoS5PIwrANQSMAJX1LEI9bqpQo4JYNFFKRSvIgsxHDVnqZgIkPnNBM0rIGtYk9YOOsqgbgepRCfdbmFtqhFkVEDVPjJp0+Z6e6hRHhqBKgg6ZDCvYBygVmUoEGoh5JTRvIJwhJo1aUOoh4CLPMyvxxi7EWOMgnCGsXXI1GIXlZUYX7ucU+kbR8NW8lh3O7cue0Pk32MKndfUxQFAwxdirk3fHappAnc0oqDPzDfGTBrCfHP04dM4oTV8cxr0SVzH9FF07xD3ib6xCDE+M+aUcVygtWzzbtGX2rPBrEUYfecfQkaFzYi6HjVnGBdtL7epqAlc1+jRdAap74RrnPc4BCijttY2tRcdN0g17w7HqZrXhdJTYAuS3hd8z+vKgK3V1zWPae0mZDMykadBn1hTQBLnZNwVrJpSe/NwEeDsEwCctEOsJTsgxLvCqUl2ACftEGvJDgjxrnBqkh3ASTvEWrIDQrwrnJpkB3DSDrGW7IAQ7wqnJtkBnLRztejXXVu4+mxz/nQ9jR1w5VB86ejLTFcnnDwhzV+F6T+CHZlx6THSjn76eyyBIOPHyDakhBAQAkJACAgBISAEhIAQYCLwC8JxpAmsEGt6AAAAAElFTkSuQmCC') no-repeat;
+  background-size: 22px;
+  width: 22px;
+  height: 22px;
+  float: right;
+  margin-left: -5px;
+  filter: invert(1);
+}
+
+th[sortable].desc:before {
+  transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+}
+
+.marginAuto {
+  margin: auto;
+}
+
+.tableDesc {
+  height: 20px;
+  width: 100px
+}
+
+.tableMiniButton {
+  height: 20px;
+  width: 20px
+}
+
+.marginLeft10 {
+  margin-left: 10px
+}
+
+.loading {
+  min-height: 1px;
+  min-width: 1px;
+  background: rgb(210, 212, 215);
+  z-index: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shine */
+.loading:after {
+  content: '';
+  top: 0;
+  transform: translateX(100%);
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  z-index: 1;
+  animation: slide 2s infinite;
+
+  /*
+  CSS Gradient - complete browser support from http://www.colorzilla.com/gradient-editor/
+  */
+  background: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(50%, rgba(255, 255, 255, 0.8)), color-stop(99%, rgba(128, 186, 232, 0)), color-stop(100%, rgba(125, 185, 232, 0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(128, 186, 232, 0) 99%, rgba(125, 185, 232, 0) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#007db9e8', GradientType=1); /* IE6-9 */
+}
+
+/* animation */
+
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/deep/ .daterangepicker tbody td {
+  padding: 3px !important;
+}
+
+@media (min-width: 730px) {
+  /deep/ .daterangepicker .ranges {
+    float: right !important;
+  }
+}
+
+/deep/ .daterangepicker.show-ranges.ltr .drp-calendar.right {
+  border-right: 1px solid #ddd !important;
+}
+
+/deep/ .daterangepicker .drp-calendar.left{
+  padding: 10px 10px 10px 15px !important;
+}
+
+/deep/ .daterangepicker .drp-calendar.right{
+  padding: 10px 10px 10px 15px !important;
+}
+
+/deep/ .daterangepicker .ranges ul li{
+  margin-bottom: 0px !important;
+}

@@ -1,0 +1,32 @@
+.bevelTitle {
+  color: #9c9c9c;
+  text-shadow: rgba(255, 255, 255, 0.5) 0px 3px 3px;
+  text-align: center;
+  margin: -20px auto 0;
+}
+
+.error{
+  color: red;
+}
+
+.invalid-feedback{
+  font-size: 15px;
+}
+
+span.redClass{
+  padding: 8px;
+  background-color: rgb(248, 0, 0);
+  border-color: rgb(248, 0, 0);
+  color: #fff;
+}
+
+span.greenClass{
+  padding: 8px;
+  background-color: rgb(0, 155, 51);
+  border-color: rgb(0, 155, 51);
+  color: #fff;
+}
+
+.add_note{
+  margin-left: 12px;
+}

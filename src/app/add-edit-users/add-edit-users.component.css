@@ -1,0 +1,32 @@
+.bevelTitle {
+  color: #9c9c9c;
+  text-shadow: rgba(255, 255, 255, 0.5) 0px 3px 3px;
+  text-align: center;
+  margin: -20px auto 0;
+}
+
+.error{
+  color: red;
+}
+
+.invalid-feedback{
+  font-size: 15px;
+}
+
+.mat-slide-toggle {
+  display: contents;
+}
+
+.mat-form-field {
+  display: block;
+  font-weight: 100;
+}
+
+::ng-deep .mat-form-field-wrapper .mat-form-field-subscript-wrapper {
+  padding: 0 !important;
+  top: 44px !important;
+}
+
+.email-exists {
+  color: red;
+}

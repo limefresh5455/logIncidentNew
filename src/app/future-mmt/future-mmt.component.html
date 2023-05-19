@@ -1,0 +1,173 @@
+<!-- <h5 class="bevelTitle">FUTURE MMTs</h5> -->
+<div class="col-sm-12">
+  <div class="row">
+    <div class="col-sm-4 mt-2">
+      <div id="futuremmtrange" class="btn-info custom-range" [ngStyle]="{'display':(futureMmtLength.length > 0) ? 'block' : 'none' }">
+        <i class="fa fa-calendar"></i>&nbsp;
+        <span></span> <i class="fa fa-caret-down"></i>
+      </div>
+    </div>
+    <div class="col-sm-4 mt-2">
+      <input type="text" class="form-control generate-date" name="generateDate"/>
+      <input type="hidden" id="getGenerateDate" [value]="generateDate"/>
+    </div>
+    <div class="col-sm-4 mt-2">
+      <button class="btn btn-primary pull-right" id="bt" (click)="openGenerateModal(generate)">
+        <span *ngIf="futureMmtLength.length > 0">Re-Generate</span><span *ngIf="futureMmtLength.length == 0">Generate</span> Question
+      </button>
+    </div>
+  </div>
+</div> 
+<div class="col-12">
+  <hr/>
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" *ngFor="let month of currentYearData; let i = index">
+      <a class="nav-link" [ngClass]="(month==firstTabDate || month==tabDate) ? 'active' : ''" data-toggle="tab" href="#"
+         data-target="#m_tabs_{{i}}" (click)="tabSection(month)">{{month}}</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="m_tabs_0" role="tabpanel">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+            <div class="m-portlet__body">
+              <div class="m-section">
+                <div class="m-section__content" *ngIf="currentYearData.length > 0">
+                  <table class="table table-hover table-responsive-sm" style="max-width: 100%">
+                    <tbody>
+                    <tr *ngIf="dataLoading">
+                      <td class="text-center" [attr.colspan]="currentYearData.length">
+                        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+                      </td>
+                    </tr>
+                    <ng-container *ngIf="!dataLoading">
+                      <tr *ngIf="currentYearData.length > 0">
+                        <td>
+                          <form [formGroup]="auditGroupForm">
+                            <mat-form-field appearance="outline">
+                              <mat-label><strong>Audit Group</strong></mat-label>
+                              <mat-select formControlName="audit_group" [(ngModel)]="ownersData">
+                                <ng-container *ngFor="let option of selectMmtNameList">
+                                  <mat-option [value]="option">{{option}}</mat-option>
+                                </ng-container>                          
+                              </mat-select>
+                            </mat-form-field>
+                            <button *ngIf="(ownersData != null && ownersData.length > 0)" class="btn btn-primary change-owner" (click)="changeOwners(deleteDate)">
+                              <span>update</span>
+                              <!-- <span *ngIf="(ownersData == null || ownersData.length == 0)">add</span> -->
+                            </button>
+                            <button class="btn btn-danger" *ngIf="(ownersData != null && ownersData.length > 0)" (click)="openAuditNow(auditNow)">
+                            Audit Now
+                            </button>
+                          </form>
+                        </td>
+                        <td class="delete-schedule">
+                          <button class="btn btn-danger" (click)="deleteSchedule(deleteDate)">
+                            Delete this Schedule
+                          </button>
+                        </td>
+                      </tr>
+                      <tr *ngFor="let question of questionList | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                        <td>{{question.question}}</td>
+                        <td class="replaceBtn"><button class="btn btn-sm btn-success" (click)="openMmtQuestionModal(content, question.id, changeDate)">Replace</button></td>
+                      </tr>
+                    </ng-container>
+                    </tbody>
+                  </table>
+                  <ng-container *ngIf="currentYearData && currentYearData.length > 0">
+                    <pagination-controls style="text-align: center;" responsive="true" (pageChange)="p = $event"></pagination-controls>
+                  </ng-container>
+                </div>
+                <div class="m-section__content text-center" *ngIf="currentYearData.length == 0">
+                  Data not found
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit(createForm.value)">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Replace Question With MMT for [{{changeDate}}]</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-12 text-center">
+      <i class="fa fa-spinner fa-spin fa-3x fa-fw text-center" *ngIf="loading"></i>
+    </div>
+    <table class="table table-hover table-responsive-sm" style="max-width: 100%" *ngIf="!loading">
+      <tbody>
+      <tr *ngFor="let question of questionPoolList; let i = index">
+        <td>{{question.question}}</td>
+        <td><input type="radio" id="question_{{i}}" formControlName="question" value="{{question.question}}" (change)="changed(question.id)"/>
+            <label for="question_{{i}}">Select</label>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <span class="error" *ngIf="errorShow"><strong>This question is already exist in this MMT</strong></span>
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Cancel</button>
+    <button type="submit" class="btn btn-success">Confirm</button>
+  </div>
+  </form>
+</ng-template>
+
+<ng-template #generate let-modal>
+  <form [formGroup]="generateForm" (ngSubmit)="generateQuestion()">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Generate Question Quantity</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body generate-modal-body">
+      <div class="m-portlet__body">
+        <div class="m-form__section m-form__section--first">
+          <div class="m-form__group form-group">
+            <input type="number" formControlName="quantity" min="1" max="50" [value]="10" class="form-control" placeholder="Quantity..">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button type="submit" class="btn btn-success">Generate</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #auditNow let-modal>
+  <form [formGroup]="triggerForm" (ngSubmit)="triggerQuestion()">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Audit Manually</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body generate-modal-body">
+      <div class="m-portlet__body">
+        <div class="m-form__section m-form__section--first">
+          <div class="m-form__group form-group">
+            <label class="labels">How many days are you going to allow for this audit?</label>
+            <input type="number" formControlName="days" min="1" max="50" [value]="10" class="form-control" placeholder="Days..">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Cancel</button>
+      <button type="submit" class="btn btn-success">Trigger</button>
+    </div>
+  </form>
+</ng-template>
+

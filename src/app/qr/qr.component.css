@@ -1,0 +1,110 @@
+.content { /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#1e5799+0,2989d8+50,207cca+51,81d7ef+100 */
+  background: #1e5799; /* Old browsers */
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#1e5799+0,81d7ef+100 */
+  background: #1e5799; /* Old browsers */
+}
+
+#m_login_password_reset{
+  color: #575962
+}
+
+.login-margin {
+  /*margin: auto 10%;*/
+  margin: 10%;
+}
+
+@media (max-width: 1440px) {
+  .login-margin {
+    margin: 10%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hd-sm {
+    display: none;
+  }
+}
+
+.loginSubtitle {
+  padding: 40px 0
+}
+
+.marginAuto {
+  margin: auto;
+}
+
+.imageWrapper {
+  margin: 5vh 5vw
+}
+
+.image {
+  max-height: 100%;
+  max-width: 100%
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.loginCard {
+  position: absolute;
+  left: 15vw;
+  right: 15vw;
+  top: 15vh;
+}
+
+.margin-top-15 {
+  margin-top: 15vh;
+}
+
+.qr{
+  margin-right: 200px;
+}
+
+/* #progressBar {
+  width: 37%;
+  height: 22px;
+  background-color: #0A5F44;
+  display: inline-block;
+  float: left;
+  margin-left: 10px;
+}
+
+#progressBar div {
+  height: 100%;
+  text-align: right;
+  padding: 0 7px;
+  line-height: 22px; 
+  min-width: 32px !important;
+  background-color: #CBEA00;
+  box-sizing: border-box;
+} */
+
+
+#progressBar {
+  width: 37%;
+  /* margin: 10px auto; */
+  height: 5px;
+  background-color: #FFFFFF;
+  display: inline-block;
+  float: left;
+  margin-left: 10px;
+}
+
+#progressBar div {
+  height: 100%;
+  text-align: right;
+  padding: 0 7px;
+  line-height: 22px; /* same as #progressBar height if we want text middle aligned */
+  min-width: 32px !important;
+  background-color: #000000;
+  box-sizing: border-box;
+}
+
+/* Do not take in account */
+html{padding-top:30px}a.solink{position:fixed;top:0;width:50%;text-align:center;background:#f3f5f6;color:#cfd6d9;border:1px solid #cfd6d9;line-height:30px;text-decoration:none;transition:all .3s;z-index:999}a.solink::first-letter{text-transform:capitalize}a.solink:hover{color:#428bca}

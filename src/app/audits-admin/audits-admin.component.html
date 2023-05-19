@@ -1,0 +1,135 @@
+<h5 *ngIf="mmtView" class="bevelTitle">Audits Admin</h5>
+<div class="col-12">
+  <hr/>
+  <div class="tab-content">
+    <div class="tab-pane active" id="m_tabs_1_5" role="tabpanel">
+      <div class="row">
+        <div class="col-xl-9">
+          <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+            <div class="m-portlet__body">
+              <div class="col-12 row pb-2 ml-3">
+                <div class="ml-auto">
+                  <a routerLink="/create-audits" class="btn btn-sm btn-dark" [style.background-color]="accentColor" [style.border-color]="accentColor">
+                      Add Audits Accounts
+                  </a>
+                </div>
+              </div>
+              <div class="m-section">
+                <div class="m-section__content" style="overflow: scroll">
+                  <table class="table table-hover table-responsive-sm" style="max-width: 100%">
+                    <thead [style.background-color]="mmtColor" [style.border-color]="mmtColor" [ngStyle]="{'color': '#fff'}">
+                    <tr>
+                      <th scope="col" sortable="name" (sort)="onSort($event)">Name</th>
+                      <th scope="col" sortable="businessUnit" (sort)="onSort($event)">Business Unit</th>
+                      <th scope="col" sortable="branch" (sort)="onSort($event)">Branch</th>
+                      <th scope="col" sortable="auditor" (sort)="onSort($event)">Auditor</th>
+                      <th scope="col" sortable="supervisor" (sort)="onSort($event)">Branch Supervisor</th>
+                      <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let number of [1,2,3,4,5,6,7,8]">
+                        <td *ngIf="!mmtAdminList">
+                          <div class="tableDesc loading">
+                          </div>
+                        </td>
+                        <td *ngIf="!mmtAdminList">
+                          <div class="tableDesc loading">
+                          </div>
+                        </td>
+                        <td *ngIf="!mmtAdminList">
+                          <div class="tableDesc loading">
+                          </div>
+                        </td>
+                        <td *ngIf="!mmtAdminList">
+                          <div class="tableDesc loading">
+                          </div>
+                        </td>
+                        <td *ngIf="!mmtAdminList">
+                          <div class="tableDesc loading">
+                          </div>
+                        </td>
+                        <td *ngIf="!mmtAdminList">
+                          <div class="marginAuto row">
+                            <div class="loading tableMiniButton">
+                            </div>
+                            <div class="tableMiniButton marginLeft10 loading">
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr *ngFor="let mmt of mmtAdminList | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                        <td title="{{mmt.name}}">{{ (mmt.name.length>12)? (mmt.name | slice:0:12)+'..':(mmt.name) }}</td>
+                        <td title="{{mmt.businessUnit}}">{{ (mmt.businessUnit.length>12)? (mmt.businessUnit | slice:0:12)+'..':(mmt.businessUnit) }}</td>
+                        <td title="{{mmt.branch}}">{{ (mmt.branch.length>12)? (mmt.branch | slice:0:12)+'..':(mmt.branch) }}</td>
+                        <td>{{mmt.auditor}}</td>
+                        <td>{{mmt.supervisor}}</td>
+                        <td class="edit-mmt">
+                          <a class="btn btn-sm btn-dark response" [style.background-color]="accentColor" [style.border-color]="accentColor" (click)="goToEditMmtAdmin(mmt.id)">Edit</a>
+                          <a class="btn btn-sm btn-dark response" [style.background-color]="accentColor" [style.border-color]="accentColor" [style.margin-left]="'3px'" (click)="deleteMmtAdmin(mmt.id)">Delete</a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <ng-container *ngIf="mmtAdminList && mmtAdminList.length > 0">
+                    <pagination-controls style="text-align: center;" responsive="true" (pageChange)="p = $event"></pagination-controls>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3">
+        <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+            <div class="m-portlet__head" [style.background-color]="mmtColor" [style.border-color]="mmtColor">
+              <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                  <h3 class="m-portlet__head-text">
+                    Filters
+                  </h3>
+                </div>
+              </div>
+            </div> 
+            <div class="m-portlet__body">
+              <div class="m-section">
+                <div class="m-section__content">
+                  <form [formGroup]="filterForm">
+                    <div class="m-form__group form-group">
+                      <label>Name</label>
+                      <select class="form-control m-input" formControlName="b_name" (change)="filterName($event)">
+                        <option value="All">All</option>
+                        <option *ngFor="let name of selectMmtNameList | unique:'name'" [value]="name">{{name}}</option>
+                      </select>
+                    </div>
+                    <div class="m-form__group form-group">
+                      <label>Business Unit</label>
+                      <select class="form-control m-input" formControlName="b_unit" (change)="selectUnit($event)">
+                        <option value="All">All</option>
+                        <option *ngFor="let unit of unitList" [value]="unit.id">{{unit.name}}</option>
+                      </select>
+                    </div>
+                    <div class="m-form__group form-group">
+                      <label>Branch</label>
+                      <select class="form-control m-input" formControlName="branch" (change)="filterBranchList($event)">
+                        <option value="All">All</option>
+                        <option *ngFor="let branch of selectBranchList" [value]="branch.id">{{branch.name}}</option>
+                      </select>
+                    </div>
+                    <div class="m-form__group form-group">
+                      <label>User</label>
+                      <select class="form-control m-input" formControlName="users" (change)="filterUserList($event)">
+                        <option value="All">All</option>
+                        <option *ngFor="let user of userList | unique:'u_name'" [value]="user">{{user}}</option>
+                      </select>
+                    </div>
+                    <button class="btn btn-sm btn-dark" (click)="resetFilterForm()" [style.background-color]="accentColor" [style.border-color]="accentColor">Reset</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="row">
+  <div class="col-xl-12">
+    <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+      <div class="m-portlet__body">
+        <div class="col-12 row pb-2 ml-3">
+          <div class="ml-auto">
+            <button class="btn btn-primary" id="bt" (click)="openAddQuestionModal(content, null, '0')">
+                Add MMT Question
+            </button>
+          </div>
+        </div>
+        <div class="m-section">
+          <div class="m-section__content" style="overflow: scroll">
+            <table class="table table-hover table-responsive-sm" style="max-width: 100%">
+              <thead [style.background-color]="actionColor" [style.border-color]="actionColor" [ngStyle]="{'color': '#fff'}">
+              <tr>
+                <th sortable="id" (sort)="onSort($event)">ID</th>
+                <th [ngStyle]="{'width': '80px'}" sortable="enabled" (sort)="onSort($event)">Status</th>
+                <th sortable="question" (sort)="onSort($event)">Question</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let number of [1,2,3,4,5,6,7,8]">
+                  <td *ngIf="!questionPool">
+                    <div class="tableId loading">
+                    </div>
+                  </td>
+                  <th *ngIf="!questionPool">
+                    <div class="tableButton loading">
+                    </div>
+                  </th>
+                  <td *ngIf="!questionPool">
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                  <td *ngIf="!questionPool">
+                    <div class="marginAuto row">
+                      <div class="loading tableMiniButton">
+                      </div>
+                      <div class="tableMiniButton marginLeft10 loading">
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngFor="let question of questionPool | paginate: { id: 'qmmt', itemsPerPage: 10, currentPage: p }; let i = index">
+                  <td>{{question.id}}</td>
+                  <td><span [ngClass]="(question.enabled) ? 'greenClass' : 'redClass'">{{(question.enabled) ? 'Active' : 'Inactive'}}</span></td>
+                  <td>{{question.question}}</td>
+                  <td>
+                    <mat-slide-toggle [checked]="question.enabled" class="example-margin" [color]="actionColor" (change)="changed($event, question.id, '0')"></mat-slide-toggle>
+                    <button class="btn btn-sm btn-dark edit-btn" [style.background-color]="accentColor" [style.border-color]="accentColor" (click)="openAddQuestionModal(content, question.id, '0')">Edit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ng-container *ngIf="questionPool && questionPool.length > 0">
+              <pagination-controls style="text-align: center;" id="qmmt" responsive="true" (pageChange)="p = $event"></pagination-controls>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}} MMT Questions</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="m-portlet__body">
+        <div class="m-form__section m-form__section--first">
+          <div class="m-form__group form-group">
+            <label>Question <span class="error">*</span></label>
+            <input type="text" formControlName="question" [ngClass]="{ 'is-invalid': submitted && f.question.errors }" class="form-control" placeholder="Question.." remove-space>
+            <div *ngIf="submitted && f.question.errors" class="invalid-feedback">
+              <div *ngIf="f.question.errors.required">Question is required</div>
+              <div *ngIf="f.question.errors?.trimError">
+                {{ f.question.errors?.trimError.value }}
+              </div>
+            </div>
+          </div>
+          <div class="m-form__group form-group">
+            <label>Status <span class="error">*</span></label>
+            <select [ngClass]="{ 'is-invalid': submitted && f.enabled.errors }" formControlName="enabled" class="form-control">
+               <option value="">Select Status</option>
+               <option [value]="true">Active</option>
+               <option [value]="false">Inactive</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="submitted && f.enabled.errors">
+               <div *ngIf="f.enabled.errors.required">Status is required</div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Close</button>
+    <button class="btn btn-dark" [style.background-color]="mmtColor" [style.border-color]="mmtColor" type="submit">Submit</button>
+  </div>
+  </form>
+</ng-template>

@@ -1,0 +1,167 @@
+<h5 class="bevelTitle">Business Units</h5>
+<div class="col-12">
+  <hr/>
+  <div class="tab-content">
+    <div class="tab-pane active" id="m_tabs_1_5" role="tabpanel">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+            <div class="m-portlet__body">
+              <div class="col-12 row pb-2">
+                <div class="unit-response">
+                  <a class="btn btn-sm btn-dark" routerLink="/users" [style.background-color]="accentColor" [style.border-color]="accentColor">
+                      Back
+                  </a>
+                </div>
+                <div class="ml-auto unit-response" *ngIf="company && company.branchAdmin">
+                  <button class="btn btn-sm btn-dark" (click)="openAddUnitBranchModal(content, 'branch')" [style.background-color]="accentColor" [style.border-color]="accentColor">
+                      Add Branch
+                  </button>
+                </div>
+                <div class="ml-2 unit-response" *ngIf="company && company.branchAdmin">
+                  <button class="btn btn-sm btn-dark" (click)="openAddUnitBranchModal(content, 'units')" [style.background-color]="accentColor" [style.border-color]="accentColor">
+                      Add Business Units
+                  </button>
+                </div>
+              </div>
+              <div class="m-section">
+                <div class="m-section__content" style="overflow: scroll">
+                  <table class="table table-hover table-responsive-sm" style="max-width: 100%">
+                    <thead [style.background-color]="mmtColor" [style.border-color]="mmtColor" [ngStyle]="{'color': '#fff'}">
+                    <tr>
+                      <th scope="col" sortable="id" (sort)="onSort($event)">ID</th>
+                      <th scope="col" sortable="name" (sort)="onSort($event)">Unit Name</th>
+                      <th [style.width]="'20%'">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let number of [1,2,3,4,5,6,7,8]">
+                        <td *ngIf="!unitList">
+                          <div class="tableDesc loading">
+                          </div>
+                        </td>
+                        <td *ngIf="!unitList">
+                          <div class="tableDesc loading">
+                          </div>
+                        </td>
+                        <td *ngIf="!unitList">
+                          <div class="marginAuto row">
+                            <div class="loading tableMiniButton">
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr *ngFor="let units of unitList | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                        <td>{{ units.id }}</td>
+                        <td>{{ units.name }}</td>
+                        <td class="edit-mmt">
+                          <button class="btn btn-sm btn-dark" [style.background-color]="accentColor" [style.border-color]="accentColor" (click)="openUnitBranchModal(details, units.id)">View Branches ({{getAllBranchCountById(units.id)}})</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <ng-container *ngIf="unitList && unitList.length > 0">
+                    <pagination-controls style="text-align: center;" responsive="true" (pageChange)="p = $event"></pagination-controls>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <form [formGroup]="unitBranchForm" (ngSubmit)="onSubmit()">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add {{(unitField) ? 'Branch' : 'Business Units'}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div class="m-portlet__body">
+        <div class="m-form__section m-form__section--first">
+          <div class="m-form__group form-group" *ngIf="unitField">
+            <label>Business Unit <span class="error">*</span></label>
+            <select [ngClass]="{ 'is-invalid': submitted && f.parentId.errors }" formControlName="parentId" class="form-control">
+               <option value="">Select Business Unit</option>
+               <option *ngFor="let units of unitList" [value]="units.id">{{units.name}}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="submitted && f.parentId.errors">
+               <div *ngIf="f.parentId.errors.required">Business Unit is required</div>
+            </div>
+          </div>
+          <div class="m-form__group form-group">
+            <label>{{(unitField) ? 'Branch Name' : 'Business Units'}} <span class="error">*</span></label>
+            <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" class="form-control" placeholder="{{(unitField) ? 'Branch' : 'Business Units'}}" remove-space>
+            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+              <div *ngIf="f.name.errors.required">
+                {{(unitField) ? 'Branch Name' : 'Business Units'}} is required
+              </div>
+              <div *ngIf="f.name.errors?.trimError">
+                {{ f.name.errors?.trimError.value }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Close</button>
+    <button class="btn btn-dark" [style.background-color]="mmtColor" [style.border-color]="mmtColor" type="submit">Submit</button>
+  </div>
+  </form>
+</ng-template>
+
+<ng-template #details let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Branch List</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="m-portlet__body">
+      <div class="col-12 text-center">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw text-center" *ngIf="loading"></i>
+      </div>
+      <table class="table table-hover" *ngIf="!loading" style="max-width: 100%">
+        <thead [style.background-color]="mmtColor" [style.border-color]="mmtColor" [ngStyle]="{'color': '#fff'}">
+        <tr>
+          <th>ID</th>
+          <th>Branch Name</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let number of [1,2,3,4]">
+            <td *ngIf="!branchList">
+              <div class="tableDesc loading">
+              </div>
+            </td>
+            <td *ngIf="!branchList">
+              <div class="tableDesc loading">
+              </div>
+            </td>
+          </tr>
+          <ng-container *ngIf="branchList.length > 0">
+            <tr *ngFor="let branch of branchList; let i = index">
+              <td>{{ branch.id }}</td>
+              <td>{{ branch.name }}</td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf="branchList.length == 0">
+            <tr class="text-center">
+              <td colspan="2">Record not found.</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Close</button>
+  </div>
+</ng-template>

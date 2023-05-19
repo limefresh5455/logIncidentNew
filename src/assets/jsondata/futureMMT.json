@@ -1,0 +1,662 @@
+[
+    {
+        "questions": [
+            {
+                "content": "Are First Aiders appointed (are names of First Aiders displayed on notice boards)?",
+                "active": true,
+                "pk": 39
+            },
+            {
+                "content": "Logincident TEST Question #4. Please IGNORE",
+                "active": false,
+                "pk": 71
+            },
+            {
+                "content": "Logincident TEST question #6 PLEASE IGNORE",
+                "active": false,
+                "pk": 73
+            },
+            {
+                "content": "Have the Water Treatment Cooling Towers been recently inspected and tested? If not please provide dates of last inspection and maintenance.",
+                "active": true,
+                "pk": 20
+            },
+            {
+                "content": "Confirm you have sampled 5 Workshop and 5 Field Service Pre Task Assessments for content and quality.",
+                "active": true,
+                "pk": 1
+            },
+            {
+                "content": "Have all Fork Lift Truck inspections and all A&B Defects Been Rectified and inspections up to date? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 3
+            },
+            {
+                "content": "Please confirm you have completed the waste disposal and waste segregation environmental audits for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 32
+            },
+            {
+                "content": "Is safety signage displayed at appropriate areas e.g. at entrances to areas and at machinery, workshop and yard areas?",
+                "active": true,
+                "pk": 43
+            },
+            {
+                "content": "Has the Kitchen Gas Equipment Servicing been scheduled?",
+                "active": true,
+                "pk": 58
+            },
+            {
+                "content": "Have all Overhead cranes & JIB Cranes received servicing and safety inspections within the specified period? If not, please provide dates of last inspection and service",
+                "active": true,
+                "pk": 47
+            }
+        ],
+        "publishdate": "2021-07-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Please confirm you have completed the bulk storage environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 24
+            },
+            {
+                "content": "Are spill kits available, are they suitable, adequately stocked and positioned in the correct areas?",
+                "active": true,
+                "pk": 30
+            },
+            {
+                "content": "Has your Heating System Servicing taken place?",
+                "active": true,
+                "pk": 59
+            },
+            {
+                "content": "Has the Kitchen Gas Equipment Servicing been scheduled?",
+                "active": true,
+                "pk": 58
+            },
+            {
+                "content": "Has your 3 monthly Airline Breathing System inspection taken place? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 4
+            },
+            {
+                "content": "Has all Flameproof electrical equipment in such rooms as spray rooms/paint shops had an annual check, if not please record date of check",
+                "active": true,
+                "pk": 63
+            },
+            {
+                "content": "Logincident TEST Question #1. Please IGNORE",
+                "active": false,
+                "pk": 68
+            },
+            {
+                "content": "Is there an Environmental emergency spill drill in place?",
+                "active": true,
+                "pk": 38
+            },
+            {
+                "content": "Are all used drums being correctly disposed of (not cut up) and those in the yard containing liquid sited in a bund or spill tray and covered?",
+                "active": true,
+                "pk": 51
+            },
+            {
+                "content": "Has the Legionella risk assessment taken place and is satisfactory? If not, answer no and include whether the test indicated that water supply testing and monitoring procedures are necessary?",
+                "active": true,
+                "pk": 17
+            }
+        ],
+        "publishdate": "2021-08-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Have all Interceptors been checked for oil in the final compartment and a regular cleaning schedule maintained?",
+                "active": true,
+                "pk": 18
+            },
+            {
+                "content": "Have the oil storage bunds and similar containment arrangements to include bulk tank alarm checks been carried out?",
+                "active": true,
+                "pk": 35
+            },
+            {
+                "content": "Have all Fall Restraint Harness, Slings, Ultimate Edge, ancillary equipment been tested by Allianz in the last 6 months? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 6
+            },
+            {
+                "content": "Is the general condition of the property, (including yard and perimeter fence etc.) such that it is unlikely to cause harm and allow unauthorised entry? Are controls in place for visitor's i.e. visitor's book in place and being correctly used.",
+                "active": true,
+                "pk": 9
+            },
+            {
+                "content": "Have all your TM44 air conditioning units energy efficiency checks been carried out within the last 5 years? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 12
+            },
+            {
+                "content": "Has the Kitchen Gas Equipment Servicing been scheduled?",
+                "active": true,
+                "pk": 58
+            },
+            {
+                "content": "Have all Overhead cranes & JIB Cranes received servicing and safety inspections within the specified period? If not, please provide dates of last inspection and service",
+                "active": true,
+                "pk": 47
+            },
+            {
+                "content": "Please confirm you have completed the consent to discharge and disposal of contaminated water environmental audits for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 66
+            },
+            {
+                "content": "Please confirm you have completed the air conditioning environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 67
+            },
+            {
+                "content": "Is there an Environmental emergency spill drill in place?",
+                "active": true,
+                "pk": 38
+            }
+        ],
+        "publishdate": "2021-09-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Has all waste been correctly segregated and placed in suitable waste receptacles?",
+                "active": true,
+                "pk": 33
+            },
+            {
+                "content": "Please confirm you have completed the guidance for emergency plans environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 64
+            },
+            {
+                "content": "Has your Mobile Yard crane been inspected by Allianz within the specified time period? If not, please provide dates of last inspection and service",
+                "active": true,
+                "pk": 48
+            },
+            {
+                "content": "Have all Fire signs, escapes, doors & fire sprinkler systems had the monthly check and then logged into Fire Log Book?",
+                "active": true,
+                "pk": 23
+            },
+            {
+                "content": "Has the fire alarm system servicing and fire drill taken place and fire emergency plan been reviewed?",
+                "active": true,
+                "pk": 29
+            },
+            {
+                "content": "Has all Lifting Equipment been inspected by Allianz and A&B Defects within the specified time period? If not, please provide dates of last inspection and service",
+                "active": true,
+                "pk": 49
+            },
+            {
+                "content": "Has the Roller shutter and sliding door servicing taken place within the specified period?",
+                "active": true,
+                "pk": 53
+            },
+            {
+                "content": "Please confirm you have completed the spillage environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 52
+            },
+            {
+                "content": "Please confirm you have completed the incident reporting environmental audit for your branch and emailed this to safety@finning.com",
+                "active": true,
+                "pk": 62
+            },
+            {
+                "content": "Are all waste control measures and disposals carried out, have all drains been colour coded, do you have a drainage plan for the site? If not, please provide details.",
+                "active": true,
+                "pk": 14
+            }
+        ],
+        "publishdate": "2021-10-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Confirm you have sampled 5 Workshop and 5 Field Service Pre Task Assessments for content and quality.",
+                "active": true,
+                "pk": 1
+            },
+            {
+                "content": "Are spill kits available, are they suitable, adequately stocked and positioned in the correct areas?",
+                "active": true,
+                "pk": 30
+            },
+            {
+                "content": "Has the fire alarm system servicing and fire drill taken place and fire emergency plan been reviewed?",
+                "active": true,
+                "pk": 29
+            },
+            {
+                "content": "Are all waste control measures and disposals carried out, have all drains been colour coded, do you have a drainage plan for the site? If not, please provide details.",
+                "active": true,
+                "pk": 14
+            },
+            {
+                "content": "Has the Roller shutter and sliding door servicing taken place within the specified period?",
+                "active": true,
+                "pk": 53
+            },
+            {
+                "content": "Have you completed the Legionella Monitoring & Control Programme risk assessment within the specified period? If not, provide the date of the last Risk Assessment.",
+                "active": true,
+                "pk": 16
+            },
+            {
+                "content": "Are all guards in place (including eye guards) and tool rests etc. correctly adjusted on work equipment (e.g. pillar drills and grinders etc.)?",
+                "active": true,
+                "pk": 36
+            },
+            {
+                "content": "Have all Gas and electrical welding equipment- hoses, burners, associated regulators & electrical system had a documented monthly check?",
+                "active": true,
+                "pk": 34
+            },
+            {
+                "content": "Have all Fall Restraint Harness, Slings, Ultimate Edge, ancillary equipment been tested by Allianz in the last 6 months? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 6
+            },
+            {
+                "content": "Has the Legionella risk assessment taken place and is satisfactory? If not, answer no and include whether the test indicated that water supply testing and monitoring procedures are necessary?",
+                "active": true,
+                "pk": 17
+            }
+        ],
+        "publishdate": "2021-11-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Housekeeping, are all areas tidy and free from trip hazards?",
+                "active": true,
+                "pk": 0
+            },
+            {
+                "content": "Please confirm you have completed the air conditioning environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 67
+            },
+            {
+                "content": "Has the Kitchen Gas Equipment Servicing been scheduled?",
+                "active": true,
+                "pk": 58
+            },
+            {
+                "content": "Have all Fork Lift Truck inspections and all A&B Defects Been Rectified and inspections up to date? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 3
+            },
+            {
+                "content": "Have all Gas and electrical welding equipment- hoses, burners, associated regulators & electrical system had a documented monthly check?",
+                "active": true,
+                "pk": 34
+            },
+            {
+                "content": "Please confirm you have completed the guidance for emergency plans environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 64
+            },
+            {
+                "content": "Have all Automatic fire detectors been checked?",
+                "active": true,
+                "pk": 37
+            },
+            {
+                "content": "Are all oil/fuel tank bunds intact, sealed at any pipe work etc. and regularly cleared and maintained?",
+                "active": true,
+                "pk": 50
+            },
+            {
+                "content": "Has the Deep Cleaning Kitchen equipment and extractor ventilation system taken place?",
+                "active": true,
+                "pk": 54
+            },
+            {
+                "content": "Is safety signage displayed at appropriate areas e.g. at entrances to areas and at machinery, workshop and yard areas?",
+                "active": true,
+                "pk": 43
+            }
+        ],
+        "publishdate": "2021-12-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Have all your TM44 air conditioning units energy efficiency checks been carried out within the last 5 years? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 12
+            },
+            {
+                "content": "Are all used drums being correctly disposed of (not cut up) and those in the yard containing liquid sited in a bund or spill tray and covered?",
+                "active": true,
+                "pk": 51
+            },
+            {
+                "content": "Are all waste control measures and disposals carried out, have all drains been colour coded, do you have a drainage plan for the site? If not, please provide details.",
+                "active": true,
+                "pk": 14
+            },
+            {
+                "content": "Has the fire alarm system servicing and fire drill taken place and fire emergency plan been reviewed?",
+                "active": true,
+                "pk": 29
+            },
+            {
+                "content": "Please confirm you have completed the waste disposal and waste segregation environmental audits for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 32
+            },
+            {
+                "content": "Are all oil/fuel tank bunds intact, sealed at any pipe work etc. and regularly cleared and maintained?",
+                "active": true,
+                "pk": 50
+            },
+            {
+                "content": "Has an AMR for Gas and Electricity been installed on site? If not please provide the last Electricity and Gas meter readings and the quantity of any heating oil ordered.",
+                "active": true,
+                "pk": 61
+            },
+            {
+                "content": "Have the Water Treatment Cooling Towers been recently inspected and tested? If not please provide dates of last inspection and maintenance.",
+                "active": true,
+                "pk": 20
+            },
+            {
+                "content": "Please confirm you have completed the training records environmental audit for your branch and emailed it to safety@finning.com",
+                "active": true,
+                "pk": 45
+            },
+            {
+                "content": "Please confirm you have completed the noise environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 57
+            }
+        ],
+        "publishdate": "2022-01-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Are spill kits available, are they suitable, adequately stocked and positioned in the correct areas?",
+                "active": true,
+                "pk": 30
+            },
+            {
+                "content": "Has your office equipment (including laptop chargers) had its portable appliance test (PAT)?",
+                "active": true,
+                "pk": 31
+            },
+            {
+                "content": "Has the Air Conditioning servicing taken place within the last 12 months? If not, please provide date of last inspection and service.",
+                "active": true,
+                "pk": 26
+            },
+            {
+                "content": "Logincident TEST question #6 PLEASE IGNORE",
+                "active": false,
+                "pk": 73
+            },
+            {
+                "content": "Has the fire alarm system servicing and fire drill taken place and fire emergency plan been reviewed?",
+                "active": true,
+                "pk": 29
+            },
+            {
+                "content": "Have all employees or new starters in your area been inducted and training needs assessed?",
+                "active": true,
+                "pk": 46
+            },
+            {
+                "content": "Has the Fixed Wire Electrical Testing been completed in the last 5 years?",
+                "active": true,
+                "pk": 40
+            },
+            {
+                "content": "Please confirm you have completed the incident reporting environmental audit for your branch and emailed this to safety@finning.com",
+                "active": true,
+                "pk": 62
+            },
+            {
+                "content": "Has the Roller shutter and sliding door servicing taken place within the specified period?",
+                "active": true,
+                "pk": 53
+            },
+            {
+                "content": "Please confirm you have completed the spillage environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 52
+            }
+        ],
+        "publishdate": "2022-02-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Confirm you have sampled 5 Workshop and 5 Field Service Pre Task Assessments for content and quality.",
+                "active": true,
+                "pk": 1
+            },
+            {
+                "content": "Has the Legionella risk assessment taken place and is satisfactory? If not, answer no and include whether the test indicated that water supply testing and monitoring procedures are necessary?",
+                "active": true,
+                "pk": 17
+            },
+            {
+                "content": "Have all Automatic fire detectors been checked?",
+                "active": true,
+                "pk": 37
+            },
+            {
+                "content": "Have the Emergency Lighting and automatic Doors been checked within the specified time period? (Monthly check and Annual test). If not please provide dates of last check and tests.",
+                "active": true,
+                "pk": 25
+            },
+            {
+                "content": "Are all used drums being correctly disposed of (not cut up) and those in the yard containing liquid sited in a bund or spill tray and covered?",
+                "active": true,
+                "pk": 51
+            },
+            {
+                "content": "Logincident TEST Question #1. Please IGNORE",
+                "active": false,
+                "pk": 68
+            },
+            {
+                "content": "Please confirm you have completed the bulk storage environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 24
+            },
+            {
+                "content": "Has the Air Conditioning servicing taken place within the last 12 months? If not, please provide date of last inspection and service.",
+                "active": true,
+                "pk": 26
+            },
+            {
+                "content": "Has the 'Water quality for effluent' test been carried out by water company, to ensure it complies with consent limits?",
+                "active": true,
+                "pk": 21
+            },
+            {
+                "content": "Have all passenger/service lifts received a 6 monthly statutory inspection? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 7
+            }
+        ],
+        "publishdate": "2022-03-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Are findings of this tour being communicated during the monthly safety meetings? And have minutes and actions been recorded from the monthly safety meetings and are all employees aware of discussions / actions?",
+                "active": true,
+                "pk": 42
+            },
+            {
+                "content": "Have all Servicing of portable fire extinguishers been completed in the last 12 months? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 22
+            },
+            {
+                "content": "Has the Legionella risk assessment taken place and is satisfactory? If not, answer no and include whether the test indicated that water supply testing and monitoring procedures are necessary?",
+                "active": true,
+                "pk": 17
+            },
+            {
+                "content": "Are all waste control measures and disposals carried out, have all drains been colour coded, do you have a drainage plan for the site? If not, please provide details.",
+                "active": true,
+                "pk": 14
+            },
+            {
+                "content": "Please confirm you have completed the use of energy and use of water environmental audits for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 41
+            },
+            {
+                "content": "Confirm you have sampled 5 Workshop and 5 Field Service Pre Task Assessments for content and quality.",
+                "active": true,
+                "pk": 1
+            },
+            {
+                "content": "Are First Aiders appointed (are names of First Aiders displayed on notice boards)?",
+                "active": true,
+                "pk": 39
+            },
+            {
+                "content": "Have your pedestal grinders been marked up with the appropriate vibration sticker, i.e. high (red)?",
+                "active": true,
+                "pk": 44
+            },
+            {
+                "content": "Please confirm you have completed the training records environmental audit for your branch and emailed it to safety@finning.com",
+                "active": true,
+                "pk": 45
+            },
+            {
+                "content": "Please confirm you have completed the guidance for emergency plans environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 64
+            }
+        ],
+        "publishdate": "2022-04-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Logincident TEST Question #1. Please IGNORE",
+                "active": false,
+                "pk": 68
+            },
+            {
+                "content": "Has all Flameproof electrical equipment in such rooms as spray rooms/paint shops had an annual check, if not please record date of check",
+                "active": true,
+                "pk": 63
+            },
+            {
+                "content": "Are all fire doors in your area checked to ensure self-closers, push bars etc. are fitted and serviceable?",
+                "active": true,
+                "pk": 56
+            },
+            {
+                "content": "Are all waste control measures and disposals carried out, have all drains been colour coded, do you have a drainage plan for the site? If not, please provide details.",
+                "active": true,
+                "pk": 14
+            },
+            {
+                "content": "Please confirm you have completed the noise environmental audit for your branch and emailed these to safety@finning.com",
+                "active": true,
+                "pk": 57
+            },
+            {
+                "content": "Are Manual Handling aids (trolleys, engine hoists etc.) available & in good condition with SWL indicated where appropriate? If not, please supply date of last Allianz inspection",
+                "active": true,
+                "pk": 55
+            },
+            {
+                "content": "Logincident TEST question #6 PLEASE IGNORE",
+                "active": false,
+                "pk": 73
+            },
+            {
+                "content": "Have all Servicing of portable fire extinguishers been completed in the last 12 months? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 22
+            },
+            {
+                "content": "Has your Heating System Servicing taken place?",
+                "active": true,
+                "pk": 59
+            },
+            {
+                "content": "Have you completed your annual review of the Asbestos register and quarterly checks? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 5
+            }
+        ],
+        "publishdate": "2022-05-01T00:00:00Z"
+    },
+    {
+        "questions": [
+            {
+                "content": "Are First Aiders appointed (are names of First Aiders displayed on notice boards)?",
+                "active": true,
+                "pk": 39
+            },
+            {
+                "content": "Are all used drums being correctly disposed of (not cut up) and those in the yard containing liquid sited in a bund or spill tray and covered?",
+                "active": true,
+                "pk": 51
+            },
+            {
+                "content": "Have all Fall Restraint Harness, Slings, Ultimate Edge, ancillary equipment been tested by Allianz in the last 6 months? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 6
+            },
+            {
+                "content": "Has your office equipment (including laptop chargers) had its portable appliance test (PAT)?",
+                "active": true,
+                "pk": 31
+            },
+            {
+                "content": "Has the Roller shutter and sliding door servicing taken place within the specified period?",
+                "active": true,
+                "pk": 53
+            },
+            {
+                "content": "Has an AMR for Gas and Electricity been installed on site? If not please provide the last Electricity and Gas meter readings and the quantity of any heating oil ordered.",
+                "active": true,
+                "pk": 61
+            },
+            {
+                "content": "Has all pressure plant, equipment, air receivers and pipe work received an annual statutory inspection? If not, please provide date of last inspection.",
+                "active": true,
+                "pk": 11
+            },
+            {
+                "content": "Have the Emergency Lighting and automatic Doors been checked within the specified time period? (Monthly check and Annual test). If not please provide dates of last check and tests.",
+                "active": true,
+                "pk": 25
+            },
+            {
+                "content": "Has your Heating System Servicing taken place?",
+                "active": true,
+                "pk": 59
+            },
+            {
+                "content": "Do all managers / supervisors in your area know the correct incident reporting procedures and have access to the FIN341?",
+                "active": true,
+                "pk": 65
+            }
+        ],
+        "publishdate": "2022-06-01T00:00:00Z"
+    }
+]

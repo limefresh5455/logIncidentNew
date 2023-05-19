@@ -1,0 +1,187 @@
+<div *ngIf="!loaded" class="col-12">
+  <mat-spinner color="{{companyColor}}" class="col-4 mx-auto mt-5"></mat-spinner>
+</div>
+<div class="padding-top-10 text-center col-12" *ngIf="loaded && error">
+  <h1>{{errorMessage}}</h1>
+</div>
+<div *ngIf="loaded && !error" class="row p-0 m-0">
+  <form [formGroup]="form" class="col-xl-12 row p-0 m-0">
+    <div class="col-xl-12">
+      <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+        <div class="m-portlet__head" [style.background-color]="companyColor" [style.border-color]="companyColor">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">
+                Filter Selected
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body p-3 ">
+          <div class="m-section mb-0">
+            <div class="m-section__content">
+              <form [formGroup]="filterForm" *ngIf="filterForm" class="col-12 row p-0 m-0">
+
+                <ngx-mat-drp *ngIf="options" (selectedDateRangeChanged)="updateRange($event)" class="col-lg-4 hidden"
+                             [options]="options"
+                             #dateRangePicker></ngx-mat-drp>
+
+                <div class="col-lg-4 m-form__group form-group " *ngFor="let filter of filters">
+                  <label>{{filter.title}}</label>
+
+                  <select class="form-control m-input" formControlName="{{filter.id}}"
+                          (change)="addFilter(filter.title, $event.target.value)">
+                    <option *ngFor="let option of filter.options" [value]="option">{{option}}</option>
+                  </select>
+                </div>
+                <div>
+                  <button (click)="resetFilterForm()" class="btn btn-dark mx-3" [style.background-color]="accentColor"
+                          [style.border-color]="accentColor">Reset
+                  </button>
+                </div>
+                <div>
+                  <button class="btn btn-dark mx-3" [style.background-color]="accentColor"
+                          [style.border-color]="accentColor" (click)="submitForm()">
+                    Export
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="false" class="col-xl-6">
+      <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+        <div class="m-portlet__head" [style.background-color]="companyColor" [style.border-color]="companyColor">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">
+                Fields
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body px-3 py-0">
+
+          Select fields to include in export
+          <div class="m-section__content">
+            <table class="table table-sm">
+              <thead>
+              <tr>
+                <th><input type="checkbox" (change)="checkAllFields($event)"></th>
+                <th>Field</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngFor="let number of [1,2,3,4,5,6,7,8]">
+                <tr *ngIf="!loaded">
+                  <td>
+                    <div class="marginAuto row">
+                      <div class="loading tableMiniButton">
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngFor="let field of getFieldsControls(); let i = index">
+                <th><input type="checkbox" [formControl]="field"></th>
+                <td>{{fields[i]}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <!--begin::Portlet-->
+      <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+        <div class="m-portlet__head" [style.background-color]="companyColor" [style.border-color]="companyColor">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">
+                <ng-container *ngIf="company?.incidentPluralName">{{company.incidentPluralName}}</ng-container>
+                <ng-container *ngIf="!company?.incidentPluralName">Incidents</ng-container>
+              </h3>
+            </div>
+          </div>
+
+        </div>
+        <div class="m-portlet__body px-3 py-0">
+          <div class="m-section">
+            Select incidents to export
+            <div class="m-section__content">
+              <table class="table table-sm table-responsive-md">
+                <thead>
+                <tr>
+                  <th><input type="checkbox" checked (change)="checkAllIncidents($event)"></th>
+                  <th>Incident Type</th>
+                  <th *ngIf="currentUser.company.name != 'emico'">ID</th>
+                  <th *ngIf="currentUser.company.name == 'emico'">Project ID</th>
+                  <th>Status</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Unit</th>
+                  <th>Branch</th>
+                  <th>Date Created</th>
+                </thead>
+                <tbody>
+                <ng-container *ngFor="let number of [1,2,3,4,5,6,7,8, 9,10,11,12,13,14,15,16]">
+                  <tr *ngIf="!loaded">
+                    <td>
+                      <div class="marginAuto row">
+                        <div class="loading tableMiniButton">
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tableDesc loading">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tableDesc loading">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tableDate loading">
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
+
+
+                <tr *ngFor="let incident of getControls(); let i=index">
+                  <th><input type="checkbox" [formControl]="incident"></th>
+                  <td><span *ngIf="incidents[i].type.name">{{incidents[i].type.name}}</span></td>
+                  <td *ngIf="currentUser.company.name != 'emico'"><span>{{ incidents[i].id }}</span></td>
+                  <td *ngIf="currentUser.company.name == 'emico'"><span> {{ getProjectId(incidents[i])}}</span></td>
+
+                  <td><span *ngIf="incidents[i].status" class="btn btn-primary btn-sm" [ngStyle]="{'background-color': (incidents[i].status.name == 'Closed') ? hexToRGB(incidents[i].type.color) : incidents[i].type.color, 'border-color': (incidents[i].status.name == 'Closed') ? hexToRGB(incidents[i].type.color) : incidents[i].type.color}">{{incidents[i].status.name}}</span>
+                  </td>
+                  <td><span
+                    *ngIf="incidents[i].user">{{incidents[i].user.firstName}} {{incidents[i].user.lastName}} </span>
+                  </td>
+                  <td><span *ngIf="incidents[i].user">{{incidents[i].user.email}}</span></td>
+                  <td><span *ngIf="incidents[i].user">{{incidents[i].user.phone}} </span></td>
+                  <td><span *ngIf="incidents[i].user">{{incidents[i].userGroup?.parent?.name}} </span></td>
+                  <td><span *ngIf="incidents[i].user">{{incidents[i].userGroup?.name}} </span></td>
+                  <td><span *ngIf="incidents[i].createdAt">{{incidents[i].createdAt |  date: 'dd/MM/y HH:mm'}}</span>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</div>

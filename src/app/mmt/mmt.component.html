@@ -1,0 +1,218 @@
+<h5 *ngIf="mmtView" class="bevelTitle">{{ tabTitles }}</h5>
+<div class="col-12" *ngIf="loadingIncidents && !incidentTypes">
+  <mat-spinner class="col-4 mx-auto mt-5"></mat-spinner>
+</div>
+<div class="col-12" *ngIf="!loadingIncidents && incidentTypes">
+  <div
+    id="mmtrange"
+    class="col-4 btn-info sos-custom-range"
+    [ngStyle]="{
+      display:
+        showSection == 2 &&
+        tabSections == '/mmt/monthly-tours' &&
+        mTour.length > 0
+          ? 'block'
+          : 'none'
+    }"
+  >
+    <i class="fa fa-calendar"></i>&nbsp; <span></span>
+    <i class="fa fa-caret-down"></i>
+  </div>
+  <div
+    id="auditrange"
+    class="col-4 btn-info sos-custom-range"
+    [ngStyle]="{
+      display:
+        showSection == 1 && tabSections == '/mmt/audits' && audits.length > 0
+          ? 'block'
+          : 'none'
+    }"
+  >
+    <i class="fa fa-calendar"></i>&nbsp; <span></span>
+    <i class="fa fa-caret-down"></i>
+  </div>
+  <div
+    id="auditactionrange"
+    class="col-4 btn-info sos-custom-range"
+    [ngStyle]="{
+      display:
+        showSection == 3 &&
+        tabSections == '/mmt/actions' &&
+        auditIncidents.length > 0
+          ? 'block'
+          : 'none'
+    }"
+  >
+    <i class="fa fa-calendar"></i>&nbsp; <span></span>
+    <i class="fa fa-caret-down"></i>
+  </div>
+  <div
+    class="col-4 custom-range"
+    [ngStyle]="{
+      display:
+        showSection == 4 && tabSections == '/mmt/question-pool-mmt'
+          ? 'block'
+          : 'none'
+    }"
+  ></div>
+  <div
+    class="col-4 custom-range"
+    [ngStyle]="{
+      display:
+        showSection == 5 && tabSections == '/mmt/question-pool-ae'
+          ? 'block'
+          : 'none'
+    }"
+  ></div>
+  <hr />
+  <ul
+    class="nav nav-tabs"
+    *ngIf="mmtValue || auditValue || auditActionValue"
+    role="tablist"
+  >
+    <li class="nav-item" *ngIf="auditValue">
+      <a
+        class="nav-link"
+        [ngClass]="{ active: tabSections == '/mmt/audits' }"
+        data-toggle="tab"
+        href="#"
+        data-target="#m_tabs_1_1"
+        (click)="tabSection('audits', '1', '/mmt/audits')"
+        >Audits</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="mmtValue">
+      <a
+        class="nav-link"
+        [ngClass]="{ active: tabSections == '/mmt/monthly-tours' }"
+        data-toggle="tab"
+        href="#"
+        data-target="#m_tabs_1_2"
+        (click)="tabSection('monthlyTour', '2', '/mmt/monthly-tours')"
+        >Monthly Tours</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="auditActionValue">
+      <a
+        class="nav-link"
+        [ngClass]="{ active: tabSections == '/mmt/actions' }"
+        data-toggle="tab"
+        href="#"
+        data-target="#m_tabs_1_3"
+        (click)="tabSection('actions', '3', '/mmt/actions')"
+        >Audit Actions</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="mmtValue">
+      <a
+        class="nav-link"
+        [ngClass]="{ active: tabSections == '/mmt/question-pool-mmt' }"
+        data-toggle="tab"
+        href="#"
+        data-target="#m_tabs_1_4"
+        (click)="tabSection('questionPoolMmt', '4', '/mmt/question-pool-mmt')"
+        >Question Pool MMT</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="auditValue">
+      <a
+        class="nav-link"
+        [ngClass]="{ active: tabSections == '/mmt/question-pool-ae' }"
+        data-toggle="tab"
+        href="#"
+        data-target="#m_tabs_1_5"
+        (click)="tabSection('questionPoolAE', '5', '/mmt/question-pool-ae')"
+        >Question Pool Audits</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [ngClass]="{ active: tabSections == '/mmt/future-mmt' }"
+        data-toggle="tab"
+        href="#"
+        data-target="#m_tabs_1_6"
+        (click)="tabSection('futureMmt', '6', '/mmt/future-mmt')"
+        >Future MMTs</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [ngClass]="{ active: tabSections == '/mmt/future-aes' }"
+        data-toggle="tab"
+        href="#"
+        data-target="#m_tabs_1_7"
+        (click)="tabSection('futureAudits', '7', '/mmt/future-aes')"
+        >Future Audits</a
+      >
+    </li>
+    <!-- <li class="nav-item" *ngIf="mmtValue">
+      <a class="nav-link" routerLink="/future-mmt">Future MMTs</a>
+    </li> -->
+    <!-- <li class="nav-item" *ngIf="auditValue">
+      <a class="nav-link" routerLink="/future-aes">Future Audits</a>
+    </li> -->
+  </ul>
+  <div class="tab-content" >
+    <div
+      class="tab-pane"
+      [ngClass]="{ active: tabSections == '/mmt/audits' }"
+      id="m_tabs_1_1"
+      role="tabpanel"
+      *ngIf="audits.length"
+    >
+      <app-audits :orderByReport="true" [incidentTypes]="incidentTypes" [mAudits]="audits"></app-audits>
+    </div>
+    <div
+      class="tab-pane"
+      [ngClass]="{ active: tabSections == '/mmt/monthly-tours' }"
+      id="m_tabs_1_2"
+      role="tabpanel"
+      *ngIf="mTour.length"
+    >
+      <app-monthly-tour :orderByReport="true" [incidentTypes]="incidentTypes" [mTour]="mTour" ></app-monthly-tour>
+    </div>
+    <div
+      class="tab-pane"
+      [ngClass]="{ active: tabSections == '/mmt/actions' }"
+      id="m_tabs_1_3"
+      role="tabpanel"
+      *ngIf="incidents"
+    >
+      <app-actions [actionIncidents]="incidents"></app-actions>
+    </div>
+    <div
+      class="tab-pane"
+      [ngClass]="{ active: tabSections == '/mmt/question-pool-mmt' }"
+      id="m_tabs_1_4"
+      role="tabpanel"
+    >
+      <app-question-pool [incidentTypes]="incidentTypes"></app-question-pool>
+    </div>
+    <div
+      class="tab-pane"
+      [ngClass]="{ active: tabSections == '/mmt/question-pool-ae' }"
+      id="m_tabs_1_5"
+      role="tabpanel"
+    >
+      <app-question-pool-ae [incidentTypes]="incidentTypes"></app-question-pool-ae>
+    </div>
+    <div
+      class="tab-pane"
+      [ngClass]="{ active: tabSections == '/mmt/future-mmt' }"
+      id="m_tabs_1_6"
+      role="tabpanel"
+    >
+      <app-future-mmt [incidentTypes]="incidentTypes"></app-future-mmt>
+    </div>
+    <div
+      class="tab-pane"
+      [ngClass]="{ active: tabSections == '/mmt/future-aes' }"
+      id="m_tabs_1_7"
+      role="tabpanel"
+    >
+      <app-future-aes [incidentTypes]="incidentTypes"></app-future-aes>
+    </div>
+  </div>
+</div>

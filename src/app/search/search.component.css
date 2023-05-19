@@ -1,0 +1,45 @@
+.icon-Button {
+  color: white;
+}
+
+.bevelTitle {
+  color: #9c9c9c;
+  text-shadow: rgba(255, 255, 255, 0.5) 0px 3px 3px;
+  text-align: center;
+  margin: -20px auto 10px;
+}
+.titleCase{
+  text-transform: uppercase;
+}
+.headerButton {
+  position: absolute;
+  right: 20px;
+  /*top: 30%*/
+}
+
+.incidentLine {
+  height: 30px;
+  width: 5px;
+  position: absolute;
+  left: 50px;
+}
+
+.incidentWrap {
+  width: 100%;
+  margin: 10px 0
+}
+
+.incidentTitle {
+  height: 10px;
+  width: 80px;
+  margin-left: 25px;
+  margin-top: 10px;
+}
+
+.incidentSubtitle {
+  height: 10px;
+  width: 180px;
+  margin-top: 5px;
+  margin-left: 25px
+}
+

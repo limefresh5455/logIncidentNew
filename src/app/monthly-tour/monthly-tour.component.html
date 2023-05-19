@@ -1,0 +1,478 @@
+<div class="row">
+  <div class="col-xl-12">
+    <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded">
+      <div class="m-portlet__body">
+        <div class="col-12 row pb-2">
+          <div class="ml-auto">
+            <button class="btn btn-primary" id="bt" (click)="openFilterModal(filterModal)">
+                Filter
+            </button>
+          </div>
+        </div>
+        <div class="m-section">
+          <div class="m-section__content"> <!-- style="overflow: scroll" -->
+            <!-- <table class="table table-hover table-responsive-sm" style="max-width: 100%">
+              <thead [style.background-color]="mTourColor" [style.border-color]="mTourColor" [ngStyle]="{'color': '#fff'}">
+              <tr>
+                <th scope="col" sortable="branchName" (sort)="onSort($event)">Branch</th>
+                <th scope="col" sortable="completesName" (sort)="onSort($event)">Completes</th>
+                <th scope="col" sortable="responsibleName" (sort)="onSort($event)">Responsible</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let number of [1,2,3,4,5]">
+                  <td *ngIf="!mmtSortList">
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                  <td *ngIf="!mmtSortList">
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                  <td *ngIf="!mmtSortList">
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                  <td *ngIf="!mmtSortList">
+                    <div class="marginAuto row">
+                      <div class="tableMiniButton marginLeft10 loading">
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngFor="let branch of mmtSortList; let i = index">
+                  <td>{{branch.branchName}}</td>
+                  <td>
+                    <ng-container *ngFor="let completes of branch.completesUser; last as isLast">
+                      <a href="mailto:{{completes.email}}?subject=Feedback on MMT&body=Please type your message here">{{completes.name}} {{ isLast ? '' : ', ' }}</a>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <ng-container *ngFor="let response of branch.responsibleUser; last as isLast">
+                      <a href="mailto:{{response.email}}?subject=Feedback on MMT&body=Please type your message here">{{response.name}} {{ isLast ? '' : ', ' }}</a>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" (click)="openMmtQuestionModal(content, dates.id, branch.branchId)">
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                        </span>
+                      </i>
+                    </ng-container>
+                  </td>
+                </tr>
+              </tbody>
+            </table> -->
+
+            <table class="table table-hover table-responsive-sm" style="max-width: 100%">
+              <thead [style.background-color]="mTourColor" [style.border-color]="mTourColor" [ngStyle]="{'color': '#fff'}">
+              <tr>
+                <th scope="col" sortable="branchName" (sort)="onSort($event)">Branch</th>
+                <th scope="col" sortable="completesName" (sort)="onSort($event)">Completes</th>
+                <th scope="col" sortable="responsibleName" (sort)="onSort($event)">Responsible</th>
+
+                <th>
+                  <span>Jan-Feb</span>
+
+                </th>
+                <th>
+                  <span>Feb-Mar</span>
+                </th>
+                <th>
+                  <span>Mar-Apr</span>
+                </th>
+                <th>
+                  <span>Apr-May</span>
+                </th>
+                <th>
+                  <span>May-Jun</span>
+                </th>
+                <th>
+                  <span>Jun-Jul</span>
+                </th>
+                <th>
+                  <span>Jul-Aug</span>
+                </th>
+                <th>
+                  <span>Aug-Sep</span>
+                </th>
+                <th>
+                  <span>Sep-Oct</span>
+                </th>
+                <th>
+                  <span>Oct-Nov</span>
+                </th>
+                <th>
+                  <span>Nov-Dec</span>
+                </th>
+                <th>
+                  <span>Dec-Jan</span>
+                </th>
+              </tr>
+              </thead>
+              <tbody >
+                <ng-container *ngFor="let branch of mmtSortList; let i = index">
+                <tr *ngFor="let number of [1,2,3,4,5]">
+                  <td *ngIf="!mmtSortList">
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                  <td *ngIf="!mmtSortList">
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                  <td *ngIf="!mmtSortList">
+                    <div class="tableDesc loading">
+                    </div>
+                  </td>
+                  <td *ngIf="!mmtSortList">
+                    <div class="marginAuto row">
+                      <div class="tableMiniButton marginLeft10 loading">
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr >
+                  <td >{{branch.branchName}}</td>
+                  <td>
+                    <ng-container *ngFor="let completes of branch.completesUser; last as isLast">
+                      <a href="mailto:{{completes.email}}?subject=Feedback on MMT&body=Please type your message here">{{completes.name}} {{ isLast ? '' : ', ' }}</a>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <ng-container *ngFor="let response of branch.responsibleUser; last as isLast">
+                      <a href="mailto:{{response.email}}?subject=Feedback on MMT&body=Please type your message here">{{response.name}} {{ isLast ? '' : ', ' }}</a>
+                    </ng-container>
+                  </td>
+                  <!-- (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" -->
+                  <!-- *ngFor="let dates of branch.reportId;" -->
+                  <td> <ng-container *ngFor="let dates of branch.reportId;" >
+                    <!-- branch.branchId,dates.id,1 -->
+                    <span (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),1)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+
+                        </span>
+                      </i>
+                    </span>
+                    </ng-container>
+                  </td>
+
+                      <td>
+                      <ng-container *ngFor="let dates of branch.reportId;">
+                          <span  (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),2)">
+                          <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true"  >
+                            <span class="custom-span-text">
+                              The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                              <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                              <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                              <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                              <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                            </span>
+                          </i>
+                        </span>
+                      </ng-container>
+                   </td>
+
+                    <td>
+                      <ng-container *ngFor="let dates of branch.reportId;">
+                      <span  (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),3)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                       </span>
+                     </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),4)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),5)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),6)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),7)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),8)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span  (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),9)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span  (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),10)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span  (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),11)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                    <td>
+                    <ng-container *ngFor="let dates of branch.reportId;">
+                      <span  (click)="openMmtQuestionModal(content, dates.id, branch.branchId)" *ngIf="filterMonthData(getMonthBranchList(dates.id),12)">
+                      <i *ngIf="getStatusColors(dates.id, 'faIcon')" class="fa fa-file monthlyIcon {{getStatusColors(dates.id, 'colored')}} tooltip1" aria-hidden="true" >
+                        <span class="custom-span-text">
+                          The Monthly Manager Tour for <strong>[{{branch.branchName}}]</strong>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'redClass'"> is not yet complete and is overdue.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'greenClass'"> was completed on time by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'amberClass'"> was completed late by <strong>[{{branch.completesName}}]</strong>.</span>
+                          <span *ngIf="getStatusColors(dates.id, 'colored') == 'purpleClass'"> <strong>[{{branch.completesName}}]</strong>. hasn't opened or completed the audit.</span>
+                        </span>
+                      </i>
+                    </span>
+                  </ng-container>
+                  </td>
+
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <ng-template #contents let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">MMT Questions with MMT for {{branchName}} due {{dueDate}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-12 text-center">
+      <i class="fa fa-spinner fa-spin fa-3x fa-fw text-center" *ngIf="loading"></i>
+    </div>
+    <ol class="list-group list-group-numbered" *ngIf="!loading">
+      <ng-container >
+        <div *ngFor="let question of mmtQuestionLists">
+        <li class="list-group-item" >
+          <strong *ngFor="let data of question.questions">{{data.question}}</strong>
+        </li>
+        <p class="text-success">{{question.reportDate | date:'medium'}}</p>
+      </div>
+      </ng-container>
+      <ng-container *ngIf="mmtQuestionLists.length == 0">
+        <li class="list-group-item"><strong>Questions not available.</strong></li>
+      </ng-container>
+    </ol>
+  </div>
+  <div class="modal-footer">
+    <a *ngIf="classType == 'greenClass' || classType == 'amberClass'" [routerLink]="['/answers/monthly-tour/',branchId,branchPkId]" target="_blank" class="btn btn-primary btn-apply" (click)="modal.dismiss('Cross click')">OPEN</a>
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Close</button>
+  </div>
+</ng-template> -->
+
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <ng-container *ngIf="completedDate else elseBlock">
+    <h4 class="modal-title" id="modal-basic-title">MMT Questions with MMT for {{branchName}} completed {{completedDate | date:'dd/MM/yyyy' }} due {{dueDate | date:'dd/MM/yyyy'}} [Issued: {{reportDate | date:'dd/MM/yyyy'}}]</h4>
+</ng-container>
+    <ng-template #elseBlock>
+    <h4 class="modal-title" id="modal-basic-title">MMT Questions with MMT for {{branchName}} due {{dueDate | date:'dd/MM/yyyy'}} [Issued: {{reportDate | date:'dd/MM/yyyy'}}]</h4>
+</ng-template>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-12 text-center">
+      <i class="fa fa-spinner fa-spin fa-3x fa-fw text-center" *ngIf="loading"></i>
+    </div>
+    <ol class="list-group list-group-numbered" *ngIf="!loading">
+      <ng-container *ngIf="mmtQuestionLists.length > 0">
+        <li class="list-group-item" *ngFor="let question of mmtQuestionLists"><strong>{{question.question}}</strong></li>
+      </ng-container>
+      <ng-container *ngIf="mmtQuestionLists.length == 0">
+        <li class="list-group-item"><strong>Questions not available.</strong></li>
+      </ng-container>
+    </ol>
+  </div>
+  <div class="modal-footer">
+    <a *ngIf="classType == 'greenClass' || classType == 'amberClass'" [routerLink]="['/answers/monthly-tour/',branchId,branchPkId]" target="_blank" class="btn btn-primary btn-apply" (click)="modal.dismiss('Cross click')">OPEN</a>
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #filterModal let-modal>
+  <form [formGroup]="filterForm">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Filter Dataset</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="m-portlet m-portlet--head-solid-bg m-portlet--success m-portlet--rounded filter-box">
+            <div class="m-portlet__body">
+              <div class="col-12 row p-0 m-0">
+                <div class="col-lg-6 m-form__group form-group">
+                  <mat-form-field appearance="outline">
+                    <mat-label><strong>Branch</strong></mat-label>
+                    <mat-select formControlName="branch">
+                      <mat-option value="All" selected>All</mat-option>
+                      <mat-option *ngFor="let option of branchFilter | unique:'name'" [value]="option">{{option}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-6 m-form__group form-group">
+                  <mat-form-field appearance="outline">
+                    <mat-label><strong>Completes</strong></mat-label>
+                    <mat-select formControlName="completes">
+                      <mat-option value="All" selected>All</mat-option>
+                      <mat-option *ngFor="let user of mmtCompletesList | unique:'u_name'" [value]="user">{{user}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-6 m-form__group form-group">
+                  <mat-form-field appearance="outline">
+                    <mat-label><strong>Responsible</strong></mat-label>
+                    <mat-select formControlName="responsible">
+                      <mat-option value="All" selected>All</mat-option>
+                      <mat-option *ngFor="let user of mmtResponseList | unique:'u_name'" [value]="user">{{user}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+    <button type="button" class="btn btn-primary btn-export" (click)="exportCsv()">Export</button>
+    <button type="button" class="btn btn-primary btn-apply" (click)="applyFilter()">Apply</button>
+  </div>
+</form>
+</ng-template>

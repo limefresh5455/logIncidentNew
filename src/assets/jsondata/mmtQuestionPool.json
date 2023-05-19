@@ -1,0 +1,382 @@
+[
+    {
+        "id": "1",
+        "content": "Housekeeping, are all areas tidy and free from trip hazards?",
+        "active": true
+    },
+    {
+        "id": "2",
+        "content": "Confirm you have sampled 5 Workshop and 5 Field Service Pre Task Assessments for content and quality.",
+        "active": true
+    },
+    {
+        "id": "3",
+        "content": "Please confirm all site first aid kits have a contents list and a monthly check has been completed and cross referenced with the accident book entries.",
+        "active": true
+    },
+    {
+        "id": "4",
+        "content": "Have all Fork Lift Truck inspections and all A&B Defects Been Rectified and inspections up to date? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "5",
+        "content": "Has your 3 monthly Airline Breathing System inspection taken place? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "6",
+        "content": "Have you completed your annual review of the Asbestos register and quarterly checks? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "7",
+        "content": "Have all Fall Restraint Harness, Slings, Ultimate Edge, ancillary equipment been tested by Allianz in the last 6 months? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "8",
+        "content": "Have all passenger/service lifts received a 6 monthly statutory inspection? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "9",
+        "content": "Are COSHH Assessments available for all Hazardous Substances in use and are the assessments communicated to users? If not, please provide date of last COSHH toolbox talk.",
+        "active": true
+    },
+    {
+        "id": "10",
+        "content": "Is the general condition of the property, (including yard and perimeter fence etc.) such that it is unlikely to cause harm and allow unauthorised entry? Are controls in place for visitor's i.e. visitor's book in place and being correctly used.",
+        "active": true
+    },
+    {
+        "id": "11",
+        "content": "Has all Fume Extraction equipment received an annual statutory inspection within the last 12 months? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "12",
+        "content": "Has all pressure plant, equipment, air receivers and pipe work received an annual statutory inspection? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "13",
+        "content": "Have all your TM44 air conditioning units energy efficiency checks been carried out within the last 5 years? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "14",
+        "content": "Please confirm you have completed this months environmental audit and submitted to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "15",
+        "content": "Are all waste control measures and disposals carried out, have all drains been colour coded, do you have a drainage plan for the site? If not, please provide details.",
+        "active": true
+    },
+    {
+        "id": "16",
+        "content": "Are all persons (Finning, Contractors and Visitors) wearing the Finning minimum standard of PPE for the area they are in? Record any areas if not worn.",
+        "active": true
+    },
+    {
+        "id": "17",
+        "content": "Have you completed the Legionella Monitoring & Control Programme risk assessment within the specified period? If not, provide the date of the last Risk Assessment.",
+        "active": true
+    },
+    {
+        "id": "18",
+        "content": "Has the Legionella risk assessment taken place and is satisfactory? If not, answer no and include whether the test indicated that water supply testing and monitoring procedures are necessary?",
+        "active": true
+    },
+    {
+        "id": "19",
+        "content": "Have all Interceptors been checked for oil in the final compartment and a regular cleaning schedule maintained?",
+        "active": true
+    },
+    {
+        "id": "20",
+        "content": "Have all Portable Appliance Testing, portable equipment hand tools been tested?",
+        "active": true
+    },
+    {
+        "id": "21",
+        "content": "Have the Water Treatment Cooling Towers been recently inspected and tested? If not please provide dates of last inspection and maintenance.",
+        "active": true
+    },
+    {
+        "id": "22",
+        "content": "Has the 'Water quality for effluent' test been carried out by water company, to ensure it complies with consent limits?",
+        "active": true
+    },
+    {
+        "id": "23",
+        "content": "Have all Servicing of portable fire extinguishers been completed in the last 12 months? If not, please provide date of last inspection.",
+        "active": true
+    },
+    {
+        "id": "24",
+        "content": "Have all Fire signs, escapes, doors & fire sprinkler systems had the monthly check and then logged into Fire Log Book?",
+        "active": true
+    },
+    {
+        "id": "25",
+        "content": "Please confirm you have completed the bulk storage environmental audit for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "26",
+        "content": "Have the Emergency Lighting and automatic Doors been checked within the specified time period? (Monthly check and Annual test). If not please provide dates of last check and tests.",
+        "active": true
+    },
+    {
+        "id": "27",
+        "content": "Has the Air Conditioning servicing taken place within the last 12 months? If not, please provide date of last inspection and service.",
+        "active": true
+    },
+    {
+        "id": "28",
+        "content": "Has a Pest control on site (pesticides) visit taken place within the last 12 months? If not, answer No and provide date of last visit.",
+        "active": true
+    },
+    {
+        "id": "29",
+        "content": "Has the BUPI serving and cleaning taken place? If not, please provide dates of last servicing and cleaning.",
+        "active": true
+    },
+    {
+        "id": "30",
+        "content": "Has the fire alarm system servicing and fire drill taken place and fire emergency plan been reviewed?",
+        "active": true
+    },
+    {
+        "id": "31",
+        "content": "Are spill kits available, are they suitable, adequately stocked and positioned in the correct areas?",
+        "active": true
+    },
+    {
+        "id": "32",
+        "content": "Has your office equipment (including laptop chargers) had its portable appliance test (PAT)?",
+        "active": true
+    },
+    {
+        "id": "33",
+        "content": "Please confirm you have completed the waste disposal and waste segregation environmental audits for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "34",
+        "content": "Has all waste been correctly segregated and placed in suitable waste receptacles?",
+        "active": true
+    },
+    {
+        "id": "35",
+        "content": "Have all Gas and electrical welding equipment- hoses, burners, associated regulators & electrical system had a documented monthly check?",
+        "active": true
+    },
+    {
+        "id": "36",
+        "content": "Have the oil storage bunds and similar containment arrangements to include bulk tank alarm checks been carried out?",
+        "active": true
+    },
+    {
+        "id": "37",
+        "content": "Are all guards in place (including eye guards) and tool rests etc. correctly adjusted on work equipment (e.g. pillar drills and grinders etc.)?",
+        "active": true
+    },
+    {
+        "id": "38",
+        "content": "Have all Automatic fire detectors been checked?",
+        "active": true
+    },
+    {
+        "id": "39",
+        "content": "Is there an Environmental emergency spill drill in place?",
+        "active": true
+    },
+    {
+        "id": "40",
+        "content": "Are First Aiders appointed (are names of First Aiders displayed on notice boards)?",
+        "active": true
+    },
+    {
+        "id": "41",
+        "content": "Has the Fixed Wire Electrical Testing been completed in the last 5 years?",
+        "active": true
+    },
+    {
+        "id": "42",
+        "content": "Please confirm you have completed the use of energy and use of water environmental audits for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "43",
+        "content": "Are findings of this tour being communicated during the monthly safety meetings? And have minutes and actions been recorded from the monthly safety meetings and are all employees aware of discussions / actions?",
+        "active": true
+    },
+    {
+        "id": "44",
+        "content": "Is safety signage displayed at appropriate areas e.g. at entrances to areas and at machinery, workshop and yard areas?",
+        "active": true
+    },
+    {
+        "id": "45",
+        "content": "Have your pedestal grinders been marked up with the appropriate vibration sticker, i.e. high (red)?",
+        "active": true
+    },
+    {
+        "id": "46",
+        "content": "Please confirm you have completed the training records environmental audit for your branch and emailed it to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "47",
+        "content": "Have all employees or new starters in your area been inducted and training needs assessed?",
+        "active": true
+    },
+    {
+        "id": "48",
+        "content": "Have all Overhead cranes & JIB Cranes received servicing and safety inspections within the specified period? If not, please provide dates of last inspection and service",
+        "active": true
+    },
+    {
+        "id": "49",
+        "content": "Has your Mobile Yard crane been inspected by Allianz within the specified time period? If not, please provide dates of last inspection and service",
+        "active": true
+    },
+    {
+        "id": "50",
+        "content": "Has all Lifting Equipment been inspected by Allianz and A&B Defects within the specified time period? If not, please provide dates of last inspection and service",
+        "active": true
+    },
+    {
+        "id": "51",
+        "content": "Are all oil/fuel tank bunds intact, sealed at any pipe work etc. and regularly cleared and maintained?",
+        "active": true
+    },
+    {
+        "id": "52",
+        "content": "Are all used drums being correctly disposed of (not cut up) and those in the yard containing liquid sited in a bund or spill tray and covered?",
+        "active": true
+    },
+    {
+        "id": "53",
+        "content": "Please confirm you have completed the spillage environmental audit for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "54",
+        "content": "Has the Roller shutter and sliding door servicing taken place within the specified period?",
+        "active": true
+    },
+    {
+        "id": "55",
+        "content": "Has the Deep Cleaning Kitchen equipment and extractor ventilation system taken place?",
+        "active": true
+    },
+    {
+        "id": "56",
+        "content": "Are Manual Handling aids (trolleys, engine hoists etc.) available & in good condition with SWL indicated where appropriate? If not, please supply date of last Allianz inspection",
+        "active": true
+    },
+    {
+        "id": "57",
+        "content": "Are all fire doors in your area checked to ensure self-closers, push bars etc. are fitted and serviceable?",
+        "active": true
+    },
+    {
+        "id": "58",
+        "content": "Please confirm you have completed the noise environmental audit for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "59",
+        "content": "Has the Kitchen Gas Equipment Servicing been scheduled?",
+        "active": true
+    },
+    {
+        "id": "60",
+        "content": "Has your Heating System Servicing taken place?",
+        "active": true
+    },
+    {
+        "id": "61",
+        "content": "Please confirm you have completed the management programmes environmental audit for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "62",
+        "content": "Has an AMR for Gas and Electricity been installed on site? If not please provide the last Electricity and Gas meter readings and the quantity of any heating oil ordered.",
+        "active": true
+    },
+    {
+        "id": "63",
+        "content": "Please confirm you have completed the incident reporting environmental audit for your branch and emailed this to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "64",
+        "content": "Has all Flameproof electrical equipment in such rooms as spray rooms/paint shops had an annual check, if not please record date of check",
+        "active": true
+    },
+    {
+        "id": "65",
+        "content": "Please confirm you have completed the guidance for emergency plans environmental audit for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "66",
+        "content": "Do all managers / supervisors in your area know the correct incident reporting procedures and have access to the FIN341?",
+        "active": true
+    },
+    {
+        "id": "67",
+        "content": "Please confirm you have completed the consent to discharge and disposal of contaminated water environmental audits for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "68",
+        "content": "Please confirm you have completed the air conditioning environmental audit for your branch and emailed these to safety@finning.com",
+        "active": true
+    },
+    {
+        "id": "69",
+        "content": "Logincident TEST Question #1. Please IGNORE",
+        "active": false
+    },
+    {
+        "id": "70",
+        "content": "Logincident TEST Question #2. Please IGNORE",
+        "active": false
+    },
+    {
+        "id": "71",
+        "content": "Logincident TEST Question #3. Please IGNORE",
+        "active": false
+    },
+    {
+        "id": "72",
+        "content": "Logincident TEST Question #4. Please IGNORE",
+        "active": false
+    },
+    {
+        "id": "73",
+        "content": "",
+        "active": false
+    },
+    {
+        "id": "74",
+        "content": "Logincident TEST question #6 PLEASE IGNORE",
+        "active": false
+    },
+    {
+        "id": "75",
+        "content": "Logincident TEST Question #7 PLEASE IGNORE.",
+        "active": false
+    },
+    {
+        "id": "76",
+        "content": "Logincident Test Question #8 PLEASE IGNORE.",
+        "active": false
+    }
+]

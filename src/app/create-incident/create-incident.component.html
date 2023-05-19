@@ -1,0 +1,1312 @@
+<div class="drawing-image" *ngIf="drawImagepopup">
+  <div class="bg_image_pop">
+    <image-drawing
+      [src]="drawImageUrl"
+      outputMimeType="'image/jpeg'"
+      (save)="saveImage($event)"
+      height="{{ drawimageHeight }}"
+      width="{{ drawimageWidth }}"
+      (cancel)="cancelImage($event)"
+    >
+    </image-drawing>
+  </div>
+</div>
+<h5 class="bevelTitle titleCase">
+  <ng-container *ngIf="company && company.incidentSingularName">{{
+    company.incidentSingularName | titlecase
+  }}</ng-container>
+  <ng-container *ngIf="!company || !company.incidentSingularName"
+    >Incidents</ng-container
+  >
+</h5>
+<div class="row">
+  <div *ngIf="!form" class="col-12">
+    <div
+      *ngFor="let number of [1, 2]"
+      class="m-portlet m-portlet--rounded m-portlet--head-solid-bg"
+    >
+      <div class="m-portlet__head portGrey">
+        <div class="m-portlet__head-caption">
+          <div class="m-portlet__head-title"></div>
+        </div>
+      </div>
+      <!--begin::Form-->
+      <div class="m-portlet__body">
+        <div class="m-form__section m-form__section--first">
+          <div class="m-form__group form-group">
+            <div class="formTitleSkel loading"></div>
+            <div *ngFor="let number of [1, 2, 3, 4]" class="row margin5">
+              <div class="formCircleSkel loading"></div>
+              <div class="formInputSkel loading"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end::Form-->
+    </div>
+  </div>
+  <div class="col-12">
+    <form
+      class="m-form"
+      *ngIf="form && companyColor"
+      [formGroup]="form"
+      (submit)="submitForm()"
+      enctype="multipart/form-data"
+    >
+      <!--begin::Portlet-->
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div class="m-portlet__head" [style.background-color]="companyColor">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <span class="m-portlet__head-icon m--hide">
+                <i class="la la-gear"></i>
+              </span>
+              <h3 class="m-portlet__head-text">
+                <ng-container *ngIf="company && company.incidentSingularName">{{
+                  company.incidentSingularName | titlecase
+                }}</ng-container>
+                <ng-container *ngIf="!company || !company.incidentSingularName"
+                  >Incident</ng-container
+                >
+                Type
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+          <div class="m-form__section m-form__section--first">
+            <div class="m-form__group form-group">
+              <label>
+                <ng-container *ngIf="company && company.incidentSingularName">{{
+                  company.incidentSingularName | titlecase
+                }}</ng-container>
+                <ng-container *ngIf="!company || !company.incidentSingularName"
+                  >Incident</ng-container
+                >
+                Type:</label
+              >
+              <div class="m-radio-list" *ngIf="!incident">
+                <ng-container
+                  *ngFor="let incident_type of formData; let first = first"
+                >
+                  <label
+                    *ngIf="
+                      incident_type.name !== 'Guidance' &&
+                      incident_type.name !== 'Audits' &&
+                      incident_type.name !== 'Managers Tour' &&
+                      incident_type.name !== 'Safe on Site'
+                    "
+                    class="m-radio"
+                  >
+                    <input
+                      type="radio"
+                      name="incident_type"
+                      [value]="incident_type"
+                      (change)="incidentTypeChange(incident_type.id)"
+                      [checked]="first"
+                    />
+                    {{ incident_type.name }}
+                    <span></span>
+                  </label>
+                </ng-container>
+                <span class="m-form__help"
+                  >Please select
+                  <ng-container
+                    *ngIf="company && company.incidentSingularName"
+                    >{{
+                      company.incidentSingularName | titlecase
+                    }}</ng-container
+                  >
+                  <ng-container
+                    *ngIf="!company || !company.incidentSingularName"
+                    >Incidents</ng-container
+                  >
+                  type</span
+                >
+              </div>
+              <!--TODO stopped working-->
+              <div class="m-radio-list" *ngIf="incident">
+                <ng-container
+                  *ngFor="let incident_type of formData; let first = first"
+                >
+                  <label
+                    *ngIf="
+                      incident_type.name !== 'Guidance' &&
+                      incident_type.name !== 'Audits' &&
+                      incident_type.name !== 'Managers Tour' &&
+                      incident_type.name !== 'Safe on Site'
+                    "
+                    class="m-radio"
+                  >
+                    <input
+                      type="radio"
+                      name="incident_type"
+                      [value]="incident_type"
+                      (change)="incidentTypeChange(incident_type.id, true)"
+                      [checked]="this.incident.type.id == incident_type.id"
+                    />
+                    {{ incident_type.name }}
+                    <span></span>
+                  </label>
+                </ng-container>
+                <span class="m-form__help"
+                  >Please select
+                  <ng-container
+                    *ngIf="company && company.incidentSingularName"
+                    >{{
+                      company.incidentSingularName | titlecase
+                    }}</ng-container
+                  >
+                  <ng-container
+                    *ngIf="!company || !company.incidentSingularName"
+                    >Incidents</ng-container
+                  >
+                  type</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--end::Form-->
+      </div>
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+        *ngIf="
+          (currentUser.company.name == 'Finninguk' ||
+            currentUser.company.name == 'Finning') &&
+          !this.incident &&
+          this.checkIncidentType != 'Electric Power' &&
+          this.checkIncidentType != 'Equipment Solutions'
+        "
+      >
+        <div class="m-portlet__head" [style.background-color]="companyColor">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <span class="m-portlet__head-icon m--hide">
+                <i class="la la-gear"></i>
+              </span>
+              <h3 class="m-portlet__head-text">Emails</h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="m-form__section m-form__section--first">
+            <div class="m-form__group form-group">
+              <ng-container *ngIf="profileFields">
+                <ng-container *ngIf="profileFields.length">
+                  <ng-container *ngFor="let field of profileFields">
+                    <ng-container
+                      *ngIf="
+                        form && form.get('useremail') && form.get('supervisor')
+                      "
+                    >
+                      <div
+                        class="m-form__group form-group"
+                        [ngClass]="{
+                          'has-danger':
+                            (submitted && form.get('supervisor').invalid) ||
+                            (form.get('supervisor').invalid &&
+                              (form.get('supervisor').dirty ||
+                                form.get('supervisor').touched))
+                        }"
+                      >
+                        <label *ngIf="field.title">{{ field.title }}</label>
+                        <input
+                          id="{{ field.id }}"
+                          type="{{ field.type }}"
+                          class="form-control"
+                          placeholder="{{ field.placeholder }}"
+                          formControlName="supervisor"
+                          remove-space
+                        />
+                        <div
+                          class="form-control-feedback"
+                          *ngIf="
+                            (submitted &&
+                              form.get('supervisor').errors &&
+                              form.get('supervisor').errors.required) ||
+                            ((form.get('supervisor').dirty ||
+                              form.get('supervisor').touched) &&
+                              form.get('supervisor').errors &&
+                              form.get('supervisor').errors.required)
+                          "
+                        >
+                          This field is required.
+                        </div>
+                        <div
+                          class="form-control-feedback"
+                          *ngIf="
+                            (form.get('supervisor').dirty ||
+                              form.get('supervisor').touched) &&
+                            form.get('supervisor').errors &&
+                            form.get('supervisor').errors.pattern
+                          "
+                        >
+                          Please enter the valid supervisor email.
+                        </div>
+                      </div>
+                    </ng-container>
+                    <div
+                      class="m-form__group form-group"
+                      [ngClass]="{
+                        'has-danger':
+                          (submitted && form.get('useremail')?.invalid) ||
+                          (form.get('useremail')?.invalid &&
+                            (form.get('useremail')?.dirty ||
+                              form.get('useremail')?.touched))
+                      }"
+                    >
+                      <label *ngIf="userEmail">User Email</label>
+                      <input
+                        class="form-control"
+                        formControlName="useremail"
+                        remove-space
+                      />
+                      <div
+                        class="form-control-feedback"
+                        *ngIf="
+                          (submitted &&
+                            form.get('useremail')?.errors &&
+                            form.get('useremail')?.errors?.required) ||
+                          ((form.get('useremail')?.dirty ||
+                            form.get('supervisor')?.touched) &&
+                            form.get('useremail')?.errors &&
+                            form.get('useremail')?.errors?.required)
+                        "
+                      >
+                        This field is required.
+                      </div>
+                      <div
+                        class="form-control-feedback"
+                        *ngIf="
+                          (form.get('useremail')?.dirty ||
+                            form.get('useremail')?.touched) &&
+                          form.get('useremail')?.errors &&
+                          form.get('useremail')?.errors?.pattern
+                        "
+                      >
+                        Please enter the valid user email.
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+        *ngIf="this.incident"
+      >
+        <ng-container
+          *ngIf="
+            (profileFields && profileFields.length) ||
+            parentGroup ||
+            selectedChildren
+          "
+        >
+          <div class="m-portlet__head" [style.background-color]="companyColor">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon m--hide">
+                  <i class="la la-gear"></i>
+                </span>
+                <h3 class="m-portlet__head-text">
+                  <ng-container
+                    *ngIf="company && company.incidentSingularName"
+                    >{{
+                      company.incidentSingularName | titlecase
+                    }}</ng-container
+                  >
+                  <ng-container
+                    *ngIf="!company || !company.incidentSingularName"
+                    >Incident</ng-container
+                  >
+                  Group
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <!--begin::Form-->
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+              <div class="m-form__group form-group">
+                <ng-container *ngIf="profileFields">
+                  <ng-container *ngIf="profileFields.length">
+                    <ng-container *ngFor="let field of profileFields">
+                      <div class="m-form__group form-group">
+                        <label *ngIf="field.title">{{ field.title }}</label>
+                        <!-- <input id="{{field.id}}"
+                               [attr.disabled]="field.isDisabled == true"
+                               type="{{field.type}}"
+                               class="form-control"
+                               placeholder="{{field.placeholder}}"
+                               value="{{field.fieldValue}}" remove-space> -->
+                        <input
+                          id="{{ field.id }}"
+                          type="{{ field.type }}"
+                          class="form-control"
+                          placeholder="{{ field.placeholder }}"
+                          value="{{ field.fieldValue }}"
+                          remove-space
+                        />
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="parentGroup">
+                  <ng-container *ngFor="let parent of parentGroup">
+                    <div class="m-form__group form-group">
+                      <label>{{ parent.name }}:</label>
+                      <select
+                        [value]="
+                          this.incident.userGroup &&
+                          this.incident.userGroup.parent
+                            ? this.incident.userGroup.parent.id
+                            : null
+                        "
+                        (change)="setChild($event.target.value)"
+                        class="form-control m-input"
+                      >
+                        <ng-container *ngFor="let group of parent.groups">
+                          <option [value]="group.id">{{ group.name }}</option>
+                        </ng-container>
+                      </select>
+                    </div>
+                  </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="selectedChildren">
+                  <ng-container *ngFor="let child of selectedChildren">
+                    <div class="m-form__group form-group">
+                      <label>{{ child.name }}:</label>
+                      <select
+                        (change)="childChange($event.target.value)"
+                        [value]="
+                          this.incident.userGroup
+                            ? this.incident.userGroup.id
+                            : null
+                        "
+                        class="form-control m-input"
+                      >
+                        <ng-container *ngFor="let group of child.groups">
+                          <option [value]="group.id">{{ group.name }}</option>
+                        </ng-container>
+                      </select>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <!--end::Form-->
+      </div>
+
+      <!--end::Portlet-->
+
+      <ng-template
+        #sectionFields
+        let-section="section"
+        let-holderItem="holderItem"
+      >
+        <ng-container *ngIf="holderItem">
+          <h3>
+            {{ section.title }}
+            <a
+              *ngIf="!this.incident"
+              class="deleteCross"
+              (click)="deleteItem(section.id)"
+              >x</a
+            >
+          </h3>
+        </ng-container>
+        <ng-container *ngFor="let field of sortOrder(section.fields)">
+          <ng-container *ngIf="field.type !== 'media'">
+            <h5 *ngIf="field.type == 'info'">{{ field.title }}</h5>
+            <div
+              class="m-form__group form-group"
+              [ngClass]="{
+                'has-danger':
+                  (submitted && form.get(field.id).invalid) ||
+                  (form.get(field.id).invalid &&
+                    (form.get(field.id).dirty || form.get(field.id).touched))
+              }"
+            >
+              <div
+                *ngIf="
+                  ((field.type == 'dropdown' || field.type == 'selection') &&
+                    (field.hiddenUntilTrue == false ||
+                      !field.hiddenUntilTrue)) ||
+                  ((field.type == 'dropdown' || field.type == 'selection') &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }}</label>
+                <!--<div class="col-xl-9 col-lg-9">-->
+                <select
+                  [attr.disabled]="field.isDisabled == true ? true : null"
+                  name=""
+                  formControlName="{{ field.id }}"
+                  class="form-control m-input"
+                  (change)="dropdownChange(section, field, $event.target.value)"
+                  *ngIf="field.title == 'Severity'; else severityOptional"
+                  value="{{ severityValue }}"
+                  [attr.disabled]="isSeverityReadonly ? '' : null"
+                >
+                  <!-- <option selected></option> -->
+                  <option
+                    *ngFor="let option of field.options"
+                    [value]="option.value"
+                  >
+                    {{ option.value }}
+                  </option>
+                </select>
+                <ng-template #severityOptional>
+                  <select
+                    [attr.disabled]="field.isDisabled == true ? true : null"
+                    name=""
+                    formControlName="{{ field.id }}"
+                    class="form-control m-input"
+                    (change)="
+                      dropdownChange(section, field, $event.target.value)
+                    "
+                  >
+                    <option selected>Please Select {{ field.title }}</option>
+                    <option
+                      *ngFor="let option of field.options"
+                      [value]="option.value"
+                    >
+                      {{ option.value }}
+                    </option>
+                  </select>
+                </ng-template>
+                <!--</div>-->
+              </div>
+
+              <div
+                *ngIf="
+                  (field.type == 'radio' && field.hiddenUntilTrue == false) ||
+                  (field.type == 'radio' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }}</label>
+
+                <div class="m-radio-list">
+                  <label *ngFor="let option of field.options" class="m-radio">
+                    <input
+                      [attr.disabled]="field.isDisabled == true ? true : null"
+                      type="radio"
+                      formControlName="{{ field.id }}"
+                      [value]="option.value"
+                    />
+                    {{ option.value }}
+                    <span></span>
+                  </label>
+                </div>
+              </div>
+
+              <div
+                *ngIf="
+                  (field.type == 'menu-option' &&
+                    field.hiddenUntilTrue == false) ||
+                  (field.type == 'menu-option' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <ng-container *ngIf="field.action == 'call'">
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#emergencyModal"
+                    (click)="status = !status"
+                    [ngClass]="status ? 'btn-danger' : 'btn-outline-danger'"
+                    type="button"
+                  >
+                    {{ field.title }}
+                  </button>
+                  <!-- Emergency Call Modal -->
+                  <div
+                    class="modal fade"
+                    id="emergencyModal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="emergencyModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="emergencyModalLabel">
+                            Emergency Contact
+                          </h5>
+                          <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          In case of emergencies please call
+                          <a href="tel:+{{ contactNumber }}"
+                            >+{{ contactNumber }}</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="field.action !== 'call'">
+                  <button
+                    class="btn"
+                    (click)="status1 = !status1"
+                    [ngClass]="status1 ? 'btn-success' : 'btn-outline-success'"
+                    type="button"
+                  >
+                    {{ field.title }}
+                  </button>
+                </ng-container>
+              </div>
+              <div
+                *ngIf="
+                  (field.type == 'text' && field.hiddenUntilTrue == false) ||
+                  (field.type == 'text' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }}</label>
+                <textarea
+                  *ngIf="field.title != 'Blueprint Project Number'"
+                  [attr.disabled]="field.isDisabled == true ? true : null"
+                  class="form-control m-input"
+                  formControlName="{{ field.id }}"
+                  placeholder="{{ field.placeholder }}"
+                  rows="3"
+                  remove-space
+                ></textarea>
+                <ng-container>
+                  <input
+                    *ngIf="field.title == 'Blueprint Project Number'"
+                    type="text"
+                    pattern="\d*"
+                    maxlength="6"
+                    minLength="6"
+                    [attr.disabled]="field.isDisabled == true ? true : null"
+                    class="form-control m-input"
+                    formControlName="{{ field.id }}"
+                    remove-space
+                  />
+                  <small *ngIf="field.title == 'Blueprint Project Number'"
+                    >6 Digit Numerical Only</small
+                  >
+                </ng-container>
+              </div>
+              <div
+                *ngIf="
+                  (field.type == 'time' && field.hiddenUntilTrue == false) ||
+                  (field.type == 'time' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }}</label>
+                <ngb-timepicker
+                  (ngModelChange)="timechange(field.id)"
+                  [attr.disabled]="field.isDisabled == true ? true : null"
+                  formControlName="{{ field.id }}"
+                  [meridian]="true"
+                  [readonlyInputs]="false"
+                ></ngb-timepicker>
+              </div>
+              <div
+                *ngIf="
+                  (field.type == 'date' && field.hiddenUntilTrue == false) ||
+                  (field.type == 'date' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }}</label> <br />
+                <ngb-datepicker
+                  (ngModelChange)="datechange(field.id)"
+                  name="dp"
+                  ngbDatepicker
+                  #d="ngbDatepicker"
+                  [maxDate]="maxDate"
+                  [disabled]="field.isDisabled == 'true'"
+                  formControlName="{{ field.id }}"
+                ></ngb-datepicker>
+              </div>
+              <div
+                *ngIf="
+                  (field.type == 'datetime' &&
+                    field.hiddenUntilTrue == false) ||
+                  (field.type == 'datetime' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }} </label>
+                <input
+                  [attr.disabled]="field.isDisabled == true ? true : null"
+                  class="form-control"
+                  formControlName="{{ field.id }}"
+                  [owlDateTime]="dt1"
+                  [owlDateTimeTrigger]="dt1"
+                  [max]="max"
+                  placeholder="{{ field.placeholder }}"
+                  (keydown)="owlDate($event)"
+                />
+                <owl-date-time #dt1></owl-date-time>
+              </div>
+              <div *ngIf="field.type == 'boolean_yesno'">
+                <label>{{ field.title }}</label>
+                <!--<div class="col-xl-9 col-lg-9">-->
+                <select
+                  name=""
+                  formControlName="{{ field.id }}"
+                  class="form-control m-input"
+                  (change)="
+                    declarationChange(section, field, $event.target.value)
+                  "
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+                <!--</div>-->
+              </div>
+              <div
+                *ngIf="
+                  (field.type == 'finish_incident_boolean_yesno' &&
+                    (field.hiddenUntilTrue == false ||
+                      !field.hiddenUntilTrue)) ||
+                  (field.type == 'finish_incident_boolean_yesno' &&
+                    field.hiddenUntilFieldId &&
+                    declareType == 'Yes')
+                "
+              >
+                <label>{{ field.title }}</label>
+                <!--<div class="col-xl-9 col-lg-9">-->
+                <select
+                  name=""
+                  formControlName="{{ field.id }}"
+                  class="form-control m-input"
+                  (change)="
+                    declarationChange2(
+                      section,
+                      field,
+                      $event.target.value,
+                      target
+                    )
+                  "
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+                <!--</div>-->
+              </div>
+              <div
+                *ngIf="
+                  (field.type == 'dropdown-address' &&
+                    field.hiddenUntilTrue == false) ||
+                  (field.type == 'dropdown-address' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }}</label>
+                <select
+                  [attr.disabled]="field.isDisabled == true ? true : null"
+                  name=""
+                  formControlName="{{ field.id }}"
+                  class="form-control m-input"
+                  (change)="
+                    addressDropdownChange(section, field, $event.target.value)
+                  "
+                >
+                  <option
+                    *ngFor="let address of field.addresses"
+                    [value]="address.address"
+                  >
+                    {{ address.address }}
+                  </option>
+                </select>
+              </div>
+              <div
+                *ngIf="
+                  (field.type == 'gps' && field.hiddenUntilTrue == false) ||
+                  (field.type == 'gps' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }}</label>
+
+                <input
+                  [attr.disabled]="field.isDisabled == true ? true : null"
+                  *ngIf="field.title != 'What3Words'"
+                  class="form-control"
+                  formControlName="{{ field.id }}"
+                  placeholder="{{ field.placeholder }}"
+                  (onAddressChange)="onLocationChange(field.id, $event)"
+                  ngx-google-places-autocomplete
+                  #placesRef="ngx-places"
+                  remove-space
+                />
+                <input
+                  [attr.disabled]="field.isDisabled == true ? true : null"
+                  *ngIf="field.title == 'What3Words'"
+                  class="form-control"
+                  formControlName="{{ field.id }}"
+                  placeholder="{{ field.placeholder }}"
+                  (blur)="onWhat3WordsChange(field.id)"
+                  remove-space
+                />
+                <agm-map
+                  *ngIf="field.title != 'What3Words' && lat && lng"
+                  [latitude]="lat"
+                  [longitude]="lng"
+                  (mapClick)="locationMarker($event)"
+                >
+                  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                </agm-map>
+              </div>
+              <div
+                *ngIf="
+                  (field.type == 'boolean' && field.hiddenUntilTrue == false) ||
+                  (field.type == 'boolean' &&
+                    field.hiddenUntilFieldId &&
+                    checkParentfield(field.hiddenUntilFieldId))
+                "
+              >
+                <label>{{ field.title }}</label>
+                <div class="m-radio-list">
+                  <label *ngFor="let option of ['Yes', 'No']" class="m-radio">
+                    <input
+                      [attr.disabled]="field.isDisabled == true ? true : null"
+                      type="radio"
+                      formControlName="{{ field.id }}"
+                      [value]="option"
+                    />
+                    {{ option }}
+                    <span></span>
+                  </label>
+                </div>
+              </div>
+
+              <div
+                class="form-control-feedback"
+                *ngIf="
+                  (submitted &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.required) ||
+                  ((form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.required)
+                "
+              >
+                This field is required.
+              </div>
+              <ng-container *ngIf="field.title == 'Witness Email'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Please enter the valid email.
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.title == 'Witness Name'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Enter the correct name.
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.title == 'Witness Contact Number'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Enter the valid contact number.
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.title == 'Witness Age - if under 18'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Enter the correct age.
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.title == 'First Name'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Enter the correct name
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.title == 'Surname'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Enter the correct name
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.title == 'Who took the Action?'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Enter the correct Name
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.title == 'Name of Injured Person'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Enter the correct Name
+                </div>
+              </ng-container>
+              <ng-container *ngIf="field.title == 'Who took the action?'">
+                <div
+                  class="form-control-feedback"
+                  *ngIf="
+                    (form.get(field.id).dirty || form.get(field.id).touched) &&
+                    form.get(field.id).errors &&
+                    form.get(field.id).errors.pattern
+                  "
+                >
+                  Enter the correct Name
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            checkIncidentType == 'Observation' &&
+            declareType == 'Yes' &&
+            declareType1 == 'No'
+          "
+        >
+          <div *ngIf="section.type === 'media'">
+            <div class="m-form__group form-group" *ngIf="dropzones[section.id]">
+              <div
+                *ngIf="section.type != 'injury' && section.type != 'vehicle'"
+                [disabled]="section.isDisabled"
+                class="dropzone"
+                id="{{ section.title }}-{{ section.id }}-{{ section.itemId }}"
+                [dropzone]="dropzones[section.id].config"
+                (error)="onUploadError($event, section.id)"
+                (success)="onUploadSuccess($event, section.id)"
+              >
+                <h1 *ngIf="section.isDisabled" style="text-align: center">
+                  Disabled
+                </h1>
+              </div>
+            </div>
+            <div class="draw-images">
+              <ng-container
+                *ngFor="let images of this.dropzones[section.id].data"
+              >
+                <img src="{{ images.path }}" />
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="checkIncidentType !== 'Observation'">
+          <div
+            *ngIf="
+              section.type === 'media' ||
+              section.type === 'injury' ||
+              section.type === 'vehicle'
+            "
+          >
+            <div class="m-form__group form-group" *ngIf="dropzones[section.id]">
+              <div
+                *ngIf="section.type != 'injury' && section.type != 'vehicle'"
+                [disabled]="section.isDisabled"
+                class="dropzone"
+                id="{{ section.title }}-{{ section.id }}-{{ section.itemId }}"
+                [dropzone]="dropzones[section.id].config"
+                (error)="onUploadError($event, section.id)"
+                (success)="onUploadSuccess($event, section.id)"
+              >
+                <h1 *ngIf="section.isDisabled" style="text-align: center">
+                  Disabled
+                </h1>
+              </div>
+            </div>
+            <div class="injury_damage_area">
+              <div
+                *ngIf="section.type === 'injury' || section.type === 'vehicle'"
+              >
+                <h5 *ngIf="section.type === 'injury'">Show Injury Area</h5>
+                <h5 *ngIf="section.type === 'vehicle'">Show Damage Area</h5>
+                <div class="btn_upload">
+                  <button
+                    class="btn btn-secondary Schematicbutton"
+                    type="button"
+                    (click)="addInjuryandVehicleDamage(section, section.type)"
+                  >
+                    Add the schematic
+                  </button>
+                </div>
+                <div
+                  *ngIf="incidentId"
+                  [disabled]="true"
+                  class="dropzone editinjury"
+                  id="{{ section.title }}-{{ section.id }}-{{ section.itemId }}"
+                  [dropzone]="dropzones[section.id].config"
+                ></div>
+              </div>
+            </div>
+            <div class="draw-images">
+              <ng-container
+                *ngFor="let images of this.dropzones[section.id].data"
+              >
+                <img
+                  [src]="mediaSrc[images.uuid]"
+                  (click)="previewImage($event)"
+                  class="modal-hover-opacity"
+                  data-toggle="modal"
+                  data-target="#myModal"
+                />
+                <button class="delete-bttn" (click)="delete(images.uuid)">
+                  X
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </ng-template>
+
+      <!-- View Image Modal -->
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Image Preview</h4>
+              <button
+                type="button"
+                #closebutton
+                class="close"
+                data-dismiss="modal"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <img
+                src="{{ imgSrc }}"
+                style="max-width: 100%; cursor: pointer"
+                class="modal-hover-opacity"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Image Modal -->
+
+      <!--begin::Portlet-->
+      <ng-container *ngFor="let section of currentIncidentType.sections">
+        <div
+          [ngClass]="
+            checkIncidentType == 'Observation' &&
+            section.type == 'media' &&
+            (declareType == 'No' || declareType1 == 'Yes')
+              ? 'hideMedia'
+              : ''
+          "
+          *ngIf="section.type != 'witness'"
+          class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+        >
+          <div
+            class="m-portlet__head align-items-center"
+            [style.background-color]="companyColor"
+            [style.border-color]="companyColor"
+          >
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon m--hide">
+                  <i class="la la-gear"></i>
+                </span>
+                <h3 class="m-portlet__head-text">
+                  {{ section.title }}
+                </h3>
+              </div>
+
+            </div>
+            <div class="m-portlet__head-title" *ngIf="showHideSIFButton && section.id == 'E9MybB5r'">
+                <button
+                  class="btn btn-secondary"
+                  type="button"
+                  (click)="showHideSif(showHideSIFSection)"
+                >
+                  {{showHideSIFSection ? 'Show': 'Hide'}}
+              </button>
+              <div class="m-portlet__head-tools"></div>
+             </div>
+          </div>
+          <!--begin::Form-->
+          <div class="m-portlet__body" [ngClass]="
+            showHideSIFSection &&
+            section.id == 'E9MybB5r'
+              ? 'd-none'
+              : 'd-block'
+          ">
+            <div class="m-form__section m-form__section--first">
+              <ng-container
+                *ngTemplateOutlet="
+                  sectionFields;
+                  context: { section: section, holderItem: false }
+                "
+              ></ng-container>
+              <ng-container *ngFor="let item of section.items">
+                <ng-container
+                  *ngTemplateOutlet="
+                    sectionFields;
+                    context: { section: item, holderItem: true }
+                  "
+                ></ng-container>
+              </ng-container>
+              <ng-container
+                *ngIf="section.type === 'holder' && section.showAddButton"
+              >
+                <div class="dropdown">
+                  <button
+                    class="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Add Item
+                  </button>
+                  <div
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <a
+                      class="dropdown-item"
+                      (click)="addSectionDamage(section, section.damageSection)"
+                      *ngIf="section.damageSection"
+                      >{{ section.damageTitle }}</a
+                    >
+                    <a
+                      class="dropdown-item"
+                      (click)="addSectionDamage(section, section.injurySection)"
+                      *ngIf="section.injurySection"
+                      >{{ section.injuryTitle }}</a
+                    >
+                    <a
+                      class="dropdown-item"
+                      (click)="
+                        addSectionDamage(section, section.vehicleSection)
+                      "
+                      *ngIf="section.vehicleSection"
+                      >{{ section.vehicleTitle }}</a
+                    >
+                    <a
+                      class="dropdown-item"
+                      (click)="
+                        addSectionDamage(section, section.witnessSection)
+                      "
+                      *ngIf="section.witnessSection"
+                      >{{ section.witnessTitle }}</a
+                    >
+                  </div>
+                </div>
+                <hr />
+              </ng-container>
+            </div>
+          </div>
+          <!--end::Form-->
+        </div>
+      </ng-container>
+      <div
+        *ngIf="currentIncidentType.isAnonymousEnabled"
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">Submit Anonymously?</h3>
+            </div>
+          </div>
+        </div>
+
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+          <div class="m-form__section m-form__section--first">
+            <div class="col-12 m-form__group form-group">
+              <div class="form-group">
+                <div class="form-check">
+                  <input
+                    (change)="anonToggle()"
+                    id="anon"
+                    type="checkbox"
+                    name="terms"
+                    style="margin-right: 20px"
+                    class="example-full-width"
+                  />
+                  <label
+                    >Submit this incident without any identifiable
+                    information.</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--end::Form-->
+      </div>
+      <div
+        *ngIf="
+          allowSelfAssign &&
+          this.checkIncidentType != 'Electric Power' &&
+          this.checkIncidentType != 'Equipment Solutions'
+        "
+        class="allowSelfAssign-search"
+      >
+        <div
+          class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+        >
+          <div class="m-portlet__head" [style.background-color]="companyColor">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon m--hide">
+                  <i class="la la-gear"></i>
+                </span>
+                <h3 class="m-portlet__head-text">Assigned To</h3>
+              </div>
+            </div>
+          </div>
+          <!--begin::Form-->
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+              <div class="m-form__group form-group">
+                <label>Assigned To</label>
+                <input
+                  type="text"
+                  class="form-control mat-class"
+                  (keyup)="searchCompanyUsers($event.target.value)"
+                  matInput
+                  [formControl]="mysearchControl"
+                  [matAutocomplete]="auto"
+                  remove-space
+                />
+                <mat-autocomplete
+                  #auto="matAutocomplete"
+                  (optionSelected)="selectedAsignedoption($event.option.value)"
+                  [displayWith]="displayFn"
+                >
+                  <mat-option
+                    class="opt_list"
+                    *ngFor="let option of filteredOptions | async"
+                    [value]="option"
+                  >
+                    {{ option.name }}
+                    <small> ({{ option.email }}) </small>
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+            </div>
+          </div>
+          <!--end::Form-->
+        </div>
+      </div>
+      <div #target class="col-md-12 col-lg-6 col-xl-4 mx-auto">
+        <div class="alert alert-danger" *ngIf="submitted && form.invalid">
+          Please fix form errors above.
+        </div>
+        <button
+          class="btn btn-dark col-12 submitButton"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+          [disabled]="submitted1"
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="col-xl-2">
+    <p>
+      <button
+        *ngIf="showAddInjuryButton"
+        class="btn btn-success btn-block"
+        (click)="addInjury()"
+      >
+        Add Injury
+      </button>
+      <button
+        *ngIf="showAddVehicleButton"
+        class="btn btn-success btn-block"
+        (click)="addVehicle()"
+      >
+        Add Vehicle
+      </button>
+    </p>
+  </div>
+</div>
+<ng-template #incident_profile>Profile</ng-template>

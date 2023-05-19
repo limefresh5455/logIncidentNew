@@ -1,0 +1,147 @@
+<h5 class="bevelTitle">{{(userId) ? 'Edit Users' : 'Add Users'}}</h5>
+<hr />
+<div class="row">
+  <div class="row col-12">
+    <div class="col-lg-2 mb-2">
+      <a routerLink="/users" class="btn btn-sm btn-dark" [style.background-color]="accentColor"
+        [style.border-color]="accentColor">
+        Back
+      </a>
+    </div>
+    <div class="col-lg-8">
+      <div class=" m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success">
+        <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
+          <div class="m-portlet__head" [style.background-color]="userColor" [style.border-color]="userColor">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                  {{(userId) ? 'Edit Users' : 'Add Users'}}
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+              <div class="m-form__group form-group">
+                <label>First Name <span class="error">*</span></label>
+                <input type="text" formControlName="firstName"
+                  [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" class="form-control"
+                  placeholder="First Name..">
+                <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                  <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                  <div *ngIf="f.firstName.errors?.trimError">
+                    {{ f.firstName.errors?.trimError.value }}
+                  </div>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <label>Last Name <span class="error">*</span></label>
+                <input type="text" formControlName="lastName"
+                  [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" class="form-control"
+                  placeholder="Last Name..">
+                <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                  <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                  <div *ngIf="f.lastName.errors?.trimError">
+                    {{ f.lastName.errors?.trimError.value }}
+                  </div>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <label>Phone <span class="error">*</span></label>
+                <input type="text" formControlName="phone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"
+                  class="form-control" placeholder="Phone..">
+                <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                  <div *ngIf="f.phone.errors?.required">Phone is required</div>
+                  <div *ngIf="f.phone.errors?.pattern">Please enter the valid Phone Number</div>
+                  <div *ngIf="f.phone.errors?.trimError">
+                    {{ f.phone.errors?.trimError.value }}
+                  </div>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <label>Email <span class="error">*</span></label>
+                <input type="text" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                  class="form-control" placeholder="Email.." remove-space>
+                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                  <div *ngIf="f.email.errors?.required">Email is required</div>
+                  <div *ngIf="f.email.errors?.pattern">Please enter the valid user email</div>
+                </div>
+                <div  class="email-exists" *ngIf="isEmail">Email already exists</div>
+              </div>
+              <div class="m-form__group form-group" *ngIf="!userId">
+                <label>Password <span class="error">*</span></label>
+                <input type="password" formControlName="password"
+                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }" class="form-control"
+                  placeholder="Password.." remove-space autocomplete="off">
+                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                  <div *ngIf="f.password.errors?.required">Password is required</div>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <label>Supervisor <span class="error">*</span></label>
+                <mat-form-field appearance="outline">
+                  <input type="text" [formControl]="mySupervisor" [ngClass]="{ 'is-invalid': submitted && f.supervisor.errors }"
+                    (keyup)="searchCompanyUsers($event.target.value)" matInput placeholder="Users" aria-label="Users"
+                    [matAutocomplete]="auto" formControlName="supervisor">
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event.option.value)"
+                    [displayWith]="displayFn">
+                    <mat-option *ngFor="let user of filteredCreators | async" [value]="user">
+                      <span [innerHTML]="user.name | highlight: toHighlight"></span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error class="invalid-feedback" *ngIf="f.supervisor.errors?.required">Supervisor is required
+                  </mat-error>
+                </mat-form-field>
+                <!--                 <label>Supervisor Email <span class="error">*</span></label>
+                <input type="text" formControlName="supervisorEmail" [ngClass]="{ 'is-invalid': submitted && f.supervisorEmail.errors }" class="form-control" placeholder="Email.." remove-space>
+                <div *ngIf="submitted && f.supervisorEmail.errors" class="invalid-feedback">
+                  <div *ngIf="f.supervisorEmail.errors?.required">Supervisor Email is required</div>
+                  <div *ngIf="f.supervisorEmail.errors?.pattern">Please enter the valid user supervisor email</div>
+                </div> -->
+              </div>
+              <div class="m-form__group form-group">
+                <mat-slide-toggle formControlName="admin">Admin (Able to see Company View)</mat-slide-toggle>
+                <mat-slide-toggle formControlName="isDashboardViewOnly">Is Dashboard Only (No App)</mat-slide-toggle>
+                <mat-slide-toggle formControlName="isManager">Is Manager</mat-slide-toggle>
+                <mat-slide-toggle formControlName="isRestrictedAdmin">Is Restricted Admin</mat-slide-toggle>
+                <mat-slide-toggle formControlName="isProjectManager">Is Project Manager</mat-slide-toggle>
+                <mat-slide-toggle formControlName="isAppOnly">Is App Only</mat-slide-toggle>
+                <mat-slide-toggle formControlName="isActive">Is Active</mat-slide-toggle>
+                <mat-slide-toggle formControlName="resetPasswordNextLogin">Reset Password Next Login</mat-slide-toggle>
+              </div>
+              <div class="m-form__group form-group">
+                <label>Business Unit</label>
+                <select [ngClass]="{ 'is-invalid': submitted && f.b_unit.errors }" class="form-control m-input"
+                  formControlName="b_unit" (change)="selectUnit($event.target.value, true)">
+                  <option value="" *ngIf="!userId">Select Business Unit</option>
+                  <option *ngFor="let unit of unitList" [value]="unit.id">{{unit.name}}</option>
+                </select>
+                <div *ngIf="submitted && f.b_unit.errors" class="invalid-feedback">
+                  <div *ngIf="f.b_unit.errors.required">Business Unit is required</div>
+                </div>
+              </div>
+              <div class="m-form__group form-group">
+                <label>Branch <span class="error">*</span></label>
+                <select [ngClass]="{ 'is-invalid': submitted && f.groupId.errors }" class="form-control m-input"
+                  formControlName="groupId">
+                  <option value="" *ngIf="!userId">Select Branch</option>
+                  <option *ngFor="let branch of selectBranchList" [value]="branch.id">{{branch.name}}</option>
+                </select>
+                <div *ngIf="submitted && f.groupId.errors" class="invalid-feedback">
+                  <div *ngIf="f.groupId.errors.required">Branch is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mx-auto">
+              <button class="btn btn-dark col-12 submitButton" [style.background-color]="userColor"
+                [style.border-color]="userColor" type="submit">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-2"></div>
+  </div>
+</div>

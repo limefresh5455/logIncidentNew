@@ -1,0 +1,1872 @@
+<div class="row" *ngIf="incident">
+  <div class="col-xl-9">
+    <h3>
+      {{ incident.id }} - {{ incident.type.name }}
+      <span
+        class="text-muted small"
+        *ngIf="incidentLocation || selectedAddress"
+      >
+        - {{ incidentLocation ? incidentLocation : selectedAddress }}</span
+      >
+    </h3>
+  </div>
+  <div class="col-xl-11">
+    <ng-container *ngIf="this.currentUser.company.name !== 'barratt'">
+      <ng-container
+        *ngIf="
+          (currentUser.isRestrictedAdmin && incident.type.name != 'Injuries') ||
+            currentUser.admin ||
+            currentUser.isManager ||
+            (currentUser.isProjectManager &&
+              incident.type.name == 'Non Conformance');
+          then someContent;
+          else otherContent
+        "
+      ></ng-container>
+      <ng-template #someContent>
+        <button
+          (click)="openUpdateStatusModal(content)"
+          matTooltip="{{ incident.type.name }}"
+          [ngStyle]="{
+            'background-color':
+              incident.status.name == 'Closed'
+                ? hexToRGB(incident.type.color)
+                : incident.type.color,
+            'border-color':
+              incident.status.name == 'Closed'
+                ? hexToRGB(incident.type.color)
+                : incident.type.color
+          }"
+          class="btn breakSpaces col-xl-12"
+        >
+          {{ incident.status.name }} (Click here to change status)
+        </button>
+      </ng-template>
+      <ng-template #otherContent>
+        <button
+          matTooltip="{{ incident.type.name }}"
+          [ngStyle]="{
+            'background-color':
+              incident.status.name == 'Closed'
+                ? hexToRGB(incident.type.color)
+                : incident.type.color,
+            'border-color':
+              incident.status.name == 'Closed'
+                ? hexToRGB(incident.type.color)
+                : incident.type.color,
+            cursor: 'not-allowed'
+          }"
+          class="btn breakSpaces col-xl-12"
+        >
+          {{ incident.status.name }}
+        </button>
+      </ng-template>
+    </ng-container>
+  </div>
+  <div class="col-xl-1">
+    <div
+      class="pull-right m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push"
+      m-dropdown-toggle="hover"
+      aria-expanded="true"
+    >
+      <button
+        href="#"
+        [style.background-color]="accentColor"
+        [style.border-color]="accentColor"
+        class="m-portlet__nav-link btn btn-info m-btn m-btn--icon m-dropdown__toggle"
+      >
+        Actions
+      </button>
+      <div class="m-dropdown__wrapper dropDownWrap">
+        <span
+          class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust dropDownBody"
+        ></span>
+        <div class="m-dropdown__inner">
+          <div class="m-dropdown__body p-3">
+            <div class="m-dropdown__content">
+              <ul class="m-nav">
+                <li class="m-nav__item">
+                  <a
+                    *ngIf="currentUser.isManager || currentUser.admin"
+                    href="javascript:void(0)"
+                    (click)="openEscalateModal(escalateModal)"
+                    class="m-nav__link"
+                  >
+                    <i class="m-nav__link-icon flaticon-up-arrow"></i>
+                    <span class="m-nav__link-text">Escalate</span>
+                  </a>
+                </li>
+                <li class="m-nav__item">
+                  <a
+                    routerLink="/incidents/{{ incident.id }}/edit/"
+                    class="m-nav__link"
+                  >
+                    <i class="m-nav__link-icon la la-edit"></i>
+                    <span class="m-nav__link-text">Edit</span>
+                  </a>
+                </li>
+                <li
+                  *ngIf="
+                    currentUser.admin &&
+                    !currentUser.isRestrictedAdmin &&
+                    requiresTags
+                  "
+                  class="m-nav__item"
+                >
+                  <a
+                    href="javascript:void(0)"
+                    (click)="openTagModal(tags)"
+                    class="m-nav__link"
+                  >
+                    <i class="m-nav__link-icon la la-tags"></i>
+                    <span class="m-nav__link-text">Tags</span>
+                  </a>
+                </li>
+                <li
+                  *ngIf="
+                    currentUser.isSuperDeleteUser ||
+                    (((currentUser.admin && !currentUser.isRestrictedAdmin) ||
+                      (currentUser.isRestrictedAdmin &&
+                        incident.type.name == 'Non Conformance')) &&
+                      currentUser.company.name !== 'Finninguk' &&
+                      currentUser.company.name !== 'Finning')
+                  "
+                  class="m-nav__item"
+                >
+                  <a
+                    (click)="deleteIncident(incident.id)"
+                    class="clickable m-nav__link"
+                  >
+                    <i class="m-nav__link-icon la la-remove"></i>
+                    <span class="m-nav__link-text">Delete</span>
+                  </a>
+                </li>
+                <li *ngIf="isDemo" class="m-nav__item">
+                  <a href="javascript:void(0)" class="disabled m-nav__link">
+                    <i class="m-nav__link-icon flaticon-notes"></i>
+                    <span class="m-nav__link-text">Add Note</span>
+                  </a>
+                </li>
+                <li *ngIf="!isDemo" class="m-nav__item">
+                  <a
+                    href="javascript:void(0)"
+                    (click)="openAddNotesModal(addNote)"
+                    class="m-nav__link"
+                  >
+                    <i class="m-nav__link-icon flaticon-notes"></i>
+                    <span class="m-nav__link-text">Add Note</span>
+                  </a>
+                </li>
+                <li
+                  *ngIf="
+                    (currentUser.isRestrictedAdmin &&
+                      incident.type.name != 'Injuries') ||
+                    currentUser.admin ||
+                    currentUser.isManager ||
+                    (currentUser.isProjectManager &&
+                      incident.type.name == 'Non Conformance')
+                  "
+                  class="m-nav__item"
+                >
+                  <a
+                    href="javascript:void(0)"
+                    (click)="openUpdateStatusModal(content)"
+                    class="m-nav__link"
+                  >
+                    <i class="m-nav__link-icon flaticon-statistics"></i>
+                    <span class="m-nav__link-text">Update Status</span>
+                  </a>
+                </li>
+                <li class="m-nav__item">
+                  <a
+                    href="javascript:void(0)"
+                    (click)="exportToPDF(incident.id)"
+                    class="m-nav__link"
+                  >
+                    <i class="m-nav__link-icon la la-edit"></i>
+                    <span class="m-nav__link-text">Export to PDF</span>
+                  </a>
+                </li>
+                <li
+                  *ngIf="currentUser.company.name == 'AonFleet'"
+                  class="m-nav__item"
+                >
+                  <a
+                    href="javascript:void(0)"
+                    (click)="exportToFleetPDF(incident.id)"
+                    class="m-nav__link"
+                  >
+                    <i class="m-nav__link-icon la la-truck"></i>
+                    <span class="m-nav__link-text">PDF Fleet Report</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <form [formGroup]="updateStatusForm" (submit)="submitUpdateStatusForm()">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Update Status</h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="status">Status</label>
+        <fieldset>
+          <select
+            (change)="onChange($event.target.value)"
+            class="form-control m-input"
+            id="status"
+            formControlName="status"
+          >
+            <option *ngFor="let status of statuses" [value]="status.id">
+              {{ status.name }}
+            </option>
+          </select>
+        </fieldset>
+      </div>
+      <div
+        class="form-group"
+        *ngIf="closedAnalysis && incident.type.commentOnClose"
+      >
+        <label>{{ commentOnCloseName }}</label>
+        <textarea
+          rows="5"
+          class="form-control m-input"
+          [ngClass]="{
+            'is-invalid': submitted && updateStatusForm.get('notes').errors
+          }"
+          formControlName="notes"
+        ></textarea>
+        <div
+          *ngIf="submitted && updateStatusForm.get('notes').errors"
+          class="invalid-feedback"
+        >
+          <div *ngIf="updateStatusForm.get('notes').errors.required">
+            This field is required.
+          </div>
+        </div>
+      </div>
+      <div
+        class="form-group"
+        *ngIf="closedAnalysis && incident.type.rootCauseOnClose"
+      >
+        <label>{{ rootCauseOnCloseName }}</label>
+        <textarea
+          rows="5"
+          class="form-control m-input"
+          formControlName="notes1"
+        ></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [style.background-color]="accentColor"
+        [style.border-color]="accentColor"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #addNote let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Add Note</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="addNoteForm">
+      <div class="form-group">
+        <label>Note Type</label>
+        <select
+          name="noteType"
+          class="form-control m-input"
+          formControlName="noteType"
+        >
+          <option *ngFor="let noteType of noteTypes" [value]="noteType.id">
+            {{ noteType.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Note</label>
+        <textarea
+          rows="12"
+          class="form-control m-input"
+          formControlName="note"
+        ></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-success"
+      [style.background-color]="accentColor"
+      [style.border-color]="accentColor"
+      (click)="submitAddNoteForm(); modal.close('Save click')"
+    >
+      Save
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #tags let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Tag Incident</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-12 row px-0 mx-0">
+      <div class="col-lg-6 text-center">
+        <h5 class="mb-3">Unassigned Tags</h5>
+        <ng-container *ngFor="let tag of availableTags">
+          <div class="col-12 my-1" *ngIf="tag">
+            <button
+              class="btn whiteSpace btn btn-info w-100"
+              *ngIf="!this.hideSelectedTags(tag)"
+              (click)="addTag(tag.id)"
+              [style.background-color]="accentColor"
+              [style.border-color]="accentColor"
+            >
+              {{ tag.name }}
+            </button>
+          </div>
+        </ng-container>
+      </div>
+      <div class="col-lg-6 text-align-center">
+        <h5 class="mb-3">Assigned Tags</h5>
+        <p *ngIf="!selectedTags || selectedTags.length <= 0">
+          There are currently no tags attached to this incident
+        </p>
+
+        <ng-container *ngFor="let tag of selectedTags">
+          <div class="col-12 my-1">
+            <button
+              class="btn whiteSpace btn btn-info w-100"
+              (click)="removeTag(tag.id)"
+              [style.background-color]="companyColor"
+              [style.border-color]="companyColor"
+            >
+              {{ tag.name }}
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #previewImage let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Image Preview</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="parentClass">
+      <img
+        [src]="preViewImg"
+        style="max-height: 300px !important"
+        class="img-fluid"
+      />
+      <div id="viewer" class="itemImages"></div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #escalateModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Escalate Incident</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="escalateForm">
+      <div class="form-group">
+        <label>Select User</label>
+        <select name="user" class="form-control m-input" formControlName="user">
+          <option *ngFor="let user of companyUsers" [value]="user.id">
+            {{ getUserDisplay(user) }}
+          </option>
+        </select>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer text-center">
+    <button
+      type="button"
+      class="btn btn-dark"
+      [style.background-color]="accentColor"
+      [style.border-color]="accentColor"
+      (click)="submitEscalateForm(); modal.close('Save click')"
+    >
+      Escalate
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #documentsModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Investigation Documents</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="m-widget2">
+      <div class="form-group col-12">
+        <ngx-dropzone
+          [multiple]="false"
+          (change)="handleInvestigationInput($event)"
+        >
+          <ngx-dropzone-label>Add Investigation File</ngx-dropzone-label>
+          <ngx-dropzone-preview
+            *ngFor="let f of this.investigationfile"
+            [removable]="true"
+            (removed)="onRemove(f)"
+          >
+            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+          </ngx-dropzone-preview>
+        </ngx-dropzone>
+        <ng-container
+          *ngFor="let investigationDocument of incident.investigationDocuments"
+        >
+          <a
+            *ngIf="investigationDocument.attachmentUrl"
+            id="investigation"
+            download
+            href="{{ investigationDocument.attachmentUrl }}"
+            class="btn btn-primary form-text whiteSpace"
+            >Download: {{ investigationDocument.attachmentUrl }}</a
+          >
+        </ng-container>
+      </div>
+      <div class="col-12 text-center">
+        <button
+          class="btn btn-dark"
+          role="button"
+          type="button"
+          (click)="sendInvestigation()"
+          [style.background-color]="companyColor"
+          [disabled]="investigationfile.length <= 0"
+          [style.border-color]="companyColor"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<br />
+
+<ng-template #sectionFields let-section="section" let-holderItem="holderItem">
+  <ng-container *ngIf="holderItem">
+    <h4>{{ section.title }}</h4>
+  </ng-container>
+  <p *ngFor="let field of section.fields">
+    <ng-container *ngIf="field.fieldType !== 'media'">
+      <span
+        *ngIf="
+          !field.lat ||
+          (field.lat &&
+            section.fields.length <= 2 &&
+            field.fieldTitle != 'What3Words')
+        "
+      >
+        {{ field.fieldTitle }} </span
+      ><br />
+
+      <span *ngIf="!field.whatthreewords">
+        <span
+          *ngIf="field.fieldType == 'gps' && field.fieldTitle == 'What3Words'"
+        >
+          {{ whats3words }}
+          <br />
+        </span>
+      </span>
+
+      <span *ngIf="field.lat && section.fields.length <= 2">
+        <agm-map [zoom]="15" [latitude]="+field.lat" [longitude]="+field.lng">
+          <agm-marker
+            [latitude]="+field.lat"
+            [longitude]="+field.lng"
+          ></agm-marker>
+        </agm-map>
+        {{ incidentLocation }}
+        <br />
+      </span>
+
+      <span *ngIf="field.additionalFieldValue">
+        Address: {{ field.additionalFieldValue }}
+        <br />
+      </span>
+
+      <span *ngIf="field.whatthreewords">
+        What3Words: {{ field.whatthreewords }}
+        <br />
+      </span>
+
+      <span
+        *ngIf="
+          field.fieldType !== 'time' &&
+          field.fieldType !== 'date' &&
+          field.fieldType !== 'datetime'
+        "
+      >
+        <span *ngIf="field.fieldType !== 'store-address'">{{
+          field.fieldValue
+        }}</span>
+      </span>
+
+      <span *ngIf="field.fieldType === 'time'">
+        {{ field.fieldValue | date : "HH:mm" }}
+      </span>
+
+      <span *ngIf="field.fieldType === 'date'">
+        {{ field.fieldValue | date : "dd/M/yyyy" }}
+      </span>
+
+      <span *ngIf="field.fieldType === 'datetime'">
+        {{ field.fieldValue | date : "dd/M/yyyy HH:mm" }}
+      </span>
+    </ng-container>
+  </p>
+
+  <ng-container *ngIf="section.media">
+    <div
+      class="justify-content-center text-align-center col-12 row p-0 m-0"
+      *ngIf="section.media.length > 0"
+      [ngClass]="{
+        canvasOverlayDiv:
+          section.title != 'Add Photos & Videos' && section.title != 'Add Media'
+      }"
+    >
+      <ng-container *ngFor="let mediaItem of section.media">
+        <div
+          *ngIf="
+            mediaItem.type != 'image' ||
+            (mediaItem.type === 'image' && hasMediaSrc(mediaItem.uuid))
+          "
+          class="col-lg-12 text-align-center"
+        >
+          <a
+            style="justify-content: center"
+            href="javascript:void(0)"
+            (click)="getMedia(mediaItem, previewImage, section.title)"
+          >
+            <ng-container
+              style="justify-content: center"
+              *ngIf="mediaItem.type === 'image' && hasMediaSrc(mediaItem.uuid)"
+            >
+              <ng-container *ngIf="!mediaItem.overlayId">
+                <div class="parentClass">
+                  <img
+                    [src]="mediaSrc[mediaItem.uuid]"
+                    style="max-height: 300px !important"
+                    class="img-fluid"
+                    [alt]="mediaItem.label"
+                  />
+                  <div [id]="mediaItem.uuid" class="itemImages"></div>
+                </div>
+                <br />
+              </ng-container>
+              <ng-container *ngIf="mediaItem.overlayId">
+                <canvas
+                  id="{{ mediaItem.uuid }}"
+                  style="
+                    max-height: 300px !important;
+                    max-width: 100% !important;
+                  "
+                  [ngClass]="{
+                    imgCanvas:
+                      section.title != 'Add Photos & Videos' &&
+                      section.title != 'Add Media'
+                  }"
+                  (click)="
+                    downloadCanvasImage(
+                      $event.target,
+                      mediaItem.uuid,
+                      previewImage
+                    )
+                  "
+                  [attr.overlayId]="mediaItem.overlayId"
+                  #canvas
+                ></canvas>
+              </ng-container>
+            </ng-container>
+            <ng-container
+              *ngIf="mediaItem.type === 'video' && hasMediaSrc(mediaItem.uuid)"
+            >
+              <video
+                [src]="mediaSrc[mediaItem.uuid]"
+                style="max-height: 300px !important"
+                class="mediaVideo"
+                controls
+              ></video>
+              <br />
+            </ng-container>
+            <ng-container
+              *ngIf="mediaItem.type === 'audio' && hasMediaSrc(mediaItem.uuid)"
+            >
+              <audio controls style="width: 100%">
+                <source [src]="mediaSrc[mediaItem.uuid]" type="audio/mp4" />
+              </audio>
+              <br />
+            </ng-container>
+            <ng-container
+              *ngIf="mediaItem.type === 'doc' && hasMediaSrc(mediaItem.uuid)"
+            >
+              <button
+                class="w-100 btn btn-link"
+                style="white-space: normal; word-wrap: break-word"
+              >
+                {{ mediaItem.label }}
+              </button>
+              <br />
+            </ng-container>
+          </a>
+          <br />
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #sectionTemplate let-section="section">
+  <ng-container
+    *ngIf="
+      section.fields.length > 0 ||
+      (section.media && section.media.length > 0) ||
+      (section.injuries && section.injuries.length > 0) ||
+      (section.damages && section.damages.length > 0) ||
+      (section.witnesses && section.witnesses.length > 0) ||
+      (section.vehicles && section.vehicles.length > 0)
+    "
+  >
+    <div
+      class="col-xl-12 {{
+        section.title == 'SIF Information' &&
+        section.fields.length > 0 &&
+        section.fields[0].fieldValue == 'Please Select Category'
+          ? 'Yes'
+          : 'no'
+      }}"
+      *ngIf="
+        !(
+          section.title == 'SIF Information' &&
+          section.fields.length > 0 &&
+          section.fields[0].fieldValue == 'Please Select Category'
+        )
+      "
+    >
+      <!--begin::Portlet-->
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <span class="m-portlet__head-icon">
+                <i class="flaticon-map-location"></i>
+              </span>
+              <h3 class="m-portlet__head-text">
+                {{
+                  section.title == "Add Media" ||
+                  section.title == "Add Photos & Videos"
+                    ? "View Media"
+                    : section.title
+                }}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <ng-container
+            *ngTemplateOutlet="
+              sectionFields;
+              context: { section: section, holderItem: false }
+            "
+          ></ng-container>
+          <ng-container *ngFor="let damage of section.damages">
+            <ng-container
+              *ngTemplateOutlet="
+                sectionFields;
+                context: { section: damage, holderItem: true }
+              "
+            ></ng-container>
+          </ng-container>
+          <ng-container *ngFor="let injury of section.injuries">
+            <ng-container
+              *ngTemplateOutlet="
+                sectionFields;
+                context: { section: injury, holderItem: true }
+              "
+            ></ng-container>
+          </ng-container>
+          <ng-container *ngFor="let vehicle of section.vehicles">
+            <ng-container
+              *ngTemplateOutlet="
+                sectionFields;
+                context: { section: vehicle, holderItem: true }
+              "
+            ></ng-container>
+          </ng-container>
+          <ng-container *ngFor="let witness of section.witnesses">
+            <ng-container
+              *ngTemplateOutlet="
+                sectionFields;
+                context: { section: witness, holderItem: true }
+              "
+            ></ng-container>
+          </ng-container>
+        </div>
+      </div>
+      <!--end::Portlet-->
+    </div>
+  </ng-container>
+</ng-template>
+
+<div id="pdfexport" class="row" *ngIf="incident">
+  <div class="col-xl-6 p-0">
+    <div class="col-xl-12" *ngIf="incident">
+      <!--begin:: Widgets/Tasks -->
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">Reported By</h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <ng-container *ngIf="incident.user">
+            <p>
+              <b>Name</b>: {{ incident.user.firstName }}
+              {{ incident.user.lastName }}
+            </p>
+            <p><b>Email</b>: {{ incident.user.email }}<br /></p>
+            <p><b>Phone</b>: {{ incident.user.phone }}<br /></p>
+            <ng-container
+              *ngIf="
+                incident.user &&
+                incident.user.profile &&
+                incident.user.profile.fields
+              "
+            >
+              <p *ngFor="let field of incident.user.profile.fields">
+                <b>{{ field.fieldTitle }}</b
+                >: {{ field.fieldValue }}
+              </p>
+            </ng-container>
+            <ng-container *ngIf="incident.userGroup && incident.userGroup.name">
+              <p>
+                <b>Group</b>:
+                <ng-container
+                  *ngIf="
+                    incident.userGroup.parent && incident.userGroup.parent.name
+                  "
+                >
+                  {{ incident.userGroup.parent.name }},
+                </ng-container>
+                {{ incident.userGroup.name }}
+                <br />
+              </p>
+            </ng-container>
+            <ng-container
+              *ngIf="
+                !incident.userGroup &&
+                incident.user &&
+                incident.user.userGroup &&
+                incident.user.userGroup.name
+              "
+            >
+              <p>
+                <b>Group</b>:
+                <ng-container
+                  *ngIf="
+                    incident.user.userGroup.parent &&
+                    incident.user.userGroup.parent.name
+                  "
+                >
+                  {{ incident.user.userGroup.parent.name }},
+                </ng-container>
+                {{ incident.user.userGroup.name }}
+                <br />
+              </p>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="!incident.user">
+            <p><b>Anonymous Incident</b></p>
+          </ng-container>
+        </div>
+      </div>
+      <!--end:: Widgets/Tasks -->
+    </div>
+    <ng-container *ngFor="let section of incident.data.sections; index as i">
+      <ng-container *ngIf="sectionIsLeft(i, incident.data.sections.length)">
+        <ng-container
+          *ngTemplateOutlet="sectionTemplate; context: { section: section }"
+        ></ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div class="col-xl-6 p-0">
+    <ng-container *ngFor="let section of incident.data.sections; index as i">
+      <ng-container *ngIf="!sectionIsLeft(i, incident.data.sections.length)">
+        <ng-container
+          *ngTemplateOutlet="sectionTemplate; context: { section: section }"
+        ></ng-container>
+      </ng-container>
+    </ng-container>
+    <div class="col-xl-12" *ngIf="incident">
+      <!--begin::Portlet-->
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <span class="m-portlet__head-icon">
+                <i class="flaticon-map-location"></i>
+              </span>
+              <h3 class="m-portlet__head-text">Notes</h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <div class="m-widget2">
+                <ng-container
+                  *ngIf="incident.notes && incident.notes.length > 0"
+                >
+                  <ng-container *ngFor="let note of incident.notes">
+                    <div class="m-widget2__item m-widget2__item--danger">
+                      <div class="noPointer m-widget2__checkbox"></div>
+                      <div class="noPointer m-widget2__desc">
+                        <span class="m-widget2__text">
+                          {{ note.type.name }} </span
+                        ><br />
+                        <span
+                          class="m-widget2__user-name"
+                          style="white-space: pre-line"
+                        >
+                          {{ note.note }}
+                        </span>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container
+                  *ngIf="!(incident.notes && incident.notes.length > 0)"
+                >
+                  <p>There are no notes yet..</p>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end::Portlet-->
+    </div>
+
+    <div class="col-xl-12" *ngIf="incident">
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+        *ngIf="this.selectedTags && selectedTags.length > 0"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <span class="m-portlet__head-icon">
+                <i class="m-nav__link-icon la la-tags"></i>
+              </span>
+              <h3 class="m-portlet__head-text">Tags</h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <ol>
+            <li *ngFor="let tag of selectedTags">{{ tag.name }}</li>
+          </ol>
+        </div>
+      </div>
+      <!--begin:: Widgets/Tasks -->
+      <div
+        class="m-portlet m-portlet--full-height m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">Logs</h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="tab-content">
+            <div class="tab-pane active" id="">
+              <div class="m-widget2">
+                <ng-container *ngIf="incident.logs && incident.logs.length > 0">
+                  <ng-container *ngFor="let log of incident.logs">
+                    <div class="m-widget2__item m-widget2__item--primary">
+                      <div class="noPointer m-widget2__checkbox"></div>
+                      <div class="noPointer m-widget2__desc">
+                        <span class="noPointer m-widget2__text">
+                          {{ log.type | titlecase }} </span
+                        ><br />
+                        <span class="noPointer m-widget2__user-name">
+                          {{ log.userDisplay }} </span
+                        ><br />
+                        <span class="noPointer m-widget2__user-name">
+                          Logged {{ log.createdAt | date : "dd/M/yyyy HH:mm" }}
+                        </span>
+                        <br />
+                        <ng-container *ngIf="log.textNote">
+                          <ng-container
+                            *ngIf="
+                              log.textNote['added'] && log.textNote['added'][0]
+                            "
+                          >
+                            <span class="noPointer m-widget2__text mt-1">
+                              Added:
+                            </span>
+                            <br />
+                            <ng-container
+                              *ngFor="
+                                let field of log.textNote['added'] | keyvalue
+                              "
+                            >
+                              <ng-container *ngIf="field.value.fieldTitle">
+                                <span class="noPointer m-widget2__user-name"
+                                  >{{ field.value.fieldTitle }}:
+                                  <ng-container
+                                    *ngIf="field.value.fieldType != 'date'"
+                                    >{{ field.value.fieldValue }}</ng-container
+                                  >
+                                  <ng-container
+                                    *ngIf="field.value.fieldType == 'date'"
+                                    >{{
+                                      field.value.fieldValue
+                                        | date : "dd/M/yyyy HH:mm"
+                                    }}</ng-container
+                                  >
+                                </span>
+                                <br />
+                              </ng-container>
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              log.textNote['updated'] &&
+                              log.textNote['updated'][0]
+                            "
+                          >
+                            <span class="noPointer m-widget2__text mt-1">
+                              Updated:
+                            </span>
+                            <br />
+                            <ng-container
+                              *ngFor="
+                                let field of log.textNote['updated'] | keyvalue
+                              "
+                            >
+                              <ng-container *ngIf="field.value.fieldTitle">
+                                <span class="noPointer m-widget2__user-name"
+                                  >{{ field.value.fieldTitle }}:
+                                  <ng-container
+                                    *ngIf="field.value.fieldType != 'date'"
+                                    >{{ field.value.fieldValue }}</ng-container
+                                  >
+                                  <ng-container
+                                    *ngIf="field.value.fieldType == 'date'"
+                                    >{{
+                                      field.value.fieldValue
+                                        | date : "dd/M/yyyy HH:mm"
+                                    }}</ng-container
+                                  >
+                                </span>
+                                <br />
+                              </ng-container>
+                            </ng-container>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="
+                              log.textNote['deleted'] &&
+                              log.textNote['deleted'][0]
+                            "
+                          >
+                            <span class="noPointer m-widget2__text mt-1">
+                              Deleted:
+                            </span>
+                            <br />
+                            <ng-container
+                              *ngFor="
+                                let field of log.textNote['deleted'] | keyvalue
+                              "
+                            >
+                              <ng-container *ngIf="field.value.fieldTitle">
+                                <span class="noPointer m-widget2__user-name"
+                                  >{{ field.value.fieldTitle }}:
+                                  <ng-container
+                                    *ngIf="field.value.fieldType != 'date'"
+                                    >{{ field.value.fieldValue }}</ng-container
+                                  >
+                                  <ng-container
+                                    *ngIf="field.value.fieldType == 'date'"
+                                    >{{
+                                      field.value.fieldValue
+                                        | date : "dd/M/yyyy HH:mm"
+                                    }}</ng-container
+                                  >
+                                </span>
+                                <br />
+                              </ng-container>
+                            </ng-container>
+                          </ng-container>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container
+                  *ngIf="!(incident.logs && incident.logs.length > 0)"
+                >
+                  <p>There are no logs yet..</p>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end:: Widgets/Tasks -->
+    </div>
+
+    <div class="col-xl-12" *ngIf="incident">
+      <!--begin:: Widgets/Tasks -->
+      <div
+        class="m-portlet m-portlet--full-height m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">Assignments</h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <div class="m-widget2">
+                <ng-container
+                  *ngIf="
+                    incident.assignments && incident.assignments.length > 0
+                  "
+                >
+                  <ng-container *ngFor="let assignment of incident.assignments">
+                    <div class="m-widget2__item m-widget2__item--success">
+                      <div class="m-widget2__checkbox"></div>
+                      <div class="m-widget2__desc">
+                        <span class="m-widget2__text"> Assign </span><br />
+                        <span class="m-widget2__user-name">
+                          {{ assignment.user.email }} </span
+                        ><br />
+                        <span class="m-widget2__user-name">
+                          Assigned
+                          {{ assignment.time | date : "dd/M/yyyy HH:mm" }}
+                        </span>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    !(incident.assignments && incident.assignments.length > 0)
+                  "
+                >
+                  <p>There are no assignments yet.</p>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end:: Widgets/Tasks -->
+    </div>
+
+    <div class="col-xl-12" *ngIf="incident && this.company.auditTrail">
+      <!--begin:: Widgets/Tasks -->
+      <div
+        class="m-portlet m-portlet--full-height m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">Audit Trail</h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <div class="m-widget2">
+                <ng-container
+                  *ngIf="
+                    incident.incidentaudittrails &&
+                    incident.incidentaudittrails.length > 0
+                  "
+                >
+                  <ng-container
+                    *ngFor="let audittrail of incident.incidentaudittrails"
+                  >
+                    <div class="m-widget2__item m-widget2__item--success">
+                      <div class="m-widget2__checkbox"></div>
+                      <div class="m-widget2__desc">
+                        <span class="m-widget2__text">
+                          Editor: {{ audittrail.user.email }} </span
+                        ><br />
+                        <span class="m-widget2__user-name">
+                          Edited
+                          {{ audittrail.createdAt | date : "dd/M/yyyy HH:mm" }}
+                        </span>
+                        <ng-container
+                          *ngIf="
+                            audittrail.auditTrail.changed &&
+                            audittrail.auditTrail.changed.length > 0
+                          "
+                        >
+                          <span class="m-widget2__user-name"
+                            ><br />
+                            <span class="m-widget2__text">Changed:</span>
+                            <ng-container
+                              *ngFor="
+                                let field of audittrail.auditTrail.changed
+                              "
+                            >
+                              <br />{{ field.field }}: from {{ field.from }} ->
+                              {{ field.to }}
+                            </ng-container> </span
+                          ><br />
+                        </ng-container>
+                        <ng-container
+                          *ngIf="
+                            audittrail.auditTrail.added &&
+                            audittrail.auditTrail.added.length > 0
+                          "
+                        >
+                          <span class="m-widget2__user-name">
+                            <span class="m-widget2__text">Added: </span>
+                            <ng-container
+                              *ngFor="let field of audittrail.auditTrail.added"
+                            >
+                              <br />{{ field.field }}: {{ field.to }}
+                            </ng-container> </span
+                          ><br />
+                        </ng-container>
+                        <ng-container
+                          *ngIf="
+                            audittrail.auditTrail.deleted &&
+                            audittrail.auditTrail.deleted.length > 0
+                          "
+                        >
+                          <span class="m-widget2__user-name">
+                            <span class="m-widget2__text">Removed: </span>
+                            <ng-container
+                              *ngFor="
+                                let field of audittrail.auditTrail.deleted
+                              "
+                            >
+                              <br />{{ field.field }}: {{ field.from }}
+                            </ng-container> </span
+                          ><br />
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    !(
+                      incident.incidentaudittrails &&
+                      incident.incidentaudittrails.length > 0
+                    )
+                  "
+                >
+                  <p>There have been no edits to this incidents.</p>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--end:: Widgets/Tasks -->
+    </div>
+
+    <div
+      class="col-12"
+      *ngIf="
+        this.company?.requiresIncidentDocuments &&
+        (this.company.name == 'barratt' || this.company.name != 'barratt')
+      "
+    >
+      <div
+        class="m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+      >
+        <div
+          class="m-portlet__head"
+          [style.background-color]="companyColor"
+          [style.border-color]="companyColor"
+        >
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <h3 class="m-portlet__head-text">Additional Media</h3>
+            </div>
+          </div>
+        </div>
+        <div class="m-portlet__body">
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <div class="m-widget2">
+                <div class="form-group col-xl-8 col-md-6">
+                  <label for="investigationDoc">Choose File</label><br />
+                  <input
+                    type="file"
+                    id="investigationDoc"
+                    (change)="handleInvestigationInput($event.target.files)"
+                  />
+                  <ng-container
+                    *ngFor="let document of incident.investigationDocuments"
+                  >
+                    <a
+                      *ngIf="document.attachmentUrl"
+                      id="investigation"
+                      download
+                      href="{{ document.attachmentUrl }}"
+                      class="btn-link form-text"
+                      >Download Response ({{
+                        getExtension(document.attachmentUrl)
+                      }})</a
+                    >
+                  </ng-container>
+                </div>
+                <div class="col-12 text-center">
+                  <button
+                    class="btn btn-dark"
+                    role="button"
+                    type="button"
+                    (click)="sendInvestigation()"
+                    [style.background-color]="companyColor"
+                    [disabled]="!investigationfile"
+                    [style.border-color]="companyColor"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--</div>-->
+  </div>
+  <div
+    *ngIf="
+      currentUser.canViewConcern &&
+      (this.incident.type.name == 'Electric Power' ||
+        this.incident.type.name == 'Equipment Solutions')
+    "
+    class="m-portlet m-portlet--full-height m-portlet--rounded m-portlet--head-solid-bg m-portlet--success"
+  >
+    <div
+      class="m-portlet__head"
+      [style.background-color]="companyColor"
+      [style.border-color]="companyColor"
+    >
+      <div class="m-portlet__head-caption">
+        <div class="m-portlet__head-title">
+          <h3 class="m-portlet__head-text">Liability Review</h3>
+        </div>
+      </div>
+    </div>
+    <div class="m-portlet__body">
+      <div class="tab-content">
+        <div class="tab-pane active">
+          <div class="m-widget2">
+            <form
+              class="form col-12 row mx-0 p-0"
+              name="concernDetailsForm"
+              [formGroup]="concernDetailsForm"
+            >
+              <div class="col-12 row my-3">
+                <div class="col-xl-3 col-md-6">
+                  <h4>Liability Details</h4>
+                </div>
+                <div class="col-xl-9 col-md-6 d-none d-md-block d-sm-none">
+                  <hr [style.background-color]="companyColor" />
+                </div>
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="detailType">Liability</label>
+                <select
+                  class="form-control"
+                  id="detailType"
+                  [formControl]="type"
+                >
+                  <option></option>
+                  <option>Finning</option>
+                  <option>Customer</option>
+                  <option>Supplier</option>
+                  <option>CAT</option>
+                </select>
+              </div>
+              <div
+                class="form-group col-xl-4 col-md-6"
+                *ngIf="this.concernDetailsForm.value.type == 'Finning'"
+              >
+                <label for="finning">Finning</label>
+                <select
+                  class="form-control"
+                  id="finning"
+                  [formControl]="finningType"
+                >
+                  <option value="Finning Prep" selected>Finning Prep</option>
+                  <option value="Finning Weld">Finning Weld</option>
+                  <option value="Finning Paint">Finning Paint</option>
+                  <option value="Finning Yard">Finning Yard</option>
+                  <option value="Finning Branch">Finning Branch</option>
+                  <option value="Finning Lakeside">Finning Lakeside</option>
+                </select>
+              </div>
+              <div
+                class="form-group col-xl-4 col-md-6"
+                *ngIf="this.concernDetailsForm.value.type == 'Supplier'"
+              >
+                <label for="supplier">Supplier</label>
+                <select
+                  class="form-control"
+                  id="supplier"
+                  [formControl]="supplierName"
+                  (ngModelChange)="supplierChange($event)"
+                >
+                  <option></option>
+                  <option
+                    *ngFor="let supplier of suppliers"
+                    [selected]="
+                      supplier.name ==
+                      this.concernDetailsForm.value.supplierName
+                    "
+                  >
+                    {{ supplier.name }}
+                  </option>
+                </select>
+              </div>
+              <div
+                class="form-group col-xl-4 col-md-6"
+                *ngIf="this.concernDetailsForm.value.type == 'CAT'"
+              >
+                <label for="supplier">Contacts</label>
+                <select
+                  class="form-control"
+                  id="contact"
+                  [ngModel]="contact"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="contactChange($event)"
+                >
+                  <option></option>
+                  <option>Caterpillar Larne</option>
+                  <option>Caterpillar Mannheim</option>
+                </select>
+              </div>
+              <div class="col-12 row my-3">
+                <div class="col-xl-3 col-md-6">
+                  <h4>Response</h4>
+                </div>
+                <div class="col-xl-9 col-md-6 d-none d-md-block d-sm-none">
+                  <hr [style.background-color]="companyColor" />
+                </div>
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="responseRequired">Response Document Required</label>
+                <select
+                  required
+                  class="form-control"
+                  id="responseRequired"
+                  [formControl]="concernResponse"
+                >
+                  <option></option>
+                  <option>Report</option>
+                  <option>Report + 8D</option>
+                </select>
+              </div>
+              <div *ngIf="incident.concernDetails[0]">
+                <div
+                  *ngIf="incident.concernDetails[0].attachmentUrl"
+                  class="form-group col-xl-8 col-md-6"
+                >
+                  <label id="responseDoc">Document Response</label>
+                  <div class="custom-file">
+                    <a
+                      *ngIf="incident.concernDetails[0].attachmentUrl"
+                      id="emailHelp"
+                      download
+                      href="{{ incident.concernDetails[0].attachmentUrl }}"
+                      class="btn-link form-text"
+                      >Download Response</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="concernResponseEmail">Response Email</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  id="concernResponseEmail"
+                  placeholder="Response Email"
+                  [formControl]="responseEmail"
+                  remove-space
+                />
+              </div>
+
+              <div class="col-12 row my-3">
+                <div class="col-xl-4 col-md-6">
+                  <h4>Responsibility Contact Details</h4>
+                </div>
+                <div class="col-xl-8 col-md-6 d-none d-md-block d-sm-none">
+                  <hr [style.background-color]="companyColor" />
+                </div>
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="primaryContact">Primary Contact</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  id="primaryContact"
+                  placeholder="Primary Contact"
+                  [formControl]="primaryContact"
+                />
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="phoneNumber">Primary Phone No</label>
+                <input
+                  type="tel"
+                  required
+                  class="form-control"
+                  id="phoneNumber"
+                  placeholder="Contact Phone Number"
+                  [formControl]="phoneNumber"
+                />
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="concernResponseEmail">Primary Email</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  id="concernResponseEmail"
+                  placeholder="Response Email"
+                  [formControl]="responseEmail"
+                  remove-space
+                />
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="secondaryContact">Secondary Contact</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  id="secondaryContact"
+                  placeholder="Secondary Contact"
+                  [formControl]="secondaryContact"
+                />
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="secondaryNumber">Secondary Phone No</label>
+                <input
+                  type="tel"
+                  required
+                  class="form-control"
+                  id="secondaryNumber"
+                  placeholder="Secondary Phone Number"
+                  [formControl]="secondaryNumber"
+                />
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="concernResponseEmail2">Secondary Email</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  id="concernResponseEmail2"
+                  placeholder="Response Email (Secondary)"
+                  [formControl]="responseEmail2"
+                  remove-space
+                />
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="supplierRef">Liability Ref</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  id="supplierRef"
+                  placeholder="Supplier Ref"
+                  [formControl]="supplierRef"
+                />
+              </div>
+              <ng-container *ngIf="immediateCorrective">
+                <div class="col-12 row my-3">
+                  <div class="col-xl-4 col-md-6">
+                    <h4 style="text-transform: uppercase">
+                      Immediate Corrective Actions
+                    </h4>
+                  </div>
+                  <div class="col-xl-8 col-md-6 d-none d-md-block d-sm-none">
+                    <hr [style.background-color]="companyColor" />
+                  </div>
+                </div>
+                <div class="form-group col-lg-6">
+                  <label for="immediateCorrectiveAction">Action Details</label>
+                  <textarea
+                    disabled
+                    class="form-control"
+                    rows="5"
+                    id="immediateCorrectiveAction"
+                    >{{ immediateCorrective }}</textarea
+                  >
+                </div>
+                <div class="form-group col-xl-3 col-md-6">
+                  <label for="datePlanned">Date Planned</label>
+                  <input
+                    *ngIf="immediateDatePlanned"
+                    type="date"
+                    disabled
+                    class="form-control"
+                    id="immediateDatePlanned"
+                    value="{{ immediateDatePlanned }}"
+                  />
+                  <input
+                    *ngIf="!immediateDatePlanned"
+                    disabled
+                    class="form-control"
+                    id="immediateDatePlanned"
+                  />
+                </div>
+                <div class="form-group col-xl-3 col-md-6">
+                  <label for="dateImplemented">Date Implemented</label>
+                  <input
+                    *ngIf="immediateDateImplemented"
+                    type="date"
+                    disabled
+                    class="form-control"
+                    id="immediateDateImplemented"
+                    value="{{ immediateDateImplemented }}"
+                  />
+                  <input
+                    *ngIf="!immediateDateImplemented"
+                    disabled
+                    class="form-control"
+                    id="immediateDateImplemented"
+                  />
+                </div>
+              </ng-container>
+              <ng-container *ngIf="rootCause">
+                <div class="col-12 row my-3">
+                  <div class="col-xl-3 col-md-6">
+                    <h4 style="text-transform: uppercase">Root Cause</h4>
+                  </div>
+                  <div class="col-xl-9 col-md-6 d-none d-md-block d-sm-none">
+                    <hr [style.background-color]="companyColor" />
+                  </div>
+                </div>
+                <div class="form-group col-12">
+                  <label for="rootCause">Root Cause</label>
+                  <textarea disabled class="form-control" id="rootCause">{{
+                    rootCause
+                  }}</textarea>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="corrective">
+                <div class="col-12 row my-3">
+                  <div class="col-xl-4 col-md-6">
+                    <h4 style="text-transform: uppercase">
+                      Action To Prevent Re-Occurrences
+                    </h4>
+                  </div>
+                  <div class="col-xl-8 col-md-6 d-none d-md-block d-sm-none">
+                    <hr [style.background-color]="companyColor" />
+                  </div>
+                </div>
+                <div class="form-group col-lg-6">
+                  <label for="correctiveAction">Action Details</label>
+                  <textarea
+                    disabled
+                    class="form-control"
+                    rows="5"
+                    id="correctiveAction"
+                    >{{ corrective }}</textarea
+                  >
+                </div>
+                <div class="form-group col-xl-3 col-md-6">
+                  <label for="datePlanned">Date Planned</label>
+                  <input
+                    *ngIf="datePlanned"
+                    type="date"
+                    disabled
+                    class="form-control"
+                    id="datePlanned"
+                    value="{{ datePlanned }}"
+                  />
+                  <input
+                    *ngIf="!datePlanned"
+                    disabled
+                    class="form-control"
+                    id="datePlanned"
+                  />
+                </div>
+                <div class="form-group col-xl-3 col-md-6">
+                  <label for="dateImplemented">Date Implemented</label>
+                  <input
+                    *ngIf="dateImplemented"
+                    type="date"
+                    disabled
+                    class="form-control"
+                    id="dateImplemented"
+                    value="{{ dateImplemented }}"
+                  />
+                  <input
+                    *ngIf="!dateImplemented"
+                    disabled
+                    class="form-control"
+                    id="dateImplemented"
+                    value="{{ dateImplemented }}"
+                  />
+                </div>
+              </ng-container>
+              <ng-container
+                *ngIf="validatedName || validatedJob || validatedDate"
+              >
+                <div class="col-12 row my-3">
+                  <div class="col-xl-3 col-md-6">
+                    <h4>Actions Completed</h4>
+                  </div>
+                  <div class="col-xl-9 col-md-6 d-none d-md-block d-sm-none">
+                    <hr [style.background-color]="companyColor" />
+                  </div>
+                </div>
+                <div class="form-group col-xl-4 col-md-6">
+                  <label for="validatedByName">Validated By</label>
+                  <input
+                    type="text"
+                    disabled
+                    class="form-control"
+                    id="validatedByName"
+                    value="{{ validatedName }}"
+                  />
+                </div>
+                <div class="form-group col-xl-4 col-md-6">
+                  <label for="validatedByJobTitle">Job title</label>
+                  <input
+                    type="text"
+                    disabled
+                    class="form-control"
+                    id="validatedByJobTitle"
+                    value="{{ validatedJob }}"
+                  />
+                </div>
+                <div class="form-group col-xl-4 col-md-6">
+                  <label for="validatedByDate">Date</label>
+                  <input
+                    *ngIf="validatedDate"
+                    type="date"
+                    disabled
+                    class="form-control"
+                    id="validatedByDate"
+                    value="{{ validatedDate }}"
+                  />
+                  <input
+                    *ngIf="!validatedDate"
+                    disabled
+                    class="form-control"
+                    id="validatedByDate"
+                  />
+                </div>
+              </ng-container>
+              <div class="col-12 row my-3">
+                <div class="col-xl-3 col-md-6">
+                  <h4>Close Down</h4>
+                </div>
+                <div class="col-xl-9 col-md-6 d-none d-md-block d-sm-none">
+                  <hr [style.background-color]="companyColor" />
+                </div>
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="closedDownByName">Closed Down By</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  id="closedDownByName"
+                  placeholder="Closed Down By"
+                  [formControl]="closedName"
+                />
+              </div>
+              <div class="form-group col-xl-4 col-md-6">
+                <label for="closedDownByJobTitle">Job Title</label>
+                <input
+                  type="text"
+                  required
+                  class="form-control"
+                  id="closedDownByJobTitle"
+                  placeholder="Job Title"
+                  [formControl]="closedJob"
+                />
+              </div>
+              <ngb-datepicker
+                name="dp"
+                ngbDatepicker
+                #d="ngbDatepicker"
+                [maxDate]="maxDate"
+                [formControl]="closedDate"
+              ></ngb-datepicker>
+
+              <div class="form-group col-xl-4 col-md-6" *ngIf="followedUp">
+                <label for="responseAccepted">Concern Disposition</label>
+                <select
+                  class="form-control"
+                  id="responseAccepted"
+                  [formControl]="responseAccepted"
+                  (change)="concernDisposition(responseAccepted.value)"
+                >
+                  <option></option>
+                  <option *ngIf="resAccepted" value="true">Closed</option>
+                  <option value="true" *ngIf="!resAccepted">Accepted</option>
+                  <option value="pending">Accepted – Pending Action</option>
+                  <option value="false">Rejected</option>
+                </select>
+              </div>
+              <div
+                *ngIf="
+                  rejectionStatus || (resRejectionNote != '' && !resAccepted)
+                "
+                class="form-group col-xl-4 col-md-6"
+              >
+                <label for="concernResponseRejected"
+                  >Concern Disposition Rejection Note</label
+                >
+                <textarea
+                  type="text"
+                  class="form-control"
+                  id="concernResponseRejected"
+                  rows="5"
+                  placeholder="Response Rejected Note"
+                  [formControl]="responseRejected"
+                ></textarea>
+              </div>
+              <div class="col-12 text-center mt-3">
+                <button
+                  class="btn btn-dark"
+                  role="button"
+                  type="button"
+                  (click)="createDetail()"
+                  [style.background-color]="companyColor"
+                  [style.border-color]="companyColor"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="incidentNotfound">
+  <div class="notFound">
+    <h2>Oops! - incident Not Found</h2>
+    <h1><span>4</span>0<span>4</span></h1>
+  </div>
+</div>

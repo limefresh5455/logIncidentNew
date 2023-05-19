@@ -1,0 +1,258 @@
+<h5 class="bevelTitle">Profile</h5>
+<div class="row">
+  <div class="row col-12">
+    <!--<form class="m-form" *ngIf="form" [formGroup]="form" (submit)="submitForm()">-->
+    <!--[formGroup]="form"-->
+
+    <!--begin::Portlet-->
+    <div class="col-lg-8">
+      <mat-spinner *ngIf="!form" class="col-4 mx-auto mt-5"></mat-spinner>
+      <mat-spinner color="{{companyColor}}" *ngIf="!form" class="col-4 mx-auto mt-5"></mat-spinner>
+      <div class=" m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success">
+        <form *ngIf="form" [formGroup]="form" (submit)="submitForm($event)">
+          <div class="m-portlet__head" [style.background-color]="companyColor" [style.border-color]="companyColor">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                  Edit Profile
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <!--begin::Form-->
+          <div class="m-portlet__body">
+            <div class="m-form__section m-form__section--first">
+
+              <div class="m-form__group form-group"
+                   [ngClass]="{'has-danger': (submitted && form.get('firstName').invalid) || (form.get('firstName').invalid && (form.get('firstName').dirty || form.get('firstName').touched))}">
+                <label for="firstName">First Name:</label>
+                <input [attr.disabled]="fakeProfile == true ? true : null" id="firstName" type="text"
+                       formControlName="firstName" class="form-control"
+                       placeholder="{{fakeProfile ? 'Sam' : 'First Name..'}}" remove-space>
+                <div class="form-control-feedback"
+                     *ngIf="(submitted && form.get('firstName').errors && form.get('firstName').errors.required) || ((form.get('firstName').dirty || form.get('firstName').touched) && form.get('firstName').errors && form.get('firstName').errors.required)">
+                  This field is required.
+                </div>
+                <div class="form-control-feedback"
+                     *ngIf="this.form.controls && this.form.controls.firstName.errors && this.form.controls.firstName.errors.pattern">
+                  Enter the correct name.
+                </div>
+                <div class="form-control-feedback" *ngIf="submitted && form.get('firstName').errors?.trimError">
+                  {{ form.get('firstName').errors?.trimError.value }}
+                </div>
+
+              </div>
+
+              <div class="m-form__group form-group"
+                   [ngClass]="{'has-danger': (submitted && form.get('lastName').invalid) || (form.get('lastName').invalid && (form.get('lastName').dirty || form.get('lastName').touched))}">
+                <label for="lastName">Last Name:</label>
+                <input [attr.disabled]="fakeProfile == true ? true : null" id="lastName" type="text"
+                       formControlName="lastName" class="form-control"
+                       placeholder="{{fakeProfile ? 'Bloggs' : 'Last Name..'}}" remove-space>
+                <div class="form-control-feedback"
+                     *ngIf="(submitted && form.get('lastName').errors && form.get('lastName').errors.required) || ((form.get('lastName').dirty || form.get('lastName').touched) && form.get('lastName').errors && form.get('lastName').errors.required)">
+                  This field is required.
+                </div>
+                <div class="form-control-feedback" *ngIf="submitted && form.get('lastName').errors?.trimError">
+                  {{ form.get('lastName').errors?.trimError.value }}
+                </div>
+              </div>
+
+              <div class="m-form__group form-group"
+                   [ngClass]="{'has-danger': (submitted && form.get('email').invalid) || (form.get('email').invalid && (form.get('email').dirty || form.get('email').touched))}">
+                <label>Email:</label>
+                <input [attr.disabled]="fakeProfile == true ? true : null" type="text" formControlName="email"
+                       class="form-control" placeholder="{{fakeProfile ? 'sam.bloggs@gmail.com' : 'Email..'}}"
+                       remove-space>
+                <div class="form-control-feedback"
+                     *ngIf="(submitted && form.get('email').errors && form.get('email').errors.required) || ((form.get('email').dirty || form.get('email').touched) && form.get('email').errors && form.get('email').errors.required)">
+                  This field is required.
+                </div>
+                <div class="email_pattren_error"
+                     *ngIf="this.form.controls && this.form.controls.email.errors && this.form.controls.email.errors.pattern">
+                  Invalid email address.
+                </div>
+              </div>
+
+              <div class="m-form__group form-group"
+                   [ngClass]="{'has-danger': (submitted && form.get('phone').invalid) || (form.get('phone').invalid && (form.get('phone').dirty || form.get('phone').touched))}">
+                <label>Phone:</label>
+                <input [attr.disabled]="fakeProfile == true ? true : null" type="phone" formControlName="phone"
+                       class="form-control" placeholder="{{fakeProfile ? '0123456789' : 'Phone..'}}" remove-space>
+                <div class="form-control-feedback"
+                     *ngIf="(submitted && form.get('phone').errors && form.get('phone').errors.required) || ((form.get('phone').dirty || form.get('phone').touched) && form.get('phone').errors && form.get('phone').errors.required)">
+                  This field is required.
+                </div>
+                <div class="form-control-feedback" *ngIf="submitted && form.get('phone').errors?.trimError">
+                  {{ form.get('phone').errors?.trimError.value }}
+                </div>
+              </div>
+
+              <div class="m-form__group form-group {{hideShowRead}}"
+                   [ngClass]="{'has-danger': (submitted && form.get('supervisor').invalid) || (form.get('supervisor').invalid && (form.get('supervisor').dirty || form.get('supervisor').touched))}">
+                <label>Supervisor:</label>
+                <mat-form-field appearance="outline">
+                  <input type="text" [formControl]="mySupervisor" (keyup)="searchCompanyUsers($event.target.value)"
+                         matInput placeholder="Users" aria-label="Users" [matAutocomplete]="auto"
+                         formControlName="supervisor">
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event.option.value)"
+                                    [displayWith]="displayFn">
+                    <mat-option *ngFor="let user of filteredCreators | async" [value]="user">
+                      <span [innerHTML]="user.name | highlight: toHighlight"></span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error class="form-control-feedback"
+                             *ngIf="(submitted && form.get('supervisor').errors && form.get('supervisor').errors.required) || ((form.get('supervisor').dirty || form.get('supervisor').touched) && form.get('supervisor').errors && form.get('supervisor').errors.required)">
+                    This field is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <ng-container *ngIf="profileFields">
+                <ng-container *ngIf="profileFields.length">
+                  <ng-container *ngFor="let field of profileFields">
+                    <div class="m-form__group form-group"
+                         [ngClass]="{'has-danger': (submitted && form.get(field.id).invalid) || (form.get(field.id).invalid && (form.get(field.id).dirty || form.get(field.id).touched))}">
+                      <label *ngIf="field.title">{{field.title}}</label>
+                      <!-- <input id="{{field.id}}"
+                                 [attr.disabled]="field.isDisabled == true|| fakeProfile == true ? true : null"
+                             type="{{field.type}}" class="form-control" placeholder="{{field.placeholder}}"
+                             value="{{field.fieldValue}}" [formControlName]="field.id" remove-space> -->
+                    <input id="{{field.id}}"
+                         type="{{field.type}}" class="form-control" placeholder="{{field.placeholder}}"
+                         value="{{field.fieldValue}}" [formControlName]="field.id" remove-space>
+                      <div class="form-control-feedback"
+                           *ngIf="(submitted && form.get(field.id).errors && form.get(field.id).errors.required) || ((form.get(field.id).dirty || form.get(field.id).touched) && form.get(field.id).errors && form.get(field.id).errors.required)">
+                        This field is required.
+                      </div>
+                      <div class="form-control-feedback"
+                           *ngIf="(submitted && (form.get(field.id).dirty || form.get(field.id).touched) && form.get(field.id).errors && form.get(field.id).errors.pattern)">
+                        Please enter the valid email.
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+
+              <ng-container *ngIf="parentGroup && !fakeProfile">
+                <ng-container *ngFor="let parent of parentGroup">
+                  <div class="m-form__group form-group">
+                    <label>{{parent.name}}:</label>
+                    <select [formControlName]="parent.id"
+                            value="{{currentGroup && currentGroup.parent? currentGroup.parent.id : parentId}}"
+                            (change)="setChild($event.target.value)" class="form-control m-input">
+                      <ng-container *ngFor="let group of parent.groups">
+                        <option [value]="group.id">{{group.name}}
+                        </option>
+                      </ng-container>
+                    </select>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <ng-container *ngIf="selectedChildren && !fakeProfile">
+                <ng-container *ngFor="let child of selectedChildren">
+                  <div class="m-form__group form-group">
+                    <label>{{child.name}}:</label>
+                    <select [formControlName]="child.id" [value]="currentGroup.id" class="form-control m-input">
+                      <ng-container *ngFor="let group of child.groups">
+                        <option [value]="group.id">{{group.name}}
+                        </option>
+                      </ng-container>
+                    </select>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+            </div>
+            <div class="col-md-12 mx-auto">
+              <!--[disabled]="form.invalid"-->
+              <div class="alert alert-danger" *ngIf="submitted && form.invalid">Please fix form errors above.</div>
+              <button class="btn btn-dark col-12 submitButton" [style.background-color]="companyColor"
+                      [style.border-color]="companyColor" type="submit">
+                Submit
+              </button>
+            </div>
+          </div>
+          <!--end::Form-->
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-4">
+
+      <div class=" m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success">
+
+        <div class="m-portlet__head" [style.background-color]="companyColor" [style.border-color]="companyColor">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <span class="m-portlet__head-icon m--hide">
+                <i class="la la-gear"></i>
+              </span>
+              <h3 class="m-portlet__head-text">
+                Your Profile
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <!--begin::Form-->
+        <div class="m-portlet__body">
+          <div class="col-12">
+            <h3>{{userInfo.firstName}} {{userInfo.lastName}}</h3>
+          </div>
+          <div class="col-12">
+            <h5>Your Code: {{userInfo.code}}</h5>
+            <ng-container *ngIf="parentGroup[0] && currentGroup && currentGroup.parent">
+              <h5>{{parentGroup[0].name}}: {{currentGroup.parent.name}}</h5>
+              <h5>{{childrenGroup[0].name}}: {{currentGroup.name}}</h5>
+            </ng-container>
+          </div>
+          <div class="margin-top-20 text-center col-12 row">
+            <div class="col-sm-6 col-md-6 col-xs-6 col-lg-12 col-xl-6">
+              <button class="btn btn-dark col-12 submitButton" routerLink="/my-view"
+                      [style.background-color]="userInfo.company.primary"
+                      [style.border-color]="userInfo.company.primary">
+                My View
+              </button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-xs-6 col-lg-12 col-xl-6">
+              <button class="btn btn-danger col-12 submitButton" (click)="logout()">
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+        <!--end::Form-->
+      </div>
+      <div class=" m-portlet m-portlet--rounded m-portlet--head-solid-bg m-portlet--success">
+        <div class="m-portlet__head" [style.background-color]="companyColor" [style.border-color]="companyColor">
+          <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+              <span class="m-portlet__head-icon m--hide">
+                <i class="la la-gear"></i>
+              </span>
+              <h3 class="m-portlet__head-text">
+                Your Company: {{userInfo.company.name}}
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <!--begin::Form-->
+        <div class="m-portlet__body col-12" [style.background-color]="userInfo.company.primaryTwo">
+          <div class="col-12 text-center">
+            <img class="companyImage" alt="{{userInfo.company.name}}" src="{{ userInfo.company.imageUrl }}">
+          </div>
+          <div class="col-12" *ngIf="userInfo.isDashboardViewOnly !== true">
+            <button class="btn btn-dark col-12 submitButton" routerLink="/company-view"
+                    [style.border-color]="userInfo.company.accent" [style.background-color]="userInfo.company.accent">
+              Company View
+            </button>
+          </div>
+        </div>
+        <!--end::Form-->
+      </div>
+    </div>
+  </div>
+</div>
